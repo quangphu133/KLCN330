@@ -1,0 +1,15 @@
+.Toastify__toast.Toastify__toast {
+  @apply font-sans text-base font-normal leading-6 rounded-md;
+}
+
+.Toastify__toast-body.Toastify__toast-body {
+  @apply flex items-center;
+}
+
+.Toastify__toast-theme--colored.Toastify__toast--success {
+  @apply text-white bg-green-800 border-green-500;
+}
+
+.Toastify__toast-theme--colored.Toastify__toast--error {
+  @apply text-white bg-rose-800 border-rose-500;
+}

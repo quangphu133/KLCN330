@@ -1,0 +1,10 @@
+node_modules
+.next
+.vercel
+.env
+Dpckerfile
+vercel.json
+.eslint.cjs
+.prettierrc.cjs
+README.md
+.idea

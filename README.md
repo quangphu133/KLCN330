@@ -1,0 +1,37 @@
+# Compliance Call Review
+
+Workspace được chia thành ba ứng dụng độc lập:
+
+- `frontend/`: Next.js, chạy cổng `3000`.
+- `backend/`: FastAPI nghiệp vụ, chạy cổng `8001`.
+- `api/`: BuzzASR GPU API, chạy cổng `8000`.
+
+```text
+Browser :3000 -> Backend :8001 -> BuzzASR API :8000
+                           |
+                       PostgreSQL
+```
+
+## Chạy frontend
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+## Chạy backend
+
+Sao chép `backend/.env.example` thành `backend/.env`, điền PostgreSQL,
+`ASR_BASE_URL` và `ASR_API_KEY`, sau đó:
+
+```powershell
+cd backend
+python -m pip install -r requirements.txt
+python run.py
+```
+
+## Chạy BuzzASR API
+
+API thường chạy trên máy GPU. Xem `api/README.md` và
+`api/buzzasr_bundle/README_API.md`.

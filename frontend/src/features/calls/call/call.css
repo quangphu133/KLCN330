@@ -1,0 +1,4 @@
+#waveform ::part(canvases) {
+  position: relative;
+  z-index: 6;
+}
