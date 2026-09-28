@@ -33,5 +33,4 @@ python run.py
 
 ## Chạy BuzzASR API
 
-API thường chạy trên máy GPU. Xem `api/README.md` và
-`api/buzzasr_bundle/README_API.md`.
+API mọi người làm nha.
