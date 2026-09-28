@@ -33,4 +33,4 @@ python run.py
 
 ## Chạy BuzzASR API
 
-API mọi người làm nha.
+API mọi người tự làm nha. Project sử dụng BuzzASR.
