@@ -14,7 +14,7 @@ const arimo = localFont({
 })
 
 export const metadata = {
-  title: 'HUIT Call Review',
+  title: 'HUIT | Hậu kiểm cuộc gọi',
   description: 'Hệ thống hậu kiểm và phân tích cuộc gọi',
   icons: {
     icon: '/favicon.png',

@@ -9,9 +9,9 @@ export const Operators = () => {
   const { data: operatorsData, isLoading } = useGetOperatorsQuery()
 
   const columns = [
-    { key: 'id', id: 1, title: 'Id' },
-    { key: 'name', id: 2, title: 'Điều hành viên name' },
-    { key: 'isActive', id: 3, title: 'Status' },
+    { key: 'id', id: 1, title: 'Mã' },
+    { key: 'name', id: 2, title: 'Tên nhân viên' },
+    { key: 'isActive', id: 3, title: 'Trạng thái' },
   ]
 
   const totalOperators = operatorsData?.length || 0
@@ -26,17 +26,17 @@ export const Operators = () => {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white/90">
-              Operators Management
+              Quản lý nhân viên tổng đài
             </h2>
           </div>
 
           {/* Admin Stat Overview Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/[0.05] dark:bg-white/[0.03]">
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Total Operators
+                    Tổng số nhân viên
                   </span>
                   <h4 className="text-2xl font-bold text-gray-800 dark:text-white mt-1">
                     {totalOperators}
@@ -48,11 +48,11 @@ export const Operators = () => {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/[0.05] dark:bg-white/[0.03]">
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Đang hoạt động Operators
+                    Đang hoạt động
                   </span>
                   <h4 className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
                     {activeOperators}
@@ -64,11 +64,11 @@ export const Operators = () => {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/[0.05] dark:bg-white/[0.03]">
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Inactive Operators
+                    Ngừng hoạt động
                   </span>
                   <h4 className="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">
                     {inactiveOperators}

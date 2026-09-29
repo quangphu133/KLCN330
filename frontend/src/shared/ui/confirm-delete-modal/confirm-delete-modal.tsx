@@ -27,7 +27,7 @@ export function ConfirmDeleteModal({
       className="mx-auto max-w-[500px]"
     >
       <div className="flex flex-col items-center gap-4 px-8 py-6 text-center">
-        <div className="flex size-14 items-center justify-center rounded-full bg-red-50 text-red-600 dark:bg-red-950/30">
+        <div className="flex size-14 items-center justify-center rounded-full bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400">
           <TrashRedIcon width={28} height={28} />
         </div>
         <div>

@@ -16,7 +16,7 @@ export const UploadingRecord = () => {
   return (
     <div className="relative flex flex-col gap-6">
       {isLoading && (
-        <div className="absolute inset-0 flex justify-center items-center z-50 bg-white backdrop-blur-sm">
+        <div className="absolute inset-0 flex justify-center items-center z-50 bg-white/80 backdrop-blur-sm dark:bg-gray-950/80">
           <LoaderContent width={200} height={200} isLoading={isLoading} />
         </div>
       )}

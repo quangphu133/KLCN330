@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 import { MainLayout } from '@/widgets/main-layout/main-layout'
 
 export const metadata = {
-  title: 'Hồ sơ cá nhân | HUIT Call Review',
+  title: 'Hồ sơ cá nhân | HUIT',
 }
 
 export default function Layout({ children }: { children: ReactNode }) {

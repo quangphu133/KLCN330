@@ -54,7 +54,7 @@ const demoChecklistData = {
 
 export const demoChecklists: Checklist[] = [
   { id: 1, name: 'Bộ tiêu chí đánh giá cuộc gọi', isActive: true, data: demoChecklistData, projectIds: [1, 2] },
-  { id: 2, name: 'Bộ tiêu chí bán hàng Telesales', isActive: true, data: demoChecklistData, projectIds: [2] },
+  { id: 2, name: 'Bộ tiêu chí bán hàng qua điện thoại', isActive: true, data: demoChecklistData, projectIds: [2] },
 ]
 
 export const demoDictionaries: Dictionary[] = [

@@ -195,7 +195,7 @@ export const Text: React.FC<TextProps> = ({
       return (
         <p>
           {first}
-          <span className="rounded-full bg-yellow-100 text-yellow-800">
+          <span className="rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-200">
             {word}
           </span>
           {second}
@@ -268,26 +268,26 @@ export const Transcript: React.FC<TranscriptProps> = ({
                 <div className="ml-4">
                   <>
                     <p className="font-medium">{callInfo.name}</p>
-                    <p className="text-gray-500 text-sm">{callInfo.phone}</p>
+                    <p className="text-gray-500 text-sm dark:text-gray-400">{callInfo.phone}</p>
                   </>
                 </div>
               </div> */}
           <div className="flex justify-between items-center mb-4">
-            <h2 className="font-semibold">Điện thoại number</h2>
+            <h2 className="font-semibold">Số điện thoại</h2>
             <p className="font-medium">{callInfo.phone}</p>
           </div>
           <div className="flex justify-between items-center mb-4">
-            <h5 className="font-semibold">Call date/time</h5>
+            <h5 className="font-semibold">Ngày, giờ gọi</h5>
             <div className="font-medium">{callInfo.date}</div>
           </div>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="font-semibold">Specialist</h2>
+            <h2 className="font-semibold">Nhân viên tổng đài</h2>
             <p className="font-medium">{callInfo.name}</p>
           </div>
 
           <div className="mb-4">
             <h2 className="font-semibold">Tóm tắt</h2>
-            <p className="text-gray-700 text-sm leading-relaxed">{summary}</p>
+            <p className="text-gray-700 text-sm leading-relaxed dark:text-gray-300">{summary}</p>
           </div>
           {/*<Button*/}
           {/*  className="w-[164px] h-[44px] border border-gray-200 rounded-full hover:bg-gray-100 mb-2 flex items-center gap-2 cursor-pointer"*/}
@@ -317,14 +317,14 @@ export const Transcript: React.FC<TranscriptProps> = ({
                 <div
                   className={`py-2 px-4 rounded-2xl ${
                     message.isMono
-                      ? 'bg-purple-100 text-purple-900'
+                      ? 'bg-purple-100 text-purple-900 dark:bg-purple-950/70 dark:text-purple-200'
                       : message.sender === 'agent'
                         ? 'bg-purple-700 text-white'
                         : message.sender === 'customer'
-                          ? 'bg-purple-100 text-purple-900'
+                          ? 'bg-purple-100 text-purple-900 dark:bg-purple-950/70 dark:text-purple-200'
                           : message.speakerLabel?.endsWith('2')
-                            ? 'bg-blue-100 text-blue-900'
-                            : 'bg-amber-100 text-amber-900'
+                            ? 'bg-blue-100 text-blue-900 dark:bg-blue-950/70 dark:text-blue-200'
+                            : 'bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-200'
                   } ${activeMessageId === message.id ? 'ring-2 ring-purple-400' : ''}`}
                 >
                   {/* <p>{message.text}</p> */}
@@ -337,11 +337,11 @@ export const Transcript: React.FC<TranscriptProps> = ({
                 <div
                   className={`text-xs text-gray-500 mt-1 ${
                     isRightAligned ? 'text-right' : 'text-left'
-                  }`}
+                  } dark:text-gray-400`}
                 >
                 {message.isMono
                     ? `Người nói chưa xác định, ${message.time}`
-                    : `${message.speakerLabel ?? (message.sender === 'agent' ? 'Operator' : 'Người gọi')}, ${message.time}`}
+                    : `${message.speakerLabel ?? (message.sender === 'agent' ? 'Nhân viên' : 'Người gọi')}, ${message.time}`}
                 </div>
               </div>
             </div>

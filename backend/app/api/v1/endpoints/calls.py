@@ -22,7 +22,7 @@ def create_call_record(call_in: CallRecordCreate, db: Session = Depends(get_db))
 
 @router.get("/", response_model=List[CallRecordResponse], summary="Lấy danh sách các cuộc gọi")
 def get_call_records(
-    telesale_id: Optional[int] = Query(None, description="Lọc theo ID nhân viên telesale"),
+    telesale_id: Optional[int] = Query(None, description="Lọc theo mã nhân viên"),
     min_score: Optional[float] = Query(None, description="Lọc cuộc gọi có điểm tuân thủ >= min_score"),
     max_score: Optional[float] = Query(None, description="Lọc cuộc gọi có điểm tuân thủ <= max_score"),
     skip: int = Query(0, ge=0, description="Vị trí bắt đầu"),

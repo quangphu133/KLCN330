@@ -48,7 +48,7 @@ export const CallsFeatureWrapper = ({ children }: CallsFeatureWrapperProps) => {
       {showUploadAlert && (
         <UploadAlert
           onClose={handleCloseAlert}
-          title={'Attention! The uploaded recording is being processed and will be available soon.'}
+          title={'Lưu ý: Bản ghi đã tải lên đang được xử lý và sẽ sớm khả dụng.'}
         />
       )}
       {children}

@@ -12,7 +12,7 @@ ALLOWED_COLORS = [
 class VocabularyBase(BaseModel):
     name: str = Field(..., description="Tên từ điển")
     is_active: bool = Field(True)
-    type: str = Field("All", description="All / OnlyOperator / OnlyClient / Hotwords")
+    type: str = Field("All", description="Phạm vi: tất cả / chỉ nhân viên / chỉ khách hàng / thuật ngữ")
     colorHex: str = Field("#88c289", description="Màu hiển thị")
     phrases: List[str] = Field(default_factory=list, description="Danh sách cụm từ")
 

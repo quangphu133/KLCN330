@@ -13,7 +13,7 @@ class UserService:
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Không tìm thấy người dùng với ID: {user_id}"
+                detail=f"Không tìm thấy người dùng có mã: {user_id}"
             )
         return user
 

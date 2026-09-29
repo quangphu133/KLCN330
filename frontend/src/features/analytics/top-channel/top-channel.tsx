@@ -26,10 +26,10 @@ export default function TopChannel({ data = [] }: TopChannelProps) {
   );
 
   return (
-    <div className="h-full rounded-2xl border border-gray-100 bg-white p-4 dark:border-gray-100 dark:bg-white/[0.03] md:p-6 flex flex-col gap-6">
+    <div className="h-full rounded-2xl border border-gray-100 bg-white p-4 dark:border-gray-800 dark:bg-gray-900 md:p-6 flex flex-col gap-6">
       <div className="flex items-start justify-between">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-          Điều hành viên ranking
+          Xếp hạng nhân viên
         </h3>
         <div className="relative hidden">
           <button className="dropdown-toggle" onClick={toggleDropdown}>
@@ -44,23 +44,23 @@ export default function TopChannel({ data = [] }: TopChannelProps) {
               onItemClick={closeDropdown}
               className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
-              Details
+              Chi tiết
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
               className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
-              Export
+              Xuất dữ liệu
             </DropdownItem>
           </Dropdown>
         </div>
       </div>
 
       <div>
-        <div className="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-200">
-          <span className="text-gray-400 text-theme-xs">Operator</span>
+        <div className="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-700">
+          <span className="text-gray-400 text-theme-xs">Nhân viên</span>
           <span className="text-right text-gray-400 text-theme-xs">
-            Metrics
+            Số cuộc gọi
           </span>
         </div>
 
@@ -86,7 +86,7 @@ export default function TopChannel({ data = [] }: TopChannelProps) {
           ))
         ) : (
           <div className="flex items-center justify-center py-8">
-            <span className="text-gray-400">No data đến display</span>
+            <span className="text-gray-400">Chưa có dữ liệu để hiển thị</span>
           </div>
         )}
       </div>

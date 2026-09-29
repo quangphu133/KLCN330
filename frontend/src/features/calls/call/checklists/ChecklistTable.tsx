@@ -31,20 +31,20 @@ export const ChecklistTable = ({ checklist }: Props) => {
     )
     .map((checklistItem, checklistIndex) => (
       <Fragment key={checklistIndex}>
-        <h3 className="font-semibold text-gray-900 text-lg mb-4">
+        <h3 className="font-semibold text-gray-900 text-lg mb-4 dark:text-gray-100">
           {checklistItem.name}
         </h3>
         <div
           key={checklistIndex}
-          className="bg-gray-200 rounded-lg overflow-hidden grid gap-px border border-gray-200"
+          className="bg-gray-200 rounded-lg overflow-hidden grid gap-px border border-gray-200 dark:bg-gray-700 dark:border-gray-700"
           style={{
             gridTemplateColumns: '1fr 1fr auto 2fr',
           }}
         >
-          {['Criteria group', 'Tiêu chí', 'Score', 'Explanation'].map((el) => (
+          {['Nhóm tiêu chí', 'Tiêu chí', 'Điểm', 'Giải thích'].map((el) => (
             <div
               key={el}
-              className="py-4 px-6 text-left text-sm font-medium text-gray-500 bg-white"
+              className="py-4 px-6 text-left text-sm font-medium text-gray-500 bg-white dark:bg-gray-900 dark:text-gray-400"
             >
               {el}
             </div>
@@ -56,13 +56,13 @@ export const ChecklistTable = ({ checklist }: Props) => {
               return (
                 <Fragment key={itemIndex}>
                   <div
-                    className={`py-4 px-6 flex items-center text-sm font-semibold text-gray-900 bg-white ${rowClass}`}
+                    className={`py-4 px-6 flex items-center text-sm font-semibold text-gray-900 bg-white dark:bg-gray-900 dark:text-gray-100 ${rowClass}`}
                   >
                     {block.name ?? ' - '}
                   </div>
                   {block.criterias.map((criteria, index) => (
                     <Fragment key={index}>
-                      <div className="flex items-center px-6 py-4  justify-betwwen w-full bg-white">
+                      <div className="flex items-center px-6 py-4 justify-betwwen w-full bg-white dark:bg-gray-900">
                         <div className="grow">{criteria.name ?? ' - '}</div>
                         {/* <div
                           className={`w-8 h-8 shrink-0 cursor-pointer rounded-full hover:bg-purple-100 
@@ -133,7 +133,7 @@ export const ChecklistTable = ({ checklist }: Props) => {
                         </div> */}
                       </div>
 
-                      <div className="flex items-center py-4 px-2 bg-white justify-center">
+                      <div className="flex items-center py-4 px-2 bg-white justify-center dark:bg-gray-900">
                         {isEditingNumber &&
                         curBlock &&
                         curCriteria &&
@@ -197,11 +197,11 @@ export const ChecklistTable = ({ checklist }: Props) => {
                           <div
                             className={`flex items-center justify-center w-8 h-8 rounded-full font-medium ${
                               criteria.score === criteria.maxScore
-                                ? 'text-green-800 1bg-green-100'
+                                ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
                                 : criteria.score &&
                                     criteria.score > criteria.maxScore / 2
-                                  ? 'text-yellow-800 1bg-yellow-100'
-                                  : 'text-red-800 1bg-red-100'
+                                  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'
+                                  : 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
                             } `}
                           >
                             {criteria.score}
@@ -210,7 +210,7 @@ export const ChecklistTable = ({ checklist }: Props) => {
                       </div>
                       <div
                         key={index}
-                        className="px-4 py-2 bg-white flex items-center"
+                        className="px-4 py-2 bg-white flex items-center dark:bg-gray-900 dark:text-gray-300"
                       >
                         {criteria.comment}
                       </div>
@@ -218,47 +218,47 @@ export const ChecklistTable = ({ checklist }: Props) => {
                   ))}
 
                   <div
-                    className={`bg-white col-span-2 uppercase py-4 px-6 flex items-center justify-center text-sm font-semibold text-gray-900 `}
+                    className="bg-white dark:bg-gray-900 dark:text-gray-100 col-span-2 uppercase py-4 px-6 flex items-center justify-center text-sm font-semibold text-gray-900"
                   >
-                    Total for {block.name ?? ' - '}
+                    Tổng điểm: {block.name ?? ' - '}
                   </div>
-                  <div className="bg-white flex items-center px-4 py-6 justify-center">
+                  <div className="bg-white flex items-center px-4 py-6 justify-center dark:bg-gray-900 dark:text-gray-300">
                     <div
                       className={`flex items-center justify-center w-8 h-8 rounded-full font-medium ${
                         block.score === block.maxScore
-                          ? 'text-green-800 1bg-green-100'
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
                           : block.score && block.score > block.maxScore / 2
-                            ? 'text-yellow-800 1bg-yellow-100'
-                            : 'text-red-800 1bg-red-100'
+                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'
+                            : 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
                       } `}
                     >
                       {block.score}
                     </div>
                   </div>
-                  <div className="bg-white"></div>
+                  <div className="bg-white dark:bg-gray-900"></div>
                 </Fragment>
               );
             })}
           <div
-            className={`bg-white col-span-2 uppercase py-4 px-6 flex items-center justify-center text-sm font-semibold text-gray-900 `}
+            className="bg-white dark:bg-gray-900 dark:text-gray-100 col-span-2 uppercase py-4 px-6 flex items-center justify-center text-sm font-semibold text-gray-900"
           >
             Tổng theo danh sách kiểm tra
           </div>
-          <div className="flex items-center px-4 py-6 bg-white justify-center">
+          <div className="flex items-center px-4 py-6 bg-white justify-center dark:bg-gray-900 dark:text-gray-300">
             <div
               className={`flex items-center justify-center w-8 h-8 rounded-full font-medium ${
                 checklistItem.score === checklistItem.maxScore
-                  ? 'text-green-800 1bg-green-100'
+                  ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
                   : checklistItem.score &&
                       checklistItem.score > checklistItem.maxScore / 2
-                    ? 'text-yellow-800 1bg-yellow-100'
-                    : 'text-red-800 1bg-red-100'
+                    ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'
+                    : 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
               } `}
             >
               {checklistItem.score}
             </div>
           </div>
-          <div className="bg-white"></div>
+          <div className="bg-white dark:bg-gray-900"></div>
         </div>
       </Fragment>
     ));

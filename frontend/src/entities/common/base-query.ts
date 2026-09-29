@@ -41,6 +41,7 @@ const baseQueryWithErrorHandling: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   const token = getFromLocalStorage('accessToken', null);
   const isDemoToken = token === 'local-demo-token';
+  const isSignInRequest = api.endpoint === 'signIn';
 
   if (isDemoToken) {
     const demoData = getDemoData(api.endpoint, args);
@@ -52,7 +53,7 @@ const baseQueryWithErrorHandling: BaseQueryFn<
   const result = await baseQuery(args, api, extraOptions);
 
   if (result.error) {
-    if (result.error.status === 401 && !isDemoToken) {
+    if (result.error.status === 401 && !isDemoToken && !isSignInRequest) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('userEmail');
       if (typeof window !== 'undefined') {
@@ -161,7 +162,7 @@ function getDemoData(endpoint: string, args: unknown): unknown {
   if (endpoint === 'createOperator') {
     const body = (args as any)?.body ?? {};
     const newId = demoOperatorsState.length > 0 ? Math.max(...demoOperatorsState.map((o) => o.id)) + 1 : 1;
-    demoOperatorsState.push({ id: newId, name: body.name || 'New Operator', isActive: body.isActive ?? true, createdAt: new Date().toISOString() });
+    demoOperatorsState.push({ id: newId, name: body.name || 'Nhân viên mới', isActive: body.isActive ?? true, createdAt: new Date().toISOString() });
     return null;
   }
   if (endpoint === 'updateOperator') {

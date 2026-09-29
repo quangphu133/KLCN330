@@ -13,7 +13,7 @@ export const Checklists = () => {
 
   const columns = [
     { key: 'name', title: 'Danh sách kiểm tra' },
-    { key: 'isActive', title: 'Xuất bảned' },
+    { key: 'isActive', title: 'Trạng thái hoạt động' },
   ];
 
   return (

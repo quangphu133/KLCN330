@@ -20,8 +20,8 @@ export const AuthGate = ({ children }: { children: ReactNode }) => {
   let loaderBgColor
   let loaderTextColor
   if (appRoutes.private.dashboard.includes(pathname.toLocaleLowerCase())) {
-    loaderBgColor = 'bg-white'
-    loaderTextColor = 'text-gray-800'
+    loaderBgColor = 'bg-white dark:bg-gray-900'
+    loaderTextColor = 'text-gray-800 dark:text-gray-200'
   } else {
     loaderBgColor = 'bg-black/10'
     loaderTextColor = 'text-white'
@@ -32,7 +32,7 @@ export const AuthGate = ({ children }: { children: ReactNode }) => {
       {showLoader && <LoaderMain bgColor={loaderBgColor} textColor={loaderTextColor} />}
       {!showLoader && !isWideEnough ? (
         <div className="p-6 text-lg h-screen flex items-center justify-center">
-          This application is available only on screens wider than 1024px
+          Ứng dụng chỉ khả dụng trên màn hình có chiều rộng từ 1024 px trở lên.
         </div>
       ) : !showLoader ? (
         children

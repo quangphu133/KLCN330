@@ -63,7 +63,7 @@ const Pagination = ({
           onClick={() => goToPage(currentPage - 1)}
           disabled={currentPage === 1}
         >
-          <span className="text-sm font-medium">Previous</span>
+          <span className="text-sm font-medium">Trước</span>
         </Button>
 
         {/* Page Numbers */}
@@ -78,7 +78,7 @@ const Pagination = ({
                   className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium cursor-pointer ${
                     currentPage === page
                       ? 'bg-purple-900 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
+                      : 'bg-white text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700'
                   }`}
                 >
                   {page}
@@ -96,7 +96,7 @@ const Pagination = ({
           className="rounded-full cursor-pointer px-4 py-2 border-px border-gray-200"
           disabled={currentPage === totalPages}
         >
-          <span className="text-sm font-medium">Next</span>
+          <span className="text-sm font-medium">Tiếp</span>
         </Button>
       </div>
     </div>

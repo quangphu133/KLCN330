@@ -68,22 +68,22 @@ export const ChecklistSummary: React.FC<ChecklistSummaryProps> = ({
 
   const getScoreColor = (score: number, maxScore: number) => {
     const percent = (score / maxScore) * 100;
-    if (percent >= 80) return 'bg-green-100 text-green-800';
-    if (percent >= 50) return 'bg-yellow-100 text-yellow-800';
-    return 'bg-red-100 text-red-800';
+    if (percent >= 80) return 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300';
+    if (percent >= 50) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300';
+    return 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300';
   };
 
   if (!checklist || !collection || collection.length === 0) {
-    return <div>No checklists available.</div>;
+    return <div>Chưa có bộ tiêu chí nào.</div>;
   }
 
   return (
-    <div className="mb-6 border border-gray-200 rounded-lg overflow-hidden bg-white">
+    <div className="mb-6 border border-gray-200 rounded-lg overflow-hidden bg-white text-gray-900 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100">
       <div className="flex justify-between p-5">
         <div>
           <DropdownCustom
-            label="Checklist"
-            placeholder="Select checklist"
+            label="Bộ tiêu chí"
+            placeholder="Chọn bộ tiêu chí"
             onChange={handleChange}
             selected={{
               label: selectedCheckList?.name || '',
@@ -92,19 +92,19 @@ export const ChecklistSummary: React.FC<ChecklistSummaryProps> = ({
             options={checkListsOptions}
           />
           {/* <Select
-            label="Checklist"
-            placeholder="Select checklist"
+            label="Bộ tiêu chí"
+            placeholder="Chọn bộ tiêu chí"
             onChange={handleChange}
             options={checkListsOptions}
           /> */}
         </div>
         <div className="flex items-center">
           <div className="flex items-center">
-            <div className="mr-3 font-medium text-sm">
+            <div className="mr-3 font-medium text-sm text-gray-700 dark:text-gray-300">
               Overall checklist score: {selectedCheckList?.score}/
               {selectedCheckList?.maxScore}
             </div>
-            <div className="w-24 bg-gray-200 rounded-full h-2.5">
+            <div className="w-24 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
               <div
                 className={`h-2.5 rounded-full ${
                   checkListPercentage >= 80
@@ -124,16 +124,16 @@ export const ChecklistSummary: React.FC<ChecklistSummaryProps> = ({
           block.maxScore > 0 ? (block.score / block.maxScore) * 100 : 0;
         return (
           <div key={index}>
-            <div className="bg-purple-50 p-4 border-b border-gray-200">
+            <div className="bg-purple-50 p-4 border-b border-gray-200 dark:border-gray-800 dark:bg-purple-950/40">
               <div className="flex justify-between items-center">
-                <h3 className="font-medium text-purple-800">
+                <h3 className="font-medium text-purple-800 dark:text-purple-200">
                   {block.name || 'Tóm tắt danh sách kiểm tra'}
                 </h3>
                 <div className="flex items-center">
-                  <div className="mr-3 font-medium text-sm">
+                  <div className="mr-3 font-medium text-sm text-gray-700 dark:text-gray-300">
                     Tổng điểm: {block.score}/{block.maxScore}
                   </div>
-                  <div className="w-24 bg-gray-200 rounded-full h-2.5">
+                  <div className="w-24 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
                     <div
                       className={`h-2.5 rounded-full ${
                         scorePercentage >= 80
@@ -153,7 +153,7 @@ export const ChecklistSummary: React.FC<ChecklistSummaryProps> = ({
               {block.criterias?.map((item, index) => (
                 <div
                   key={index}
-                  className="border border-gray-200 rounded p-3 bg-white"
+                  className="border border-gray-200 rounded p-3 bg-white dark:border-gray-700 dark:bg-gray-800"
                 >
                   <div className="flex justify-between items-center mb-1">
                     <div className="font-medium text-sm">{item.name}</div>
@@ -164,7 +164,7 @@ export const ChecklistSummary: React.FC<ChecklistSummaryProps> = ({
                     </span>
                   </div>
                   {item.comment && (
-                    <p className="text-xs text-gray-500">{item.comment}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{item.comment}</p>
                   )}
                 </div>
               ))}

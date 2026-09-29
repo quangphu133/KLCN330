@@ -22,13 +22,13 @@ class CallService:
             if not user:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
-                    detail=f"Không tìm thấy nhân viên telesale với ID: {call_in.telesale_id}"
+                    detail=f"Không tìm thấy nhân viên với mã: {call_in.telesale_id}"
                 )
 
         if call_in.operator_id and not db.query(Operator).filter(Operator.id == call_in.operator_id).first():
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy operator ID: {call_in.operator_id}")
+            raise HTTPException(status_code=404, detail=f"Không tìm thấy nhân viên có mã: {call_in.operator_id}")
         if call_in.project_id and not db.query(Project).filter(Project.id == call_in.project_id).first():
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy project ID: {call_in.project_id}")
+            raise HTTPException(status_code=404, detail=f"Không tìm thấy dự án có mã: {call_in.project_id}")
 
         # 2. Chuẩn hóa dữ liệu transcript và segments từ AI JSON hoặc raw transcript
         final_transcript = call_in.transcript or ""
@@ -77,7 +77,7 @@ class CallService:
         if not stored_file_path.is_file():
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"File âm thanh không tồn tại: {stored_file_path}",
+                detail=f"Tệp âm thanh không tồn tại: {stored_file_path}",
             )
 
         # 4. Khởi tạo bản ghi cuộc gọi
@@ -125,7 +125,7 @@ class CallService:
         if diarization.get("status") != "completed" or len(speaker_ids) != 2:
             raise HTTPException(status_code=400, detail="Cuộc gọi chưa có đúng hai người nói để xác nhận")
         if agent_speaker_id not in speaker_ids:
-            raise HTTPException(status_code=400, detail="Speaker ID không tồn tại trong cuộc gọi")
+            raise HTTPException(status_code=400, detail="Mã người nói không tồn tại trong cuộc gọi")
 
         customer_speaker_id = next(speaker for speaker in speaker_ids if speaker != agent_speaker_id)
         for speaker in speakers:
@@ -180,7 +180,7 @@ class CallService:
         if not record:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Không tìm thấy cuộc gọi với ID: {call_id}"
+                detail=f"Không tìm thấy cuộc gọi có mã: {call_id}"
             )
         return record
 

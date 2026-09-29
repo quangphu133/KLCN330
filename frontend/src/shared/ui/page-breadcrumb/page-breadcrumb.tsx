@@ -8,7 +8,7 @@ interface BreadcrumbProps {
 
 const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
   pageTitle,
-  backTitle = 'Back',
+  backTitle = 'Quay lại',
   backHref = '/',
 }) => {
   return (

@@ -9,7 +9,7 @@ router = APIRouter(prefix="/violations", tags=["Violations"])
 
 @router.get("/", response_model=List[ViolationResponse], summary="Lấy danh sách các lỗi vi phạm")
 def get_violations(
-    call_record_id: Optional[int] = Query(None, description="Lọc vi phạm theo ID cuộc gọi"),
+    call_record_id: Optional[int] = Query(None, description="Lọc vi phạm theo mã cuộc gọi"),
     severity: Optional[str] = Query(None, description="Lọc theo mức độ nghiêm trọng: 'low', 'medium', 'high'"),
     violation_type: Optional[str] = Query(None, description="Lọc theo loại vi phạm"),
     skip: int = Query(0, ge=0),

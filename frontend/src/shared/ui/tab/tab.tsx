@@ -32,7 +32,7 @@ export const Tab = ({ items, onChange }: TabProps) => {
             className={`px-4 rounded-full text-sm font-medium cursor-pointer transition-all duration-300 ease-in-out
             ${
               selectedTaskGroup === item.key
-                ? 'bg-white text-black font-semibold shadow-lg'
+                ? 'bg-white text-black font-semibold shadow-lg dark:bg-gray-700 dark:text-white'
                 : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
             }`}
           >

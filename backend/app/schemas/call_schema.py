@@ -5,12 +5,12 @@ from app.schemas.violation_schema import ViolationResponse
 from app.schemas.ai_schema import AIModelResult
 
 class CallRecordBase(BaseModel):
-    telesale_id: Optional[int] = Field(None, description="ID của nhân viên telesale thực hiện cuộc gọi")
+    telesale_id: Optional[int] = Field(None, description="Mã nhân viên thực hiện cuộc gọi")
     operator_id: Optional[int] = None
     project_id: Optional[int] = None
     client_number: Optional[str] = None
     call_date: Optional[datetime] = None
-    file_path: str = Field(..., description="Đường dẫn file ghi âm (.wav, .mp3)")
+    file_path: str = Field(..., description="Đường dẫn tệp ghi âm (.wav, .mp3)")
     audio_duration: Optional[int] = Field(0, description="Thời lượng cuộc gọi (giây)")
     transcript: Optional[str] = Field(None, description="Toàn văn bản bóc băng (nếu gửi dạng chuỗi thô)")
     sentiment: Optional[str] = Field(None, description="Cảm xúc tổng thể")

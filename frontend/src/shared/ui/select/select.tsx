@@ -19,7 +19,7 @@ export interface SelectProps {
 
 const Select: React.FC<SelectProps> = ({
   options,
-  placeholder = 'Select an option',
+  placeholder = 'Chọn một mục',
   onChange,
   className = '',
   label,

@@ -225,7 +225,7 @@ export const useCalls = () => {
         URL.revokeObjectURL(result);
       }
     } catch (error) {
-      toast.error('Không thể tải file Excel.');
+      toast.error('Không thể tải tệp Excel.');
     }
   };
 
@@ -265,7 +265,7 @@ export const useCalls = () => {
 
   const handleRefresh = () => {
     refetch();
-    toast.success('Data updated successfully');
+    toast.success('Đã cập nhật dữ liệu');
   };
 
   return {

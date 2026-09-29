@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class OperatorBase(BaseModel):
-    name: str = Field(..., max_length=100, description="Tên nhân viên operator")
+    name: str = Field(..., max_length=100, description="Tên nhân viên tổng đài")
 
 
 class OperatorCreate(OperatorBase):

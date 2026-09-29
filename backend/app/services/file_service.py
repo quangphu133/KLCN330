@@ -15,7 +15,7 @@ class FileService:
         if not file.filename:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Tên file không hợp lệ"
+                detail="Tên tệp không hợp lệ"
             )
 
         # Kiểm tra đuôi mở rộng file
@@ -23,7 +23,7 @@ class FileService:
         if ext not in settings.ALLOWED_AUDIO_EXTENSIONS:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Định dạng file không được hỗ trợ. Chỉ chấp nhận: {', '.join(settings.ALLOWED_AUDIO_EXTENSIONS)}"
+                detail=f"Định dạng tệp không được hỗ trợ. Chỉ chấp nhận: {', '.join(settings.ALLOWED_AUDIO_EXTENSIONS)}"
             )
 
         # Tạo tên file độc nhất để tránh trùng lặp
@@ -37,7 +37,7 @@ class FileService:
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Không thể lưu file âm thanh: {str(e)}"
+                detail=f"Không thể lưu tệp âm thanh: {str(e)}"
             )
 
         file_size = os.path.getsize(destination_path)
@@ -49,7 +49,7 @@ class FileService:
                 destination_path.unlink()
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Dung lượng file vượt quá giới hạn cho phép ({settings.MAX_FILE_SIZE_MB}MB)"
+                detail=f"Dung lượng tệp vượt quá giới hạn cho phép ({settings.MAX_FILE_SIZE_MB} MB)"
             )
 
         return FileUploadResponse(
@@ -67,6 +67,6 @@ class FileService:
         if not file_path.exists():
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="File âm thanh không tồn tại"
+                detail="Tệp âm thanh không tồn tại"
             )
         return str(file_path)

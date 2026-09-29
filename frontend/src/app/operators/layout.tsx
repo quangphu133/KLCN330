@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 import { MainLayout } from '@/widgets/main-layout/main-layout'
 
 export const metadata = {
-  title: 'Operators',
+  title: 'Nhân viên tổng đài',
 }
 
 export default function Layout({ children }: { children: ReactNode }) {

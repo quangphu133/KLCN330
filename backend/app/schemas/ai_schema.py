@@ -7,9 +7,9 @@ class AISpeechSegment(BaseModel):
     """
     speaker: Optional[str] = Field(
         "unknown",
-        description="Speaker label: 'agent', 'customer', or 'unknown' when diarization is unavailable",
+        description="Vai trò người nói: 'agent' (nhân viên), 'customer' (khách hàng) hoặc 'unknown' (chưa xác định) khi không thể tách người nói",
     )
-    speaker_id: Optional[str] = Field(None, description="Stable diarization label within one call")
+    speaker_id: Optional[str] = Field(None, description="Mã người nói ổn định trong một cuộc gọi")
     start_time: Optional[float] = Field(None, description="Thời điểm bắt đầu đoạn thoại (tính bằng giây)")
     end_time: Optional[float] = Field(None, description="Thời điểm kết thúc đoạn thoại (tính bằng giây)")
     text: str = Field(..., description="Nội dung văn bản được bóc băng của phân đoạn")
@@ -24,5 +24,5 @@ class AIModelResult(BaseModel):
     sentiment: Optional[str] = Field(None, description="Cảm xúc tổng thể: 'positive', 'neutral', 'negative'")
     call_intent: Optional[str] = Field(None, description="Ý định/Chủ đề của cuộc gọi")
     summary: Optional[str] = Field(None, description="Tóm tắt ngắn nội dung cuộc gọi từ AI")
-    duration: Optional[int] = Field(None, description="Thời lượng file âm thanh (giây)")
-    diarization: Optional[Dict[str, Any]] = Field(None, description="Speaker diarization metadata and aligned utterances")
+    duration: Optional[int] = Field(None, description="Thời lượng tệp âm thanh (giây)")
+    diarization: Optional[Dict[str, Any]] = Field(None, description="Siêu dữ liệu phân tách người nói và các lượt thoại đã đồng bộ")

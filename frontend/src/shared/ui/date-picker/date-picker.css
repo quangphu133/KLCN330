@@ -44,6 +44,37 @@
   font-weight: 600;
   font-size: 1.2rem;
 }
+
+.dark .rmdp-wrapper {
+  background-color: #1f2937;
+  color: #f3f4f6;
+  box-shadow: 0 0 5px #030712;
+}
+
+.dark .rmdp-header-values,
+.dark .rmdp-week-day,
+.dark .rmdp-day:not(.rmdp-deactive) {
+  color: #d1d5db;
+}
+
+.dark .rmdp-day.rmdp-deactive,
+.dark .rmdp-day.rmdp-disabled {
+  color: #6b7280;
+}
+
+.dark .rmdp-day:not(.rmdp-disabled):hover {
+  background-color: rgba(96, 165, 250, 0.2);
+  color: #fff;
+}
+
+.dark .rmdp-range-hover {
+  background-color: #374151 !important;
+  color: #f9fafb !important;
+}
+
+.dark .rmdp-arrow {
+  border-color: #93c5fd !important;
+}
 .rmdp-day.rmdp-selected span:not(.highlight) {
   background: none !important;
 }

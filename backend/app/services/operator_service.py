@@ -16,7 +16,7 @@ class OperatorService:
         if not op:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Không tìm thấy operator với ID: {operator_id}"
+                detail=f"Không tìm thấy nhân viên với mã: {operator_id}"
             )
         return op
 

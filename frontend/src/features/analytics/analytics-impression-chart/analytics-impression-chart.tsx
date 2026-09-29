@@ -2,6 +2,7 @@
 
 import { ApexOptions } from 'apexcharts';
 import dynamic from 'next/dynamic';
+import { useTheme } from '@/shared/context/theme-context/theme-context';
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 interface PlotDataItem {
@@ -21,6 +22,7 @@ export default function ImpressionChart({
   data,
   dateRange,
 }: ImpressionChartProps) {
+  const { theme } = useTheme();
   const processHourlyData = (
     data: PlotDataItem[] | undefined,
     dateRange?: { start: string; end: string }
@@ -83,7 +85,7 @@ export default function ImpressionChart({
 
     const formattedDates = sortedDates.map((dateStr) => {
       const date = new Date(dateStr);
-      return new Intl.DateTimeFormat('ru', {
+      return new Intl.DateTimeFormat('vi-VN', {
         month: 'short',
         day: 'numeric',
       }).format(date);
@@ -132,6 +134,7 @@ export default function ImpressionChart({
   const { categories, series } = processHourlyData(data, dateRange);
 
   const options: ApexOptions = {
+    theme: { mode: theme },
     legend: {
       show: true,
       position: 'bottom',
@@ -142,6 +145,7 @@ export default function ImpressionChart({
         vertical: 0,
       },
       fontSize: '14px',
+      labels: { colors: theme === 'dark' ? '#D1D5DB' : '#374151' },
     },
     chart: {
       fontFamily: 'Outfit, sans-serif',
@@ -169,6 +173,7 @@ export default function ImpressionChart({
       },
     },
     grid: {
+      borderColor: theme === 'dark' ? '#374151' : '#E5E7EB',
       xaxis: {
         lines: {
           show: false,
@@ -191,6 +196,9 @@ export default function ImpressionChart({
     xaxis: {
       type: 'category',
       categories: categories,
+      labels: {
+        style: { colors: theme === 'dark' ? '#9CA3AF' : '#6B7280' },
+      },
       axisBorder: {
         show: false,
       },
@@ -202,6 +210,9 @@ export default function ImpressionChart({
       },
     },
     yaxis: {
+      labels: {
+        style: { colors: theme === 'dark' ? '#9CA3AF' : '#6B7280' },
+      },
       title: {
         text: '',
       },
@@ -210,13 +221,12 @@ export default function ImpressionChart({
 
   return (
     <div
-      className="rounded-2xl h-full border border-gray-100 bg-white px-5 pt-5 
-    dark:border-gray-200 dark:bg-white/[0.03] sm:px-6 sm:pt-6"
+      className="rounded-2xl h-full border border-gray-100 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-gray-900 sm:px-6 sm:pt-6"
     >
       <div className="flex flex-wrap items-start justify-between gap-5">
         <div>
-          <h3 className="mb-1 text-lg font-semibold text-neutral-900">
-            Trends
+          <h3 className="mb-1 text-lg font-semibold text-neutral-900 dark:text-gray-100">
+            Xu hướng
           </h3>
         </div>
       </div>
@@ -226,7 +236,7 @@ export default function ImpressionChart({
             <Chart options={options} series={series} type="line" height={350} />
           ) : (
             <div className="flex h-64 items-center justify-center">
-              <p className="text-gray-500">No data đến display</p>
+              <p className="text-gray-500 dark:text-gray-400">Chưa có dữ liệu để hiển thị</p>
             </div>
           )}
         </div>

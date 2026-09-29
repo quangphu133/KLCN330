@@ -47,13 +47,13 @@ function SettingSwitch({
         aria-checked={checked}
         aria-label={label}
         onClick={() => onChange(!checked)}
-        className={`relative mt-1 h-6 w-11 shrink-0 rounded-full transition-colors ${
+        className={`relative mt-1 h-6 w-11 shrink-0 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/20 ${
           checked ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-700'
         }`}
       >
         <span
-          className={`absolute top-0.5 size-5 rounded-full bg-white shadow-sm transition-transform ${
-            checked ? 'translate-x-5' : 'translate-x-0.5'
+          className={`absolute left-0.5 top-0.5 size-5 rounded-full bg-white shadow-sm transition-transform ${
+            checked ? 'translate-x-5' : 'translate-x-0'
           }`}
         />
       </button>
@@ -71,14 +71,17 @@ function SectionIcon({ children }: { children: React.ReactNode }) {
 
 export function AccountSettings() {
   const { data: profile } = useGetProfileQuery()
-  const { theme, setTheme } = useTheme()
+  const { setTheme } = useTheme()
   const [settings, setSettings] = useState(defaultSettings)
+  const [draftTheme, setDraftTheme] = useState<'light' | 'dark'>('light')
   const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem('accountSettings')
       const homePage = localStorage.getItem('accountHomePage')
+      const storedTheme = localStorage.getItem('theme')
+      setDraftTheme(storedTheme === 'dark' ? 'dark' : 'light')
       const parsed = stored ? (JSON.parse(stored) as Partial<Settings>) : {}
       setSettings({
         ...defaultSettings,
@@ -99,15 +102,14 @@ export function AccountSettings() {
   const saveSettings = () => {
     localStorage.setItem('accountSettings', JSON.stringify(settings))
     localStorage.setItem('accountHomePage', settings.homePage)
+    setTheme(draftTheme)
     toast.success('Đã lưu cài đặt tài khoản')
   }
 
   const resetSettings = () => {
     setSettings(defaultSettings)
-    setTheme('light')
-    localStorage.setItem('accountSettings', JSON.stringify(defaultSettings))
-    localStorage.setItem('accountHomePage', defaultSettings.homePage)
-    toast.success('Đã khôi phục cài đặt mặc định')
+    setDraftTheme('light')
+    toast.info('Đã khôi phục mặc định cho bản nháp. Nhấn “Lưu cài đặt” để áp dụng.')
   }
 
   return (
@@ -184,9 +186,9 @@ export function AccountSettings() {
                 <button
                   key={option}
                   type="button"
-                  onClick={() => setTheme(option)}
+                  onClick={() => setDraftTheme(option)}
                   className={`rounded-2xl border p-4 text-left transition ${
-                    theme === option
+                    draftTheme === option
                       ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-600/10 dark:bg-blue-950/40'
                       : 'border-gray-200 hover:border-blue-300 dark:border-gray-700'
                   }`}
@@ -237,7 +239,7 @@ export function AccountSettings() {
                 <p className="truncate font-bold text-gray-900 dark:text-white">
                   {profile?.full_name || 'Tài khoản HUIT'}
                 </p>
-                <p className="truncate text-sm text-gray-500">{profile?.email || 'Đang tải...'}</p>
+                <p className="truncate text-sm text-gray-500 dark:text-gray-400">{profile?.email || 'Đang tải...'}</p>
               </div>
             </div>
             <div className="mt-5 border-t border-gray-100 pt-5 dark:border-gray-800">

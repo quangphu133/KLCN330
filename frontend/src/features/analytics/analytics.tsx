@@ -48,12 +48,12 @@ export const Analytics = () => {
       ) : (
         <>
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-xl font-bold">Analytics</h1>
+            <h1 className="text-xl font-bold">Phân tích và báo cáo</h1>
             <Button
               className="w-[112px] h-[44px] border border-gray-200 rounded-full mb-2 flex items-center gap-2 cursor-pointer"
               onClick={openFilterModal}
             >
-              <span>Filter</span>
+              <span>Lọc</span>
               <FilterIcon width={20} height={20} />
             </Button>
           </div>

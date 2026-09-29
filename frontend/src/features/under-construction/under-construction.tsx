@@ -32,9 +32,9 @@ export default function UnderConstruction() {
 
         <div className="bg-purple-900 h-1 w-16 mx-auto mb-6"></div>
 
-        <h2 className="text-xl font-semibold text-gray-800 mb-2">Trang đang được xây dựng{dots}</h2>
+        <h2 className="text-xl font-semibold text-gray-800 mb-2 dark:text-white">Trang đang được xây dựng{dots}</h2>
 
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 mb-6 dark:text-gray-400">
           Chúng tôi đang cải thiện khu vực này và sẽ sớm cung cấp.
         </p>
 

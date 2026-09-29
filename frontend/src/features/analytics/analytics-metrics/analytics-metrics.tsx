@@ -7,7 +7,7 @@ interface AnalyticsMetricsProps {
 const formatDuration = (seconds: number): string => {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = Math.floor(seconds % 60);
-  return `${minutes} min ${remainingSeconds} sec`;
+  return `${minutes} phút ${remainingSeconds} giây`;
 };
 
 const formatPercentage = (value: number | null): string => {
@@ -17,23 +17,23 @@ const formatPercentage = (value: number | null): string => {
 const metricsMapping = [
   {
     key: 'recordsCount',
-    title: 'Number of calls',
-    format: (value: number) => value.toLocaleString('ru-RU'),
+    title: 'Số cuộc gọi',
+    format: (value: number) => value.toLocaleString('vi-VN'),
   },
   {
     key: 'averageDuration',
-    title: 'Average call duration',
+    title: 'Thời lượng cuộc gọi trung bình',
     format: formatDuration,
   },
   {
     key: 'averageNegativeLevelOverall',
-    title: 'Average negativity rate',
+    title: 'Tỷ lệ tiêu cực trung bình',
     format: formatPercentage,
     color: 'error',
   },
   {
     key: 'averageKeywordsCount',
-    title: 'Average number of stop words',
+    title: 'Số từ khóa trung bình',
     format: (value: number) => value.toFixed(2),
   },
   {
@@ -58,7 +58,7 @@ const AnalyticsMetrics: React.FC<AnalyticsMetricsProps> = ({
       {metricsMapping.map(({ key, title, format }) => (
         <div
           key={key}
-          className="rounded-2xl border border-gray-100 bg-white p-5 dark:border-gray-100 dark:bg-white/[0.03]"
+          className="rounded-2xl border border-gray-100 bg-white p-5 dark:border-gray-800 dark:bg-gray-900"
         >
           <p className="text-gray-500 text-sm dark:text-gray-400 mb-3 leading-[32px]">
             {title}

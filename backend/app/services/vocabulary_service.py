@@ -15,7 +15,7 @@ class VocabularyService:
     def get_by_id(db: Session, vocab_id: int) -> dict:
         item = db.query(Vocabulary).filter(Vocabulary.id == vocab_id).first()
         if not item:
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy vocabulary ID: {vocab_id}")
+            raise HTTPException(status_code=404, detail=f"Không tìm thấy từ điển có mã: {vocab_id}")
         return VocabularyService._to_response(item)
 
     @staticmethod
@@ -36,7 +36,7 @@ class VocabularyService:
     def update(db: Session, vocab_id: int, vocab_in: VocabularyUpdate) -> dict:
         item = db.query(Vocabulary).filter(Vocabulary.id == vocab_id).first()
         if not item:
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy vocabulary ID: {vocab_id}")
+            raise HTTPException(status_code=404, detail=f"Không tìm thấy từ điển có mã: {vocab_id}")
         if vocab_in.name is not None:
             item.name = vocab_in.name
         if vocab_in.is_active is not None:
@@ -55,7 +55,7 @@ class VocabularyService:
     def delete(db: Session, vocab_id: int) -> None:
         item = db.query(Vocabulary).filter(Vocabulary.id == vocab_id).first()
         if not item:
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy từ điển ID: {vocab_id}")
+            raise HTTPException(status_code=404, detail=f"Không tìm thấy từ điển có mã: {vocab_id}")
         item.projects = []
         db.delete(item)
         db.commit()

@@ -97,7 +97,7 @@ const TableCell: React.FC<TableCellProps> = ({
 
   return (
     <CellTag
-      className={`${borderClasses} border-gray-100 ${className || ''}`}
+      className={`${borderClasses} border-gray-100 dark:border-gray-700 ${className || ''}`}
       colSpan={colSpan}
       rowSpan={rowSpan}
     >

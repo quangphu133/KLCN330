@@ -8,12 +8,12 @@ import { ControlledTextField } from '@/shared/ui/input/controlled-text-field'
 import { ControlledCheckbox } from '@/shared/ui/checkbox/controlled-checkbox'
 import Button from '@/shared/ui/button/button'
 import { appRoutes } from '@/shared/constants/routes'
-import { toast } from 'react-toastify'
 import { setToLocalStorage } from '@/shared/utils/common-utils'
 import { useSignInMutation } from '@/entities/auth/auth.api'
 
 export function SignInForm() {
   const [showPassword, setShowPassword] = useState(false)
+  const [authError, setAuthError] = useState<string | null>(null)
   const { handleSubmit, control } = useSignInForm()
   const [signIn, { isLoading }] = useSignInMutation()
 
@@ -30,13 +30,9 @@ export function SignInForm() {
       : appRoutes.private.dashboard
   }
 
-  const handleDemoLogin = () => {
-    setToLocalStorage('accessToken', 'local-demo-token')
-    setToLocalStorage('userEmail', 'demo@example.com')
-    window.location.href = getHomePage()
-  }
-
   const onSubmit = handleSubmit(async (data: any) => {
+    setAuthError(null)
+
     try {
       const payload = {
         email: data.email,
@@ -49,11 +45,16 @@ export function SignInForm() {
       setToLocalStorage('userEmail', data.email)
 
       window.location.href = getHomePage()
-    } catch (error: any) {
-      if (error.status === 401) {
-        toast.error('Invalid email or password')
+    } catch (error: unknown) {
+      const status =
+        typeof error === 'object' && error !== null && 'status' in error
+          ? error.status
+          : undefined
+
+      if (status === 401) {
+        setAuthError('Email hoặc mật khẩu không chính xác.')
       } else {
-        toast.error('Authentication error')
+        setAuthError('Không thể đăng nhập. Vui lòng thử lại sau.')
       }
     }
   })
@@ -63,7 +64,7 @@ export function SignInForm() {
       <div className="huit-auth-page flex min-h-screen">
         {/* Left side - Sign-in form */}
         <div className="w-full lg:w-1/2 p-8 flex items-center justify-center">
-          <div className="w-full max-w-[440px] rounded-3xl border border-blue-100 bg-white/90 p-8 shadow-[0_24px_70px_rgba(0,79,135,0.12)] backdrop-blur-sm">
+          <div className="w-full max-w-[440px] rounded-3xl border border-blue-100 bg-white/90 p-8 shadow-[0_24px_70px_rgba(0,79,135,0.12)] backdrop-blur-sm dark:border-gray-700 dark:bg-gray-900/95">
             <div className="mb-7">
               <div className="mb-5 flex items-center gap-3">
                 <div className="flex size-12 items-center justify-center rounded-2xl bg-blue-600 text-lg font-bold text-white shadow-lg shadow-blue-600/20">
@@ -71,45 +72,54 @@ export function SignInForm() {
                 </div>
                 <div>
                   <p className="text-xs font-bold tracking-[0.16em] text-blue-700">HUIT</p>
-                  <p className="text-xs text-gray-500">Hệ thống hậu kiểm cuộc gọi</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Hệ thống hậu kiểm cuộc gọi</p>
                 </div>
               </div>
               <div className="huit-red-rule mb-4" />
-              <h1 className="mb-2 text-4xl font-semibold text-gray-800">Đăng nhập</h1>
-              <p className="text-sm text-gray-500">
+              <h1 className="mb-2 text-4xl font-semibold text-gray-800 dark:text-white">Đăng nhập</h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Nhập email và mật khẩu để truy cập hệ thống.
               </p>
             </div>
 
             <form onSubmit={onSubmit}>
+              {authError && (
+                <div
+                  className="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/50 dark:bg-rose-950/40 dark:text-rose-300"
+                  role="alert"
+                  aria-live="assertive"
+                >
+                  {authError}
+                </div>
+              )}
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">
                     Email<span className="text-rose-500">*</span>
                   </label>
                   <ControlledTextField
-                    placeholder="Enter email"
+                    placeholder="Nhập email"
                     name="email"
                     rounded="full"
                     autoComplete="new-email"
                     control={control}
-                    className="w-full border border-gray-300 rounded-full px-4 py-2"
+                    className="w-full border border-gray-300 rounded-full px-4 py-2 dark:border-gray-700 dark:bg-gray-950 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Password<span className="text-rose-500">*</span>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">
+                    Mật khẩu<span className="text-rose-500">*</span>
                   </label>
                   <div className="relative">
                     <ControlledTextField
                       type={showPassword ? 'text' : 'password'}
-                      placeholder="hello123"
+                      placeholder="Nhập mật khẩu"
                       name="password"
                       autoComplete="new-password"
                       rounded="full"
                       control={control}
-                      className="w-full border border-gray-300 rounded-full px-4 py-2 pr-12" //
+                      className="w-full border border-gray-300 rounded-full px-4 py-2 pr-12 dark:border-gray-700 dark:bg-gray-950 dark:text-white" //
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -127,7 +137,7 @@ export function SignInForm() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <ControlledCheckbox control={control} name="rememberMe" />
-                    <span className="text-sm text-gray-700">Keep me signed in</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Duy trì đăng nhập</span>
                   </div>
                   <Link
                     href={appRoutes.auth.underConstructionPlain}
@@ -148,16 +158,6 @@ export function SignInForm() {
                 >
                   Đăng nhập
                 </Button>
-                {process.env.NODE_ENV !== 'production' && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleDemoLogin}
-                    className="w-full py-2 px-4 rounded-full cursor-pointer"
-                  >
-                    Tiếp tục với chế độ demo
-                  </Button>
-                )}
               </div>
             </form>
           </div>
