@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cải thiện độ tương phản chế độ tối cho nội dung cuộc gọi và transcript.
 import React, { useState, useMemo, useEffect } from 'react';
 import { DropdownCustom } from '@/shared/ui/dropdown-custom';
 

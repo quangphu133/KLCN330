@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
 import { useState, useRef, useEffect } from 'react';
 import Button from '../button/button';
 import Label from '../label/label';

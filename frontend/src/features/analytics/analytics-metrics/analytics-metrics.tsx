@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa và cải thiện hiển thị chế độ tối cho trang thống kê.
 import { SummaryData } from '@/entities/analytics/analytics.types';
 
 interface AnalyticsMetricsProps {

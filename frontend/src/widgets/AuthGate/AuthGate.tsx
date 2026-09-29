@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật xử lý phiên và điều hướng khi xác thực.
 'use client'
 
 import { LoaderMain } from '../../shared/ui/loader'

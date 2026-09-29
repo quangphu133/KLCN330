@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật nội dung và luồng giao diện đăng nhập theo yêu cầu demo.
 'use client'
 
 import { z } from 'zod'

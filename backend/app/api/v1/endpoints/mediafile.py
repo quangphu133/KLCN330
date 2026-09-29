@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Cập nhật mô tả API và thông báo phản hồi bằng tiếng Việt.
 from io import BytesIO
 from pathlib import Path
 from datetime import datetime

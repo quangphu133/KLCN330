@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
 import { useTheme } from '@/shared/context/theme-context/theme-context'
 
 export const ThemeToggleButton: React.FC = () => {

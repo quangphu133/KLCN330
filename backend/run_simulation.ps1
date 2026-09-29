@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Script khởi tạo và chạy backend ở chế độ mô phỏng.
 $ErrorActionPreference = 'Stop'
 
 $configPath = Join-Path $PSScriptRoot '.env.simulation'

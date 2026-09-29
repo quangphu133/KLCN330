@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa và cải thiện hiển thị cho màn hình quản lý dữ liệu.
 'use client';
 
 import { Fragment, useCallback, useEffect, useState } from 'react';

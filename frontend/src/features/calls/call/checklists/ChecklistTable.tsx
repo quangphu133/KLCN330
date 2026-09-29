@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cải thiện độ tương phản chế độ tối cho nội dung cuộc gọi và transcript.
 import { GptChecklist } from '@/entities/mediafile/api/mediafile.types';
 import { Fragment, useState } from 'react';
 // import { EditIcon } from '../../../../../public/assets/icons';

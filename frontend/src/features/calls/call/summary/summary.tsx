@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cải thiện độ tương phản chế độ tối cho nội dung cuộc gọi và transcript.
 'use client'
 
 import React from 'react'

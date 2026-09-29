@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Điều chỉnh xử lý dữ liệu demo và phản hồi gọi API.
 import {
   BaseQueryFn,
   createApi,

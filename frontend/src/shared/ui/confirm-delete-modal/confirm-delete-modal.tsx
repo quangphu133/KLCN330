@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
 import { TrashRedIcon } from '@/../public/assets/icons'
 import Button from '@/shared/ui/button/button'
 import { Modal } from '@/shared/ui/modal/modal'

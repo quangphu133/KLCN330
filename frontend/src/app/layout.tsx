@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật bố cục và khả năng hiển thị giao diện theo chủ đề.
 import '@/app/globals.css'
 import Providers from '@/app/providers'
 import { AuthGate } from '../widgets/AuthGate'

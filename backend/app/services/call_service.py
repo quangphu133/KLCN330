@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Chuẩn hóa thông báo nghiệp vụ và thuật ngữ tiếng Việt.
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Optional, Tuple

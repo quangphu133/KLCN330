@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Cập nhật mô tả và thông báo xác thực dữ liệu bằng tiếng Việt.
 from pydantic import BaseModel, Field
 from typing import Any, Dict, List, Optional
 

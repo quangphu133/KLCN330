@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật kiểu dữ liệu hoặc cách hiển thị dữ liệu của tính năng.
 import { dictionaryColors } from '@/shared/constants/dictionaryColors';
 
 export interface Dictionary {

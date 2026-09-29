@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
 interface Props {
   enabled: boolean;
   setEnabled: () => void;

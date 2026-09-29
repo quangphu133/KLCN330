@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Cập nhật mô tả API và thông báo phản hồi bằng tiếng Việt.
 """
 Endpoint xử lý luồng phiên âm đầu-cuối:
   POST /transcribe/upload    – Upload audio, gửi sang BuzzASR, trả job_id ngay

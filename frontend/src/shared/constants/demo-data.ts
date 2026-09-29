@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật giao diện và nội dung tiếng Việt cho khu vực này.
 import type { AnalyticsDashboardResponse } from '@/entities/analytics/analytics.types'
 import type { Checklist } from '@/entities/checklists/checklists.types'
 import type { Dictionary } from '@/entities/dictionaries/dictionaries.types'

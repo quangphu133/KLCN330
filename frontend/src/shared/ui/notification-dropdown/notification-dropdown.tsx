@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
 import { useCallback, useEffect, useState } from 'react'
 import { Dropdown } from '@/shared/ui/dropdown/dropdown'
 import { DropdownItem } from '@/shared/ui/dropdown/dropdown-Item'

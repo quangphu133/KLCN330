@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật giao diện và nội dung tiếng Việt cho khu vực này.
 import { ColumnConfig } from '@/shared/hooks/use-sort'
 import { TableRowData } from '@/entities/mediafile/hooks/use-calls'
 

@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật giao diện và nội dung tiếng Việt cho khu vực này.
 'use client'
 
 import { ReactNode, useEffect, useState } from 'react'

@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật giao diện cài đặt và cách áp dụng tùy chọn đã lưu.
 'use client'
 
 import Link from 'next/link'

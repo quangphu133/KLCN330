@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Cập nhật mô tả API và thông báo phản hồi bằng tiếng Việt.
 from fastapi import APIRouter, UploadFile, File, status
 from fastapi.responses import FileResponse
 from app.schemas.file_schema import FileUploadResponse

@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật kiểu dữ liệu hoặc cách hiển thị dữ liệu của tính năng.
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getLast30DaysRange } from '@/shared/utils/date-utils';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';

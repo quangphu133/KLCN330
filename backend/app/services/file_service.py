@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Chuẩn hóa thông báo nghiệp vụ và thuật ngữ tiếng Việt.
 import os
 import uuid
 import shutil

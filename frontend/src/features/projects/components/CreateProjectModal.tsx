@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa và cải thiện hiển thị cho màn hình quản lý dữ liệu.
 import { Modal } from '@/shared/ui/modal/modal';
 import Button from '@/shared/ui/button/button';
 import { type Project } from '@/entities/projects/projects.types';

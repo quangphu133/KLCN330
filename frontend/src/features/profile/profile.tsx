@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa và cải thiện khả năng đọc của trang hồ sơ.
 'use client'
 
 import { useEffect } from 'react'
