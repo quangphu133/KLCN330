@@ -22,7 +22,7 @@ npm run dev
 
 ## Chạy backend
 
-Sao chép `backend/.env.example` thành `backend/.env`, điền PostgreSQL,
+Tham khảo `backend/.env.example` rồi tạo file `backend/.env`, điền PostgreSQL,
 `ASR_BASE_URL` và `ASR_API_KEY`, sau đó:
 
 ```powershell
