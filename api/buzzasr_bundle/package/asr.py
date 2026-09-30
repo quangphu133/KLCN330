@@ -6,8 +6,11 @@ import gc
 import json
 import math
 import os
+<<<<<<< HEAD
 import subprocess
 import sys
+=======
+>>>>>>> 9cbf175 (Them phan quyen)
 import threading
 import time
 from pathlib import Path
@@ -179,11 +182,14 @@ def transcribe_audio(
     language: str = "vi",
     beam_size: int = 5,
     output_dir: str | Path | None = None,
+<<<<<<< HEAD
     enable_diarization: bool = False,
     diarization_model: str = "pyannote/speaker-diarization-community-1",
     diarization_token: str | None = None,
     diarization_device: str | None = None,
     diarization_python: str | None = None,
+=======
+>>>>>>> 9cbf175 (Them phan quyen)
 ) -> dict[str, Any]:
     """Transcribe one local audio file and return text plus word timestamps.
 
@@ -287,6 +293,7 @@ def transcribe_audio(
         "files": None,
     }
 
+<<<<<<< HEAD
     if enable_diarization:
         target_device = diarization_device or device
         try:
@@ -366,6 +373,8 @@ def transcribe_audio(
         }
     result["diarization"] = diarization
 
+=======
+>>>>>>> 9cbf175 (Them phan quyen)
     if output_dir is not None:
         result["files"] = _write_outputs(result, Path(output_dir), audio.stem)
 

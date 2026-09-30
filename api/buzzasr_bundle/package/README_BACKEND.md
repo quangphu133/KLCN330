@@ -224,6 +224,7 @@ For a backend that does not store the model, use the remote GPU API and the
 client documented in [README_API.md](../README_API.md). The backend should
 copy only `buzzasr_bundle/client`, rename it to `buzzasr_client`, and call
 `submit_audio()` followed by `wait_for_result()`.
+<<<<<<< HEAD
 
 ## Speaker diarization
 
@@ -245,3 +246,5 @@ example `.venv-diarization\\Scripts\\python.exe`). The API invokes a local
 worker subprocess and does not create a second network service. On Windows, set
 `ASR_FFMPEG_BIN` to the `bin` directory from an FFmpeg shared build so
 TorchCodec can load its FFmpeg DLLs inside the diarization worker.
+=======
+>>>>>>> 9cbf175 (Them phan quyen)

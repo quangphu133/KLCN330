@@ -1,0 +1,71 @@
+Bước 1: Tạo Database trên PostgreSQL
+Nếu bạn đã cài PostgreSQL (qua pgAdmin, Docker hoặc PostgreSQL App):
+
+Mở pgAdmin hoặc chạy lệnh qua psql:
+sql
+CREATE DATABASE do_an_db;
+(Hoặc tạo trực tiếp database mới tên bất kỳ, ví dụ do_an_db, trên giao diện pgAdmin).
+
+Bước 2: Cài đặt thư viện kết nối (nếu chưa có)
+
+
+requirements.txt
+ đã khai báo sẵn psycopg2-binary. Hãy đảm bảo thư viện đã được cài trong môi trường ảo:
+
+powershell
+pip install psycopg2-binary
+Bước 3: Cập nhật cấu hình trong file 
+
+.env
+Mở file 
+
+.env
+ và sửa dòng DATABASE_URL:
+
+env
+# Thay đổi thông tin user, password, host, port và db_name tương ứng của bạn
+DATABASE_URL=postgresql://postgres:mat_khau_cua_ban@localhost:5432/do_an_db
+Ví dụ:
+
+env
+DATABASE_URL=postgresql://postgres:123456@localhost:5432/do_an_db
+Bước 4: Khởi động server để tự động tạo bảng
+Hệ thống đã có cấu hình tự động tạo cấu trúc bảng (Base.metadata.create_all trong 
+
+app/main.py
+). Bạn chỉ cần chạy lại ứng dụng:
+
+powershell
+python run.py
+Khi server khởi động thành công, kiểm tra trên pgAdmin hoặc trang chủ http://127.0.0.1:8000/, trường "database_engine" sẽ hiển thị là "postgresql".
+
+(Tùy chọn) Chuyển dữ liệu đã có từ sql_app.db sang PostgreSQL
+Nếu trong file sql_app.db cũ của bạn đã có sẵn dữ liệu và bạn muốn giữ lại dữ liệu này:
+
+
+
+cập nhật .env
+ → DATABASE_URL=postgresql://postgres:1@localhost:5432/do_an_db	✅
+SQLAlchemy tự động tạo 3 bảng (users, call_records, violations)	✅
+Bây giờ bạn có thể chạy server bình thường:
+
+powershell
+python run.py
+Ứng dụng sẽ chạy với PostgreSQL thay vì SQLite. File sql_app.db cũ không còn được dùng nữa.
+
+
+SQLite	PostgreSQL
+Lưu trữ	File sql_app.db ngay trong thư mục project	Quản lý bởi PostgreSQL Server (chạy như service Windows)
+Vị trí data	Project folder	C:\Program Files\PostgreSQL\18\data\
+Xem được không?	Có, thấy file .db	Không thấy file trong project — phải dùng pgAdmin hoặc psql
+Để xem/quản lý database do_an_db, bạn dùng:
+1. pgAdmin (GUI - đã cài kèm PostgreSQL)
+Mở pgAdmin 4 từ Start Menu
+Kết nối vào server localhost với password 1
+Vào: Servers → PostgreSQL 18 → Databases → do_an_db → Schemas → public → Tables
+Bạn sẽ thấy 3 bảng: users, call_records, violations
+2. Qua psql (command line)
+powershell
+$env:PGPASSWORD = "1"; & "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -d do_an_db -c "\dt"
+3. Qua VS Code (cài extension PostgreSQL của Microsoft hoặc Database Client)
+Kết nối: postgresql://postgres:1@localhost:5432/do_an_db

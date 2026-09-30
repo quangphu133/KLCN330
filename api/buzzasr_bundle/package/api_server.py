@@ -27,6 +27,7 @@ STATUSES = {"queued", "running", "completed", "failed"}
 ALLOWED_EXTENSIONS = {".wav", ".mp3", ".m4a", ".flac", ".ogg"}
 
 
+<<<<<<< HEAD
 def _env_bool(name: str, default: bool) -> bool:
     value = os.environ.get(name)
     if value is None:
@@ -34,6 +35,8 @@ def _env_bool(name: str, default: bool) -> bool:
     return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
+=======
+>>>>>>> 9cbf175 (Them phan quyen)
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
@@ -59,11 +62,14 @@ class Settings:
     model: str = "buzzasr"
     device: str = "cuda"
     compute_type: str = "float16"
+<<<<<<< HEAD
     enable_diarization: bool = True
     diarization_model: str = "pyannote/speaker-diarization-community-1"
     diarization_token: str = ""
     diarization_device: str = "cuda"
     diarization_python: str = ""
+=======
+>>>>>>> 9cbf175 (Them phan quyen)
 
     @classmethod
     def from_environment(cls) -> "Settings":
@@ -83,6 +89,7 @@ class Settings:
             max_audio_seconds=int(os.environ.get("ASR_MAX_AUDIO_SECONDS", "1800")),
             max_pending_jobs=int(os.environ.get("ASR_MAX_PENDING_JOBS", "10")),
             retention_days=int(os.environ.get("ASR_RETENTION_DAYS", "7")),
+<<<<<<< HEAD
             enable_diarization=_env_bool("ASR_ENABLE_DIARIZATION", True),
             diarization_model=os.environ.get(
                 "ASR_DIARIZATION_MODEL",
@@ -91,6 +98,8 @@ class Settings:
             diarization_token=os.environ.get("HF_TOKEN", ""),
             diarization_device=os.environ.get("ASR_DIARIZATION_DEVICE", "cuda"),
             diarization_python=os.environ.get("ASR_DIARIZATION_PYTHON", ""),
+=======
+>>>>>>> 9cbf175 (Them phan quyen)
         )
 
 
@@ -214,18 +223,25 @@ class JobStore:
             connection.execute("DELETE FROM jobs WHERE job_id = ?", (job_id,))
 
 
+<<<<<<< HEAD
 SETTINGS_KEY = web.AppKey("settings", Settings)
 STORE_KEY = web.AppKey("store", JobStore)
 QUEUE_KEY = web.AppKey("queue", asyncio.Queue)
 STATE_KEY = web.AppKey("state", dict)
 
 
+=======
+>>>>>>> 9cbf175 (Them phan quyen)
 def _json_error(code: str, message: str, status: int) -> web.Response:
     return web.json_response({"error": {"code": code, "message": message}}, status=status)
 
 
 def _authorized(request: web.Request) -> bool:
+<<<<<<< HEAD
     expected = request.app[SETTINGS_KEY].api_key
+=======
+    expected = request.app["settings"].api_key
+>>>>>>> 9cbf175 (Them phan quyen)
     return request.headers.get("Authorization") == f"Bearer {expected}"
 
 
@@ -284,8 +300,12 @@ def _safe_result(result: dict[str, Any], original_filename: str) -> dict[str, An
 
 
 async def _run_job(app: web.Application, job_id: str) -> None:
+<<<<<<< HEAD
     settings: Settings = app[SETTINGS_KEY]
     store: JobStore = app[STORE_KEY]
+=======
+    store: JobStore = app["store"]
+>>>>>>> 9cbf175 (Them phan quyen)
     row = store.get(job_id)
     if row is None or row["status"] != "queued":
         return
@@ -303,11 +323,14 @@ async def _run_job(app: web.Application, job_id: str) -> None:
             language="vi",
             beam_size=5,
             output_dir=None,
+<<<<<<< HEAD
             enable_diarization=settings.enable_diarization,
             diarization_model=settings.diarization_model,
             diarization_token=settings.diarization_token or None,
             diarization_device=settings.diarization_device,
             diarization_python=settings.diarization_python or None,
+=======
+>>>>>>> 9cbf175 (Them phan quyen)
         )
         safe_result = _safe_result(result, row["original_filename"])
         result_path.write_text(
@@ -320,7 +343,11 @@ async def _run_job(app: web.Application, job_id: str) -> None:
 
 
 async def _worker(app: web.Application) -> None:
+<<<<<<< HEAD
     queue: asyncio.Queue[str | None] = app[QUEUE_KEY]
+=======
+    queue: asyncio.Queue[str | None] = app["queue"]
+>>>>>>> 9cbf175 (Them phan quyen)
     while True:
         job_id = await queue.get()
         try:
@@ -338,8 +365,13 @@ async def _cleanup_loop(app: web.Application) -> None:
 
 
 def _cleanup_expired(app: web.Application) -> None:
+<<<<<<< HEAD
     store: JobStore = app[STORE_KEY]
     cutoff = utc_now() - timedelta(days=app[SETTINGS_KEY].retention_days)
+=======
+    store: JobStore = app["store"]
+    cutoff = utc_now() - timedelta(days=app["settings"].retention_days)
+>>>>>>> 9cbf175 (Them phan quyen)
     for row in store.expired_jobs(cutoff):
         job_dir = Path(row["audio_path"]).parent
         shutil.rmtree(job_dir, ignore_errors=True)
@@ -347,8 +379,13 @@ def _cleanup_expired(app: web.Application) -> None:
 
 
 async def _startup(app: web.Application) -> None:
+<<<<<<< HEAD
     settings: Settings = app[SETTINGS_KEY]
     store: JobStore = app[STORE_KEY]
+=======
+    settings: Settings = app["settings"]
+    store: JobStore = app["store"]
+>>>>>>> 9cbf175 (Them phan quyen)
     store.recover_running()
     _cleanup_expired(app)
     await asyncio.to_thread(
@@ -358,6 +395,7 @@ async def _startup(app: web.Application) -> None:
         compute_type=settings.compute_type,
     )
     for job_id in store.queued_jobs():
+<<<<<<< HEAD
         app[QUEUE_KEY].put_nowait(job_id)
     app[STATE_KEY]["worker_task"] = asyncio.create_task(_worker(app))
     app[STATE_KEY]["cleanup_task"] = asyncio.create_task(_cleanup_loop(app))
@@ -371,6 +409,21 @@ async def _cleanup(app: web.Application) -> None:
         if task is not None:
             task.cancel()
     worker = app[STATE_KEY].get("worker_task")
+=======
+        app["queue"].put_nowait(job_id)
+    app["worker_task"] = asyncio.create_task(_worker(app))
+    app["cleanup_task"] = asyncio.create_task(_cleanup_loop(app))
+    app["ready"] = True
+
+
+async def _cleanup(app: web.Application) -> None:
+    app["ready"] = False
+    for key in ("cleanup_task", "worker_task"):
+        task = app.get(key)
+        if task is not None:
+            task.cancel()
+    worker = app.get("worker_task")
+>>>>>>> 9cbf175 (Them phan quyen)
     if worker is not None:
         await asyncio.gather(worker, return_exceptions=True)
 
@@ -379,6 +432,7 @@ async def health(request: web.Request) -> web.Response:
     unauthorized = _require_auth(request)
     if unauthorized:
         return unauthorized
+<<<<<<< HEAD
     store: JobStore = request.app[STORE_KEY]
     settings: Settings = request.app[SETTINGS_KEY]
     return web.json_response(
@@ -391,6 +445,15 @@ async def health(request: web.Request) -> web.Response:
             "diarization_model": settings.diarization_model,
             "diarization_device": settings.diarization_device,
             "diarization_python_configured": bool(settings.diarization_python),
+=======
+    store: JobStore = request.app["store"]
+    return web.json_response(
+        {
+            "ready": bool(request.app.get("ready", False)),
+            "model": "buzzasr",
+            "device": "cuda",
+            "compute_type": "float16",
+>>>>>>> 9cbf175 (Them phan quyen)
             "queued_jobs": store.count_pending(),
         }
     )
@@ -400,9 +463,15 @@ async def create_job(request: web.Request) -> web.Response:
     unauthorized = _require_auth(request)
     if unauthorized:
         return unauthorized
+<<<<<<< HEAD
     settings: Settings = request.app[SETTINGS_KEY]
     store: JobStore = request.app[STORE_KEY]
     if not request.app[STATE_KEY]["ready"]:
+=======
+    settings: Settings = request.app["settings"]
+    store: JobStore = request.app["store"]
+    if not request.app.get("ready", False):
+>>>>>>> 9cbf175 (Them phan quyen)
         return _json_error("not_ready", "The ASR model is not ready.", 503)
     if store.count_pending() >= settings.max_pending_jobs:
         return _json_error("queue_full", "The ASR queue is full.", 429)
@@ -442,7 +511,11 @@ async def create_job(request: web.Request) -> web.Response:
                 output.write(chunk)
         _probe_audio(audio_path, settings.max_audio_seconds)
         store.create_job(job_id, Path(file_part.filename).name, audio_path, result_path)
+<<<<<<< HEAD
         request.app[QUEUE_KEY].put_nowait(job_id)
+=======
+        request.app["queue"].put_nowait(job_id)
+>>>>>>> 9cbf175 (Them phan quyen)
     except web.HTTPRequestEntityTooLarge:
         shutil.rmtree(job_dir, ignore_errors=True)
         return _json_error("file_too_large", "The audio file exceeds the configured limit.", 413)
@@ -469,7 +542,11 @@ async def get_job(request: web.Request) -> web.Response:
     unauthorized = _require_auth(request)
     if unauthorized:
         return unauthorized
+<<<<<<< HEAD
     row = request.app[STORE_KEY].get(request.match_info["job_id"])
+=======
+    row = request.app["store"].get(request.match_info["job_id"])
+>>>>>>> 9cbf175 (Them phan quyen)
     if row is None:
         return _json_error("not_found", "Job was not found or has expired.", 404)
     return web.json_response(_job_payload(request, row))
@@ -479,7 +556,11 @@ async def get_result(request: web.Request) -> web.Response:
     unauthorized = _require_auth(request)
     if unauthorized:
         return unauthorized
+<<<<<<< HEAD
     row = request.app[STORE_KEY].get(request.match_info["job_id"])
+=======
+    row = request.app["store"].get(request.match_info["job_id"])
+>>>>>>> 9cbf175 (Them phan quyen)
     if row is None:
         return _json_error("not_found", "Job was not found or has expired.", 404)
     if row["status"] != "completed":
@@ -495,10 +576,17 @@ async def get_result(request: web.Request) -> web.Response:
 def create_app(settings: Settings | None = None) -> web.Application:
     resolved_settings = settings or Settings.from_environment()
     app = web.Application(client_max_size=resolved_settings.max_file_bytes + 1024 * 1024)
+<<<<<<< HEAD
     app[SETTINGS_KEY] = resolved_settings
     app[STORE_KEY] = JobStore(resolved_settings.data_dir)
     app[QUEUE_KEY] = asyncio.Queue(maxsize=resolved_settings.max_pending_jobs)
     app[STATE_KEY] = {"ready": False}
+=======
+    app["settings"] = resolved_settings
+    app["store"] = JobStore(resolved_settings.data_dir)
+    app["queue"] = asyncio.Queue(maxsize=resolved_settings.max_pending_jobs)
+    app["ready"] = False
+>>>>>>> 9cbf175 (Them phan quyen)
     app.router.add_get("/health", health, name="health")
     app.router.add_post("/jobs", create_job, name="create-job")
     app.router.add_get("/jobs/{job_id}", get_job, name="job-status")
