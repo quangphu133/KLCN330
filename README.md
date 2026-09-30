@@ -4,6 +4,7 @@ Mã nguồn web và backend phục vụ khóa luận: tải bản ghi cuộc g�
 
 - **Web và backend:** [quangphu133/KLTN330_FE_BE](https://github.com/quangphu133/KLTN330_FE_BE).
 - **Android HUIT dành cho nhân viên:** [quangphu133/KNTN330_DT](https://github.com/quangphu133/KNTN330_DT). Đây là repository riêng, không nằm trong thư mục `frontend/`.
+- **AI:** [[lemn-lab/buzz-asr](https://github.com/lemn-lab/buzz-asr)]. Đây là model AI nhóm sử dụng
 
 ## 1. Cấu trúc và luồng kết nối
 
@@ -11,7 +12,7 @@ Mã nguồn web và backend phục vụ khóa luận: tải bản ghi cuộc g�
 | --- | --- | --- | --- |
 | Web Next.js | `frontend/` | Quản lý và xem kết quả cuộc gọi | `3000` |
 | Backend FastAPI | `backend/` | Tài khoản, dữ liệu nghiệp vụ, lưu audio, điều phối AI | `8001` |
-| BuzzASR API | `api/` hoặc dự án AI riêng của nhóm | Phiên âm và phân tách người nói | `8000` |
+| API | `api/` hoặc dự án riêng của nhóm | Liên kết đến AI và backend | `8000` |
 | PostgreSQL | Dịch vụ cài riêng | Lưu dữ liệu nghiệp vụ | `5432` mặc định |
 
 ```text
