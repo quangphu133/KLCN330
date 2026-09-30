@@ -153,7 +153,7 @@ py -3.12 -m venv .venv-diarization
 
 Cài phụ thuộc chưa đủ để chạy model trên mọi máy. Cần chuẩn bị:
 
-- Model BuzzASR CTranslate2 do nhóm tự làm không đem lên được, ai muốn sử dụng thì tự làm riêng. Mã không tự tải model này; `BUZZASR_MODEL_DIR` phải là đường dẫn tuyệt đối đến thư mục model.
+- Model kèm CTranslate2 do nhóm tham khảo và tự làm không đem lên được, ai muốn sử dụng thì tự làm riêng.
 - CUDA/cuDNN và driver tương thích với CTranslate2. Bộ phụ thuộc diarization khai báo PyTorch CUDA 12.8.
 - Quyền truy cập model `pyannote/speaker-diarization-community-1` trên Hugging Face và token phù hợp.
 - TorchCodec/FFmpeg hoạt động trong môi trường diarization. Trên Windows, khi cần nạp DLL FFmpeg, đặt `ASR_FFMPEG_BIN` tới thư mục `bin` của bản FFmpeg shared phù hợp.
