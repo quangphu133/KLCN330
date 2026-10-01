@@ -1,0 +1,5 @@
+# Used only in .venv-convert; keep the working ASR environment unchanged.
+# Install the CPU build of torch from https://download.pytorch.org/whl/cpu.
+torch==2.8.0
+transformers==4.57.6
+ctranslate2==4.8.2

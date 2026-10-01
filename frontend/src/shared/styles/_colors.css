@@ -1,0 +1,113 @@
+:root {
+  --color-accent-50: #e6f2e6;
+  --color-accent-100: #abd6ac;
+  --color-accent-200: #88c289;
+  --color-accent-300: #6bb26d;
+  --color-accent-400: #53a655;
+  --color-accent-500: #41a143;
+  --color-accent-600: #338035;
+  --color-accent-700: #29662a;
+  --color-accent-800: #1f4d20;
+  --color-accent-900: #0b260c;
+
+  /* HUIT identity palette. Existing purple utilities intentionally map to
+     university blue so every feature keeps one consistent accent color. */
+  --color-purple-100: #e7f3fb;
+  --color-purple-300: #8fc3e5;
+  --color-purple-500: #2585c4;
+  --color-purple-700: #0872b9;
+  --color-purple-800: #0067aa;
+  --color-purple-900: #005a9c;
+
+  --color-green-50: #e4f7e6;
+  --color-green-100: #c9f2cf;
+  --color-green-200: #adedb6;
+  --color-green-300: #95ea80;
+  --color-green-400: #73e583;
+  --color-green-500: #5ce56f;
+  --color-green-600: #4dbf5c;
+  --color-green-700: #3d994a;
+  --color-green-800: #2e7337;
+  --color-green-900: #1f4d25;
+
+  --color-warning-50: #faf2e1;
+  --color-warning-100: #f7e7c6;
+  --color-warning-200: #f2d7a0;
+  --color-warning-300: #edc677;
+  --color-warning-400: #e5b450;
+  --color-warning-500: #e5ab2d;
+  --color-warning-600: #bf8c26;
+  --color-warning-700: #99701e;
+  --color-warning-800: #735417;
+  --color-warning-900: #4d380f;
+
+  --color-rose-50: #fae6e6;
+  --color-rose-100: #f7dcdc;
+  --color-rose-200: #f5a9a9;
+  --color-rose-300: #eb8383;
+  --color-rose-400: #e56363;
+  --color-rose-500: #e54545;
+  --color-rose-600: #bf3939;
+  --color-rose-700: #992e2e;
+  --color-rose-800: #732222;
+  --color-rose-900: #4d1717;
+
+  --color-blue-50: #eff8fd;
+  --color-blue-100: #d9eef9;
+  --color-blue-200: #b9def2;
+  --color-blue-300: #83c4e8;
+  --color-blue-400: #45a4d8;
+  --color-blue-500: #1685c5;
+  --color-blue-600: #0872b9;
+  --color-blue-700: #0062a3;
+  --color-blue-800: #075183;
+  --color-blue-900: #0b436b;
+
+  --color-gray-50: #f2f2f2;
+  --color-gray-100: #e6e6e6;
+  --color-gray-200: #d0d5dd;
+  --color-gray-300: #bdbdbd;
+  --color-gray-400: #98a2b3;
+  --color-gray-500: #8a8a8a;
+  --color-gray-600: #707070;
+  --color-gray-700: #575757;
+  --color-gray-800: #404040;
+  --color-gray-900: #262626;
+
+  --color-light-100: #fff;
+  --color-light-300: #fafafa;
+  --color-light-500: #f4f2fa;
+  --color-light-700: #dcdae0;
+  --color-light-900: #c3c1c7;
+
+  --color-neutral-100: #808080;
+  --color-neutral-300: #4c4c4c;
+  --color-neutral-500: #4c4c4c;
+  --color-neutral-600: #161616;
+  --color-neutral-700: #1a1a1a;
+  --color-neutral-900: #191919;
+
+  --color-red-50: #fbeaea;
+  --color-red-100: #f4c8c9;
+  --color-red-200: #eba2a6;
+  --color-red-300: #df7278;
+  --color-red-400: #cf3d4c;
+  --color-red-500: #b72635;
+  --color-red-600: #a6202f;
+  --color-red-700: #8d1d2a;
+  --color-red-800: #781925;
+  --color-red-900: #671521;
+  --color-red-950: #3d0f18;
+
+  --color-yellow-50: #fffdea;
+  --color-yellow-100: #fff6bf;
+  --color-yellow-200: #ffe986;
+  --color-yellow-300: #ffd749;
+  --color-yellow-400: #ffbf1f;
+  --color-yellow-500: #f7a700;
+  --color-yellow-600: #d78e00;
+  --color-yellow-700: #b06d00;
+  --color-yellow-800: #945c00;
+  --color-yellow-900: #7c4d00;
+  --color-yellow-950: #593700;
+}

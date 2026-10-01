@@ -1,0 +1,77 @@
+.root {
+  position: fixed;
+  z-index: 1010;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 0.25em;
+  font-size: 16px;
+  color: #704ecc;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+}
+
+.root::-webkit-progress-bar {
+  background-color: transparent;
+}
+
+/* Determinate */
+.root::-webkit-progress-value {
+  background-color: currentColor;
+  transition: all 0.2s;
+}
+
+.root::-moz-progress-bar {
+  background-color: currentColor;
+  transition: all 0.2s;
+}
+
+.root::-ms-fill {
+  background-color: currentColor;
+  border: none;
+  transition: all 0.2s;
+}
+
+/* Indeterminate */
+.root:indeterminate {
+  background-image: linear-gradient(
+    to right,
+    transparent 50%,
+    currentColor 50%,
+    currentColor 60%,
+    transparent 60%,
+    transparent 71.5%,
+    currentColor 71.5%,
+    currentColor 84%,
+    transparent 84%
+  );
+  background-size: 200% 100%;
+  animation: root 2s infinite linear;
+}
+
+.root:indeterminate::-moz-progress-bar {
+  background-color: transparent;
+}
+
+.root:indeterminate::-ms-fill {
+  animation-name: none;
+}
+
+@keyframes root {
+  0% {
+    background-position: left -31.25% top 0%;
+    background-size: 200% 100%;
+  }
+
+  50% {
+    background-position: left -49% top 0%;
+    background-size: 800% 100%;
+  }
+
+  100% {
+    background-position: left -102% top 0%;
+    background-size: 400% 100%;
+  }
+}

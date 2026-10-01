@@ -1,0 +1,3 @@
+bước 1: vô csdl postgresql
+	2: vô D:\Đồ án\backend cmd chạy lần đầu thì chạy lệnh python -m pip install -r requirements.txt tiếp đến python run.py
+	3: vô D:\Đồ án\frontend cmd chạy npm install tiếp đến npm run dev

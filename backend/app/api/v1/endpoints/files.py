@@ -1,0 +1,43 @@
+# Ghi chú nhóm: Cập nhật mô tả API và thông báo phản hồi bằng tiếng Việt kèm RBAC.
+from fastapi import APIRouter, Depends, UploadFile, File, status
+from fastapi.responses import FileResponse
+from app.models.user import User
+from app.schemas.file_schema import FileUploadResponse
+from app.services.file_service import FileService
+from app.core.dependencies import get_current_user
+
+router = APIRouter(prefix="/files", tags=["Files"])
+
+
+@router.post(
+    "/upload", 
+    response_model=FileUploadResponse, 
+    status_code=status.HTTP_201_CREATED,
+    summary="Tải lên file âm thanh ghi âm cuộc gọi"
+)
+async def upload_audio_file(
+    file: UploadFile = File(..., description="Tệp âm thanh cuộc gọi (.wav, .mp3, .m4a, .ogg)"),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Tải lên file ghi âm từ hệ thống tổng đài / telesale.
+    Hệ thống sẽ lưu trữ và trả về thông tin đường dẫn `file_path` để sử dụng khi tạo cuộc gọi.
+    """
+    del current_user
+    return await FileService.save_audio_file(file)
+
+
+@router.get(
+    "/download/{filename}",
+    summary="Tải xuống hoặc nghe trực tiếp file âm thanh"
+)
+def download_audio_file(
+    filename: str,
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Lấy file âm thanh theo tên file đã lưu trong hệ thống.
+    """
+    del current_user
+    file_path = FileService.get_file_path(filename)
+    return FileResponse(file_path)
