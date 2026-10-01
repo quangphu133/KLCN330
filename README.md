@@ -3,7 +3,7 @@
 Mã nguồn web và backend phục vụ khóa luận: tải bản ghi cuộc gọi, phiên âm tiếng Việt, phân tách người nói, xác nhận vai trò nhân viên/khách hàng và đánh giá tuân thủ theo quy tắc hiện có.
 
 - **Web và backend:** [quangphu133/KLTN330_FE_BE](https://github.com/quangphu133/KLTN330_FE_BE).
-- **Android HUIT dành cho nhân viên:** [quangphu133/KNTN330_DT](https://github.com/quangphu133/KNTN330_DT). Đây là repository riêng, không nằm trong thư mục `frontend/`.
+- **Android App dành cho nhân viên:** [quangphu133/KNTN330_DT](https://github.com/quangphu133/KNTN330_DT). Đây là repository riêng, không nằm trong thư mục `frontend/`.
 - **Nguồn AI:** [BuzzASR — lemn-lab/buzz-asr](https://github.com/lemn-lab/buzz-asr). Nhóm sử dụng mô hình có sẵn từ BuzzASR để tích hợp vào hệ thống. Người dùng tự tải model và thiết lập môi trường theo hướng dẫn của BuzzASR trước khi sử dụng.
 
 ## 1. Cấu trúc và luồng kết nối
@@ -16,22 +16,20 @@ Mã nguồn web và backend phục vụ khóa luận: tải bản ghi cuộc g�
 | PostgreSQL | Dịch vụ cài riêng | Lưu dữ liệu nghiệp vụ | `5432` mặc định |
 
 ```text
-Web / HUIT -> Backend :8001 -> BuzzASR API :8000
+Web / App -> Backend :8001 -> BuzzASR API :8000
                   |
              PostgreSQL
 ```
 
-Backend dùng tiền tố **`/api`**, không phải `/api/v1`. Web và HUIT gọi backend; không kết nối trực tiếp AI hoặc database.
-
 **Repository chỉ cung cấp mã nguồn tích hợp.** Thư mục `api/` chứa mã API kết nối backend với BuzzASR, không chứa model/trọng số BuzzASR. Mọi người cần tự tải model từ nguồn BuzzASR và cấu hình đường dẫn để API sử dụng. Clone repo hoặc cài thư viện Python không đồng nghĩa đã có model.
 
-**Database cũng cần tự chuẩn bị:** repo có model dữ liệu ORM và migration SQL trong `backend/`, không kèm database PostgreSQL đã cài sẵn, bản sao lưu dữ liệu, tài khoản đăng nhập hay dữ liệu cuộc gọi thực tế. Người dùng tự cài PostgreSQL, tạo database và khởi tạo bảng theo phần 3. Việc kết nối database nghiệp vụ do `backend/` thực hiện, không phải thư mục `api/`.
+**Database cũng cần tự chuẩn bị:** repo có model dữ liệu ORM và migration SQL trong `backend/`, không kèm bản sao lưu dữ liệu, tài khoản đăng nhập hay dữ liệu cuộc gọi thực tế. Người dùng tự cài PostgreSQL, tạo database và khởi tạo bảng theo phần 3. Việc kết nối database nghiệp vụ do `backend/` thực hiện.
 
 ## 2. Chuẩn bị và lấy mã nguồn
 
-Hướng dẫn dùng Windows và **PowerShell 7**. Cần Git, Python 3.12, Node.js 20 trở lên với npm, PostgreSQL đang hoạt động và công cụ `psql`/`pg_dump` nếu thao tác database trong terminal. Có thể dùng pgAdmin cho các thao tác SQL tương ứng.
+Hướng dẫn dùng Windows và **PowerShell**. Cần Git, Python 3.12, Node.js 20 trở lên với npm, PostgreSQL đang hoạt động và công cụ `psql`/`pg_dump` nếu thao tác database trong terminal. Có thể dùng pgAdmin cho các thao tác SQL tương ứng.
 
-Máy chỉ chạy web/backend không cần CUDA. Máy AI cần model BuzzASR được tải riêng, ở định dạng CTranslate2 mà mã API hiện tại sử dụng, cùng môi trường GPU tương thích.
+Máy chỉ chạy web/backend. Máy AI cần model BuzzASR được tải riêng, ở định dạng CTranslate2 mà mã API hiện tại sử dụng, cùng môi trường GPU tương thích.
 
 ```powershell
 git clone https://github.com/quangphu133/KLTN330_FE_BE.git
@@ -206,7 +204,7 @@ Remove-Variable asrKey
 
 Nếu AI ngoại tuyến, backend có thể lưu audio cùng job thất bại; HTTP 202 chỉ cho biết đã tiếp nhận, không chứng minh AI phân tích thành công. Audio một người nói có thể trả `unsupported_speaker_count`, không đủ điều kiện xác nhận hai vai trò.
 
-## 8. Kết nối Android HUIT
+## 8. Kết nối Android app
 
 Hướng dẫn Flutter nằm tại [KNTN330_DT](https://github.com/quangphu133/KNTN330_DT). `API_BASE_URL` của app là địa chỉ gốc backend, không thêm `/api`:
 
@@ -217,7 +215,7 @@ Hướng dẫn Flutter nằm tại [KNTN330_DT](https://github.com/quangphu133/K
 
 Với điện thoại thật, backend cần bind IP LAN hoặc `0.0.0.0`, firewall cho phép thiết bị thử nghiệm truy cập cổng `8001`. `localhost` trên điện thoại là chính điện thoại. HTTP chỉ phục vụ demo debug; bản release dùng HTTPS theo hướng dẫn repo app.
 
-**Tình trạng tương thích:** phiên bản backend làm cơ sở cho tài liệu này là commit `68e8b7a`. Phiên bản đó có API đăng nhập, cuộc gọi, upload, kết quả và xác nhận người nói, nhưng chưa có `GET /api/analytics/me`, `GET /api/transcribe/` để liệt kê job, các API `/api/notifications/` và migration `003_add_call_notifications.sql` mà HUIT cần. Phải đồng bộ thay đổi backend tương ứng trước khi kiểm thử đầy đủ các màn hình app; clone hai repo chưa đảm bảo toàn bộ chức năng HUIT hoạt động.
+**Tình trạng tương thích:** phiên bản backend làm cơ sở cho tài liệu này là commit `68e8b7a`. Phiên bản đó có API đăng nhập, cuộc gọi, upload, kết quả và xác nhận người nói, nhưng chưa có `GET /api/analytics/me`, `GET /api/transcribe/` để liệt kê job, các API `/api/notifications/` và migration `003_add_call_notifications.sql` mà app cần. Phải đồng bộ thay đổi backend tương ứng trước khi kiểm thử đầy đủ các màn hình app; clone hai repo chưa đảm bảo toàn bộ chức năng app hoạt động.
 
 ## 9. Kiểm tra mã nguồn
 
@@ -228,7 +226,7 @@ cd backend
 ..\.venv-doan\Scripts\python.exe -m pytest
 ```
 
-Bộ test cấu hình SQLite và thư mục upload tạm riêng. Test tự động không thay thế kiểm thử AI/GPU thực tế với audio.
+Bộ test cấu hình SQLite và thư mục upload tạm riêng.
 
 Frontend, mở terminal khác từ thư mục gốc repo:
 
@@ -239,19 +237,4 @@ npx tsc --noEmit
 npm run build
 ```
 
-Sau khi build thành công, dùng `npm run start` để chạy bản build. Hướng dẫn này không khẳng định cài đặt mới đã được kiểm thử trên mọi máy; kết quả kiểm thử cần ghi theo môi trường thực tế.
-
-## 10. Lỗi thường gặp
-
-| Hiện tượng | Kiểm tra |
-| --- | --- |
-| `WinError 10048` / cổng bị chiếm | Dùng `netstat -ano` xác định tiến trình; chỉ giữ một dịch vụ trên mỗi cổng |
-| Web `Failed to fetch` hoặc audio không phát | Backend hoạt động, URL web có `/` cuối, đăng nhập hợp lệ và audio còn tồn tại |
-| PostgreSQL từ chối kết nối | Dịch vụ, database, user/password và `DATABASE_URL` |
-| Thiếu bảng/cột | Chạy `init_db` cho database mới hoặc migration phù hợp cho database cũ |
-| AI trả `401` | Header Bearer và khóa ASR phải khớp; không dùng HF token thay khóa ASR |
-| Không tìm thấy model / lỗi CUDA | Đường dẫn model tuyệt đối, thư viện GPU và môi trường AI |
-| Có phiên âm nhưng diarization lỗi | Quyền model/token, Python diarization, TorchCodec/FFmpeg và lỗi trong kết quả AI |
-| HUIT báo `404` ở thống kê/thông báo | Đối chiếu các API còn thiếu tại phần tương thích HUIT |
-
-Không commit `.env`, `.env.local`, token, mật khẩu, bản sao database, audio thật hoặc dữ liệu khách hàng. Hướng dẫn này lấy cấu hình local làm điểm bắt đầu, không bắt buộc Tailscale.
+Sau khi build thành công, dùng `npm run start` để chạy bản build.
