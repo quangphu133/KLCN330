@@ -1,5 +1,9 @@
 # BuzzASR API
 
+Thư mục này chỉ chứa mã API tích hợp backend với [BuzzASR](https://github.com/lemn-lab/buzz-asr), mô hình AI có sẵn mà nhóm sử dụng. **Không có model/trọng số BuzzASR trong thư mục `api/`.** Người dùng tự tải model theo hướng dẫn của BuzzASR, chuẩn bị định dạng CTranslate2 phù hợp và đặt `BUZZASR_MODEL_DIR` tới đường dẫn tuyệt đối của thư mục model đã chuẩn bị. Cài các thư viện dưới đây không tự tải model.
+
+Database PostgreSQL nghiệp vụ được cấu hình và truy cập qua `backend/`, không đi kèm thư mục này. Người dùng tự cài PostgreSQL và khởi tạo database theo [README chính](../README.md). Kho SQLite lưu job do API tạo lúc chạy không thay thế database nghiệp vụ.
+
 Dịch vụ này chạy độc lập trên máy có GPU và mặc định lắng nghe ở cổng `8000`.
 
 ```powershell
