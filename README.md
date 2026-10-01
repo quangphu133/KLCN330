@@ -4,7 +4,7 @@ Mã nguồn web và backend phục vụ khóa luận: tải bản ghi cuộc g�
 
 - **Web và backend:** [quangphu133/KLTN330_FE_BE](https://github.com/quangphu133/KLTN330_FE_BE).
 - **Android HUIT dành cho nhân viên:** [quangphu133/KNTN330_DT](https://github.com/quangphu133/KNTN330_DT). Đây là repository riêng, không nằm trong thư mục `frontend/`.
-- **AI:** [[lemn-lab/buzz-asr](https://github.com/lemn-lab/buzz-asr)]. Đây là model AI nhóm sử dụng
+- **Nguồn AI:** [BuzzASR — lemn-lab/buzz-asr](https://github.com/lemn-lab/buzz-asr). Nhóm sử dụng mô hình có sẵn từ BuzzASR để tích hợp vào hệ thống. Người dùng tự tải model và thiết lập môi trường theo hướng dẫn của BuzzASR trước khi sử dụng.
 
 ## 1. Cấu trúc và luồng kết nối
 
@@ -12,7 +12,7 @@ Mã nguồn web và backend phục vụ khóa luận: tải bản ghi cuộc g�
 | --- | --- | --- | --- |
 | Web Next.js | `frontend/` | Quản lý và xem kết quả cuộc gọi | `3000` |
 | Backend FastAPI | `backend/` | Tài khoản, dữ liệu nghiệp vụ, lưu audio, điều phối AI | `8001` |
-| API | `api/` hoặc dự án riêng của nhóm | Liên kết đến AI và backend | `8000` |
+| API tích hợp BuzzASR | `api/` | Nhận yêu cầu từ backend và gọi model BuzzASR đã được tải, cấu hình riêng; không chứa model | `8000` |
 | PostgreSQL | Dịch vụ cài riêng | Lưu dữ liệu nghiệp vụ | `5432` mặc định |
 
 ```text
@@ -21,13 +21,17 @@ Web / HUIT -> Backend :8001 -> BuzzASR API :8000
              PostgreSQL
 ```
 
-Backend dùng tiền tố **`/api`**, không phải `/api/v1`. Web và HUIT gọi backend; không kết nối trực tiếp AI hoặc database. Model, audio thực tế, dữ liệu PostgreSQL và token không được cung cấp trong repository.
+Backend dùng tiền tố **`/api`**, không phải `/api/v1`. Web và HUIT gọi backend; không kết nối trực tiếp AI hoặc database.
+
+**Repository chỉ cung cấp mã nguồn tích hợp.** Thư mục `api/` chứa mã API kết nối backend với BuzzASR, không chứa model/trọng số BuzzASR. Mọi người cần tự tải model từ nguồn BuzzASR và cấu hình đường dẫn để API sử dụng. Clone repo hoặc cài thư viện Python không đồng nghĩa đã có model.
+
+**Database cũng cần tự chuẩn bị:** repo có model dữ liệu ORM và migration SQL trong `backend/`, không kèm database PostgreSQL đã cài sẵn, bản sao lưu dữ liệu, tài khoản đăng nhập hay dữ liệu cuộc gọi thực tế. Người dùng tự cài PostgreSQL, tạo database và khởi tạo bảng theo phần 3. Việc kết nối database nghiệp vụ do `backend/` thực hiện, không phải thư mục `api/`.
 
 ## 2. Chuẩn bị và lấy mã nguồn
 
 Hướng dẫn dùng Windows và **PowerShell 7**. Cần Git, Python 3.12, Node.js 20 trở lên với npm, PostgreSQL đang hoạt động và công cụ `psql`/`pg_dump` nếu thao tác database trong terminal. Có thể dùng pgAdmin cho các thao tác SQL tương ứng.
 
-Máy chỉ chạy web/backend không cần CUDA. Máy AI cần model BuzzASR dạng CTranslate2 và môi trường GPU tương thích.
+Máy chỉ chạy web/backend không cần CUDA. Máy AI cần model BuzzASR được tải riêng, ở định dạng CTranslate2 mà mã API hiện tại sử dụng, cùng môi trường GPU tương thích.
 
 ```powershell
 git clone https://github.com/quangphu133/KLTN330_FE_BE.git
@@ -139,11 +143,15 @@ npm run dev
 
 Mở <http://localhost:3000/auth/sign-in> và đăng nhập bằng tài khoản đã tạo. Chế độ demo của web có dữ liệu mô phỏng; kiểm thử backend/AI cần dùng tài khoản thật trong database.
 
-## 6. Kết nối và khởi chạy AI API
+## 6. Tự tải BuzzASR và kết nối qua API
+
+AI phiên âm mà nhóm sử dụng được lấy từ [BuzzASR](https://github.com/lemn-lab/buzz-asr). Mỗi người tự tải model theo tài liệu của dự án nguồn và chuẩn bị model tương thích với định dạng CTranslate2 mà API này yêu cầu. Repository này không phân phối model BuzzASR và không tự tải model khi khởi động.
+
+Thư mục `api/` chỉ cung cấp mã dịch vụ API tích hợp với model đã chuẩn bị: nhận audio, gọi xử lý và trả trạng thái/kết quả cho backend. Các lệnh dưới đây cài và chạy lớp API này, không phải lệnh tải model BuzzASR. Phân tách người nói sử dụng pyannote và cần cấu hình riêng như bên dưới.
 
 Nếu đã chạy dịch vụ trong dự án `KLTN330_AI`, cấu hình `ASR_BASE_URL` và cùng một `ASR_API_KEY` ở hai phía; không mở thêm bản `api/` trên cùng cổng `8000`.
 
-Nếu dùng mã AI trong repo này, làm các bước sau **trên máy AI**, từ thư mục gốc repo:
+Sau khi tự tải và chuẩn bị model, nếu dùng lớp API trong repo này, làm các bước sau **trên máy AI**, từ thư mục gốc repo:
 
 ```powershell
 py -3.12 -m venv .venv-asr-local
@@ -154,7 +162,7 @@ py -3.12 -m venv .venv-diarization
 
 Cài phụ thuộc chưa đủ để chạy model trên mọi máy. Cần chuẩn bị:
 
-- Model kèm CTranslate2 do nhóm tham khảo và tự làm không đem lên được, ai muốn sử dụng thì tự làm riêng.
+- Model BuzzASR do người dùng tự tải và chuẩn bị ở định dạng CTranslate2. `BUZZASR_MODEL_DIR` phải là đường dẫn tuyệt đối đến thư mục model trên máy của người dùng; model không có sẵn trong `api/`.
 - CUDA/cuDNN và driver tương thích với CTranslate2. Bộ phụ thuộc diarization khai báo PyTorch CUDA 12.8.
 - Quyền truy cập model `pyannote/speaker-diarization-community-1` trên Hugging Face và token phù hợp.
 - TorchCodec/FFmpeg hoạt động trong môi trường diarization. Trên Windows, khi cần nạp DLL FFmpeg, đặt `ASR_FFMPEG_BIN` tới thư mục `bin` của bản FFmpeg shared phù hợp.
@@ -175,7 +183,7 @@ $env:ASR_DIARIZATION_PYTHON = (Resolve-Path .\.venv-diarization\Scripts\python.e
 .\.venv-asr-local\Scripts\python.exe .\api\run.py
 ```
 
-Thay đường dẫn model bằng đường dẫn thật trên máy. Khóa ASR nhập ở đây phải khớp `backend/.env`. `HF_TOKEN` chỉ dùng phía AI, không đặt trong web/Flutter. Bản API trong repo này đọc biến môi trường: chỉ tạo `api/.env` không tự nạp cấu hình, và không nên giả định API sẽ hỏi token khi thiếu.
+Đường dẫn model trong ví dụ chỉ minh họa cách cấu hình; thay bằng thư mục chứa model bạn đã tự tải và chuẩn bị. Khóa ASR nhập ở đây phải khớp `backend/.env`. `HF_TOKEN` chỉ dùng phía AI, không đặt trong web/Flutter. Bản API trong repo này đọc biến môi trường: chỉ tạo `api/.env` không tự nạp cấu hình, và không nên giả định API sẽ hỏi token khi thiếu.
 
 Mọi endpoint AI, kể cả health, cần header Bearer. Trong terminal PowerShell 7 khác:
 
