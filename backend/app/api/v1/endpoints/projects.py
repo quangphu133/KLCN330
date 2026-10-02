@@ -6,7 +6,9 @@ from app.db.database import get_db
 from app.schemas.project_schema import ProjectCreate, ProjectResponse, ProjectUpdate
 from app.services.project_service import ProjectService
 
-router = APIRouter()
+from app.api.v1.endpoints.auth import require_admin
+
+router = APIRouter(dependencies=[Depends(require_admin)])
 
 
 @router.get("/", response_model=List[ProjectResponse])

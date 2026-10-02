@@ -3,14 +3,7 @@ import type { AnalyticsDashboardResponse } from '@/entities/analytics/analytics.
 import type { Checklist } from '@/entities/checklists/checklists.types'
 import type { Dictionary } from '@/entities/dictionaries/dictionaries.types'
 import type { MediaFileResponse } from '@/entities/mediafile/api/mediafile.types'
-import type { Operator } from '@/entities/operators/operators.types'
 import type { Project } from '@/entities/projects/projects.types'
-
-export const demoOperators: Operator[] = [
-  { id: 1, name: 'Nguyễn Văn An', isActive: true, createdAt: '2026-01-15T08:00:00.000Z' },
-  { id: 2, name: 'Trần Thị Bình', isActive: true, createdAt: '2026-02-10T10:30:00.000Z' },
-  { id: 3, name: 'Lê Hoàng Cường', isActive: false, createdAt: '2026-03-01T14:15:00.000Z' },
-]
 
 export const demoProjects: Project[] = [
   { id: 1, name: 'Chăm sóc khách hàng', isActive: true },
@@ -73,8 +66,8 @@ const demoMediaFile = {
   numChannels: 2,
   sampleRate: 44100,
   duration: 187,
-  operatorId: 1,
-  operatorName: 'Nguyễn Văn An',
+  telesaleId: 1,
+  telesaleName: 'Nguyễn Văn An',
   operatorChannel: '1',
   lastAccessUtc: '2026-09-14T08:30:00.000Z',
   createDate: '2026-09-14T08:30:00.000Z',
@@ -107,8 +100,8 @@ export const demoMediaFiles: MediaFileResponse = {
   totalCount: 3,
   mediaFile: [
     demoMediaFile,
-    { ...demoMediaFile, id: 1002, fileName: 'cuoc-goi-ban-hang-014.wav', projectName: 'Tư vấn bán hàng', operatorId: 2, operatorName: 'Trần Thị Bình', additionalMetadata: { ...demoMediaFile.additionalMetadata, clientNumber: '0912 345 678' } },
-    { ...demoMediaFile, id: 1003, fileName: 'cuoc-goi-danh-gia-007.wav', projectName: 'Đánh giá chất lượng', operatorId: 3, operatorName: 'Lê Hoàng Cường', additionalMetadata: { ...demoMediaFile.additionalMetadata, clientNumber: '0903 888 999' } },
+    { ...demoMediaFile, id: 1002, fileName: 'cuoc-goi-ban-hang-014.wav', projectName: 'Tư vấn bán hàng', telesaleId: 2, telesaleName: 'Trần Thị Bình', additionalMetadata: { ...demoMediaFile.additionalMetadata, clientNumber: '0912 345 678' } },
+    { ...demoMediaFile, id: 1003, fileName: 'cuoc-goi-danh-gia-007.wav', projectName: 'Đánh giá chất lượng', telesaleId: 3, telesaleName: 'Lê Hoàng Cường', additionalMetadata: { ...demoMediaFile.additionalMetadata, clientNumber: '0903 888 999' } },
   ],
 }
 
@@ -123,10 +116,10 @@ export const demoAnalytics: AnalyticsDashboardResponse = {
   ],
   negativeHistogramData: { '0.1': 8, '0.2': 14, '0.3': 7, '0.4': 3 },
   summaryData: { recordsCount: 128, averageDuration: 214, averageNegativeLevelOverall: 0.16, averageKeywordsCount: 2.8, averageMaxSimultaneousSilenceDuration: 3.1, averageSimultaneousSpeechCount: 1.7 },
-  operatorRatingData: [
-    { operatorName: 'Nguyễn Văn An', recordsCount: 52, averageDuration: 198, averageNegativeLevelOverall: 0.11, averageKeywordsCount: 2.1, averageMaxSimultaneousSilenceDuration: 2.4, averageSimultaneousSpeechCount: 1.2 },
-    { operatorName: 'Trần Thị Bình', recordsCount: 44, averageDuration: 226, averageNegativeLevelOverall: 0.17, averageKeywordsCount: 3.2, averageMaxSimultaneousSilenceDuration: 3.5, averageSimultaneousSpeechCount: 1.8 },
-    { operatorName: 'Lê Hoàng Cường', recordsCount: 32, averageDuration: 219, averageNegativeLevelOverall: 0.2, averageKeywordsCount: 3.1, averageMaxSimultaneousSilenceDuration: 3.7, averageSimultaneousSpeechCount: 2.1 },
+  employeeRatingData: [
+    { telesaleId: 1, telesaleName: 'Nguyễn Văn An', recordsCount: 52, averageDuration: 198, averageNegativeLevelOverall: 0.11, averageKeywordsCount: 2.1, averageMaxSimultaneousSilenceDuration: 2.4, averageSimultaneousSpeechCount: 1.2 },
+    { telesaleId: 2, telesaleName: 'Trần Thị Bình', recordsCount: 44, averageDuration: 226, averageNegativeLevelOverall: 0.17, averageKeywordsCount: 3.2, averageMaxSimultaneousSilenceDuration: 3.5, averageSimultaneousSpeechCount: 1.8 },
+    { telesaleId: 3, telesaleName: 'Lê Hoàng Cường', recordsCount: 32, averageDuration: 219, averageNegativeLevelOverall: 0.2, averageKeywordsCount: 3.1, averageMaxSimultaneousSilenceDuration: 3.7, averageSimultaneousSpeechCount: 2.1 },
   ],
 }
 

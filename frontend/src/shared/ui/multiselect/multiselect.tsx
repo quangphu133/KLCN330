@@ -131,7 +131,7 @@ export const MultiSelect = ({
             setDropdownOpen(true);
           }}
           onBlur={() => setDropdownOpen(false)}
-          className={`absolute left-0 top-full z-40 mt-2 w-full rounded-[22px] border border-stroke bg-white py-3 shadow-card dark:border-strokedark dark:bg-boxdark ${
+          className={`absolute left-0 top-full z-40 mt-2 w-full rounded-[22px] border border-gray-200 bg-white py-3 text-gray-800 shadow-card dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 ${
             dropdownOpen === true ? 'block' : 'hidden'
           }`}
         >
@@ -140,8 +140,7 @@ export const MultiSelect = ({
               <li key={option.value}>
                 <button
                   type="button"
-                  className="flex py-2 px-5 font-medium hover:bg-whiter hover:text-primary 
-                  dark:hover:bg-meta-4 cursor-pointer"
+                  className="flex w-full cursor-pointer py-2 px-5 text-left font-medium text-gray-800 hover:bg-gray-100 hover:text-primary dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-white"
                   onClick={() => {
                     if (
                       !selectedOptions.some((opt) => opt.value === option.value)

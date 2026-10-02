@@ -246,7 +246,7 @@ export function AccountSettings() {
             <div className="mt-5 border-t border-gray-100 pt-5 dark:border-gray-800">
               <Link
                 href={appRoutes.private.profile}
-                className="flex items-center justify-between rounded-xl bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-300"
+                className="flex items-center justify-between rounded-xl bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100 dark:bg-blue-900/50 dark:text-blue-100 dark:hover:bg-blue-900/70"
               >
                 Hồ sơ và mật khẩu
                 <span aria-hidden="true">→</span>

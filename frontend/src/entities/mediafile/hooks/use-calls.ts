@@ -14,12 +14,13 @@ import { getSortParamName, SortKey } from './getSortParamsName';
 export interface TableRowData {
   id: string;
   date: string;
-  operator: string;
+  employee: string;
   phone: string;
   numChannels: string;
   duration: string;
   negative: string;
   negativeValue: number | null;
+  complianceScore?: number | null;
   lexis: number;
   interruptions: number;
   silence: string;
@@ -122,7 +123,7 @@ export const useCalls = () => {
     data: mediaFilesData,
     refetch,
     isLoading,
-  } = useGetMediaFilesQueryQuery(queryParams);
+  } = useGetMediaFilesQueryQuery(queryParams, { pollingInterval: 10_000 });
   const [downloadUrl] = useLazyGetDownloadFileExcelQuery();
 
   const mediaFilesDataTable = mediaFilesData?.mediaFile || [];

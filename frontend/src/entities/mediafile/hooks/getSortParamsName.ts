@@ -1,6 +1,5 @@
 export type SortKey = 
   | 'date'
-  | 'operator'
   | 'phone'
   | 'duration'
   | 'negative'
@@ -14,7 +13,6 @@ export const getSortParamName = (
   direction: 'asc' | 'desc'
 ): string | null => {
   const map: Record<SortKey, string> = {
-    operator: 'OperatorName',
     date: 'CreateDate',
     phone: 'ClientNumber',
     duration: 'Duration',

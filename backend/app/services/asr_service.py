@@ -16,6 +16,7 @@ from app.models.call_record import CallRecord
 from app.schemas.call_schema import CallRecordCreate
 from app.schemas.ai_schema import AIModelResult, AISpeechSegment
 from app.services.call_service import CallService
+from app.services.notification_service import create_once, update_upload_notifications
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +35,6 @@ def submit_to_asr(
     db: Session,
     file_path: str,
     telesale_id: Optional[int] = None,
-    operator_id: Optional[int] = None,
     project_id: Optional[int] = None,
     client_number: Optional[str] = None,
     requested_call_date: Optional[datetime] = None,
@@ -64,7 +64,6 @@ def submit_to_asr(
         file_path=file_path,
         status="queued",
         telesale_id=telesale_id,
-        operator_id=operator_id,
         project_id=project_id,
         client_number=client_number,
         requested_call_date=requested_call_date,
@@ -141,7 +140,6 @@ def process_asr_result(db: Session, asr_job_db_id: int) -> AsrJob:
 
     call_in = CallRecordCreate(
         telesale_id=asr_job.telesale_id,
-        operator_id=asr_job.operator_id,
         project_id=asr_job.project_id,
         client_number=asr_job.client_number,
         call_date=asr_job.requested_call_date,
@@ -183,5 +181,65 @@ def _set_status(db: Session, asr_job: AsrJob, status: str, error_message: Option
     asr_job.updated_at = datetime.now(timezone.utc).replace(tzinfo=None)
     if error_message:
         asr_job.error_message = error_message
+
+    notification = None
+    if status == "failed":
+        notification = (
+            "failed",
+            "Phân tích bản ghi thất bại",
+            "AI không xử lý được bản ghi này. Vui lòng thử lại hoặc liên hệ quản trị viên.",
+        )
+    elif status == "completed":
+        call_record = asr_job.call_record
+        diarization = ((call_record.analysis_data or {}).get("diarization") or {}) if call_record else {}
+        role_mapping = diarization.get("role_mapping") or {}
+        speaker_ids = [str(speaker.get("speaker_id")) for speaker in diarization.get("speakers") or []]
+        has_two_speakers = len(speaker_ids) == 2 and len(set(speaker_ids)) == 2
+        needs_confirmation = (
+            diarization.get("status") == "completed"
+            and has_two_speakers
+            and not role_mapping.get("agent_speaker_id")
+        )
+        insufficient_speakers = (
+            diarization.get("status") in {"completed", "unsupported_speaker_count"}
+            and not has_two_speakers
+            and not role_mapping.get("agent_speaker_id")
+        )
+        suffix = "confirm" if needs_confirmation else "insufficient" if insufficient_speakers else "completed"
+        event_type = "needs_confirmation" if needs_confirmation else "insufficient_speakers" if insufficient_speakers else "completed"
+        notification = (
+            event_type,
+            "Cần xác nhận người nói" if needs_confirmation else "Chưa đủ dữ liệu người nói" if insufficient_speakers else "Đã có kết quả phân tích",
+            "Cuộc gọi đã phân tích xong. Hãy xác nhận giọng nhân viên để tính điểm."
+            if needs_confirmation
+            else "Phân tích đã xong nhưng dữ liệu cần đúng hai người nói để xác nhận giọng nhân viên."
+            if insufficient_speakers
+            else "Kết quả phân tích cuộc gọi đã sẵn sàng.",
+        )
+
+    notified_users = set()
+    if notification is not None:
+        event_type, title, message = notification
+        notified_users = update_upload_notifications(
+            db,
+            asr_job_id=asr_job.id,
+            job_id=asr_job.job_id,
+            event_type=event_type,
+            title=title,
+            message=message,
+            call_record_id=asr_job.call_record_id,
+        )
+        if asr_job.telesale_id is not None and asr_job.telesale_id not in notified_users:
+            suffix = "failed" if status == "failed" else event_type.replace("needs_confirmation", "confirm").replace("insufficient_speakers", "insufficient")
+            create_once(
+                db,
+                user_id=asr_job.telesale_id,
+                event_key=f"asr:{asr_job.job_id}:{suffix}",
+                event_type=event_type,
+                title=title,
+                message=message,
+                call_record_id=asr_job.call_record_id,
+                asr_job_id=asr_job.id,
+            )
     db.commit()
     db.refresh(asr_job)

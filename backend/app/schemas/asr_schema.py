@@ -15,7 +15,6 @@ class AsrJobResponse(BaseModel):
     job_id: str = Field(..., description="Mã tác vụ từ máy chủ GPU BuzzASR")
     status: str = Field(..., description="Trạng thái: đang chờ | đang xử lý | hoàn tất | thất bại")
     telesale_id: Optional[int] = Field(None, description="Mã nhân viên")
-    operator_id: Optional[int] = None
     project_id: Optional[int] = None
     client_number: Optional[str] = None
     call_record_id: Optional[int] = Field(None, description="Mã bản ghi cuộc gọi sau khi phiên âm xong")

@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 from app.db.database import Base, SessionLocal, engine
 from app.models.vocabulary import Vocabulary
+from app.models.notification import CallNotification
 from app.services.rule_service import FORBIDDEN_RULES, MANDATORY_RULES
 
 

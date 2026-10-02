@@ -5,10 +5,10 @@ import { useState } from 'react';
 import { MoreDotIcon } from '@/../public/assets/icons';
 import { Dropdown } from '@/shared/ui/dropdown/dropdown';
 import { DropdownItem } from '@/shared/ui/dropdown/dropdown-Item';
-import { OperatorRatingDataItem } from '@/entities/analytics/analytics.types';
+import { EmployeeRatingDataItem } from '@/entities/analytics/analytics.types';
 
 interface TopChannelProps {
-  data?: OperatorRatingDataItem[];
+  data?: EmployeeRatingDataItem[];
 }
 
 export default function TopChannel({ data = [] }: TopChannelProps) {
@@ -66,7 +66,7 @@ export default function TopChannel({ data = [] }: TopChannelProps) {
         </div>
 
         {sortedData && sortedData.length > 0 ? (
-          sortedData.slice(0, 5).map((operator, index) => (
+          sortedData.slice(0, 5).map((employee, index) => (
             <div
               key={index}
               className={`py-3 ${
@@ -77,10 +77,10 @@ export default function TopChannel({ data = [] }: TopChannelProps) {
             >
               <div className="flex items-center justify-between">
                 <span className="font-medium text-gray-800 text-theme-sm dark:text-gray-300">
-                  {operator.operatorName || `Điều hành viên ${index + 1}`}
+                  {employee.telesaleName || (employee.telesaleId === null ? 'Chưa gán nhân viên' : `Nhân viên ${index + 1}`)}
                 </span>
                 <span className="text-right text-gray-500 text-theme-sm dark:text-gray-400">
-                  {operator.recordsCount}
+                  {employee.recordsCount}
                 </span>
               </div>
             </div>

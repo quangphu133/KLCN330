@@ -9,7 +9,13 @@ from app.schemas.vocabulary_schema import VocabularyCreate, VocabularyUpdate
 class VocabularyService:
     @staticmethod
     def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[dict]:
-        items = db.query(Vocabulary).offset(skip).limit(limit).all()
+        items = (
+            db.query(Vocabulary)
+            .order_by(Vocabulary.id.asc())
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
         return [VocabularyService._to_response(v) for v in items]
 
     @staticmethod

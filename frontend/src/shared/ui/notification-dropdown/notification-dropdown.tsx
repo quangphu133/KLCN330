@@ -1,38 +1,62 @@
 // Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Dropdown } from '@/shared/ui/dropdown/dropdown'
 import { DropdownItem } from '@/shared/ui/dropdown/dropdown-Item'
-import { useGetChatMessagesQuery } from '@/entities/chat/chat.api'
-import { ChatMessage } from '@/entities/chat/chat.types'
-import { formatDates, formatTimeAgo } from '@/shared/utils/date-utils'
-import { getFromLocalStorage, setToLocalStorage } from '@/shared/utils/common-utils'
+import { appRoutes } from '@/shared/constants/routes'
+import {
+  CallNotification,
+  useGetNotificationsQuery,
+  useMarkNotificationReadMutation,
+} from '@/entities/notifications.api'
+import { formatDates } from '@/shared/utils/date-utils'
 
 type NotificationItemProps = {
-  data: ChatMessage
+  data: CallNotification
   onClose: () => void
+  onRead: (id: number) => void
+  destination?: string
 }
 
-const NotificationItem = ({ data, onClose }: NotificationItemProps) => {
+const NotificationItem = ({ data, onClose, onRead, destination }: NotificationItemProps) => {
+  const status = data.event_type === 'processing'
+    ? 'Đang xử lý'
+    : data.event_type === 'needs_confirmation'
+      ? 'Cần xác nhận người nói'
+      : data.event_type === 'insufficient_speakers'
+        ? 'Thiếu dữ liệu người nói'
+        : data.event_type === 'failed'
+          ? 'Thất bại'
+          : data.event_type === 'completed'
+            ? 'Đã hoàn tất'
+            : null
+
   return (
     <li>
       <DropdownItem
+        tag={destination ? 'a' : 'button'}
+        to={destination}
+        onClick={() => onRead(data.id)}
         onItemClick={onClose}
-        className="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
+        className="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
       >
         <span className="block">
           <span className="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400 space-x-1">
             <span className="font-medium text-gray-800 dark:text-white/90">
-              {data.text || 'Thông báo mới'}
+              {data.title || 'Thông báo mới'}
             </span>
           </span>
+          <span className="mb-1 block text-theme-xs text-gray-600 dark:text-gray-300">
+            {data.message}
+          </span>
+
+          {status && (
+            <span className="mb-1 inline-block rounded-full bg-blue-50 px-2 py-0.5 text-theme-xs font-medium text-blue-700 dark:bg-blue-500/10 dark:text-blue-300">
+              {status}
+            </span>
+          )}
 
           <span className="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400">
-            <span className={'hidden'}>
-              {data.attachmentsCount > 0
-                ? `${data.attachmentsCount} tệp đính kèm`
-                : 'Không có tệp đính kèm'}
-            </span>
-            <span>{formatDates(data.createDate ? new Date(data?.createDate) : null)}</span>
+            <span>{formatDates(data.created_at ? new Date(data.created_at) : null)}</span>
           </span>
         </span>
       </DropdownItem>
@@ -42,52 +66,23 @@ const NotificationItem = ({ data, onClose }: NotificationItemProps) => {
 
 export const NotificationDropdown = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [notifying, setNotifying] = useState(false)
-  const [combinedMessages, setCombinedMessages] = useState<ChatMessage[]>([])
-  const [lastFetchTime, setLastFetchTime] = useState<Date | null>(null)
-
-  const [lastSeenCount, setLastSeenCountState] = useState(() => {
-    const stored = getFromLocalStorage('lastSeenCount', '')
-    return stored ? Number(stored) : 0
-  })
-
-  const setLastSeenCount = (count: number) => {
-    setLastSeenCountState(count)
-    setToLocalStorage('lastSeenCount', String(count))
-  }
-
-  const { data: notificationMessages = [], isSuccess: isNotificationMessagesSuccess } =
-    useGetChatMessagesQuery(
-      {
-        chatType: 'Notification',
-      },
-      { pollingInterval: 60 * 60 * 1000 }
-    )
-
-  const { data: alertMessages = [], isSuccess: isAlertMessagesSuccess } = useGetChatMessagesQuery(
-    {
-      chatType: 'Alert',
-    },
-    { pollingInterval: 60 * 1000 }
+  const {
+    data: notifications = [],
+    isError,
+    isLoading,
+  } = useGetNotificationsQuery(
+    { offset: 0, limit: 50 },
+    { pollingInterval: 10 * 1000, skipPollingIfUnfocused: true, refetchOnFocus: true }
   )
+  const [markNotificationRead] = useMarkNotificationReadMutation()
+  const notifying = notifications.some(notification => !notification.is_read)
 
-  const updateCombinedMessages = useCallback(() => {
-    const combined = [...notificationMessages, ...alertMessages].sort(
-      (a, b) => new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
-    )
-    setCombinedMessages(combined)
-    if (combined.length > lastSeenCount) {
-      setNotifying(true)
-    }
-
-    setLastFetchTime(new Date())
-  }, [lastSeenCount, notificationMessages, alertMessages])
-
-  useEffect(() => {
-    if (isNotificationMessagesSuccess && isAlertMessagesSuccess) {
-      updateCombinedMessages()
-    }
-  }, [isNotificationMessagesSuccess, isAlertMessagesSuccess, updateCombinedMessages])
+  const handleRead = useCallback(
+    (id: number) => {
+      void markNotificationRead(id)
+    },
+    [markNotificationRead]
+  )
 
   const toggleDropdown = useCallback(() => {
     setIsOpen(prev => !prev)
@@ -99,9 +94,7 @@ export const NotificationDropdown = () => {
 
   const handleClick = useCallback(() => {
     toggleDropdown()
-    setNotifying(false)
-    setLastSeenCount(combinedMessages.length)
-  }, [toggleDropdown, combinedMessages.length])
+  }, [toggleDropdown])
 
   return (
     <div className="relative">
@@ -135,13 +128,13 @@ export const NotificationDropdown = () => {
       <Dropdown
         isOpen={isOpen}
         onClose={closeDropdown}
-        className="absolute -right-[240px] mt-[17px] flex h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark sm:w-[361px] lg:right-0"
+        className="absolute -right-[240px] mt-[17px] flex h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-700 dark:bg-gray-900 sm:w-[361px] lg:right-0"
       >
         <div className="flex items-center justify-between pb-3 mb-3 border-b border-gray-100 dark:border-gray-700">
-          <h5 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Thông báo</h5>
+          <h5 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Thông báo</h5>
           <button
             onClick={toggleDropdown}
-            className="text-gray-500 transition dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+            className="text-gray-500 transition dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
           >
             <svg
               className="fill-current"
@@ -160,20 +153,38 @@ export const NotificationDropdown = () => {
           </button>
         </div>
         <div className="flex justify-between items-center px-1 mb-2 text-theme-sm">
-          <span className="text-gray-500 hidden">
-            {lastFetchTime ? `Cập nhật lần cuối: ${formatTimeAgo(lastFetchTime)}` : 'Đang tải...'}
-          </span>
-          <span className="text-gray-500">
-            {combinedMessages.length} thông báo
+          <span className="text-gray-500 dark:text-gray-300">
+            {notifications.length} thông báo
           </span>
         </div>
         <ul className="flex flex-col h-auto overflow-y-auto custom-scrollbar">
-          {combinedMessages.length > 0 ? (
-            combinedMessages.map(message => (
-              <NotificationItem key={message.id} data={message} onClose={closeDropdown} />
+          {isError && (
+            <li className="py-3 text-center text-sm text-red-600 dark:text-red-300">
+              Không thể tải thông báo. Dữ liệu cũ (nếu có) vẫn được giữ lại.
+            </li>
+          )}
+          {notifications.length > 0 ? (
+            notifications.map(notification => (
+              <NotificationItem
+                key={notification.id}
+                data={notification}
+                onClose={closeDropdown}
+                onRead={handleRead}
+                destination={
+                  notification.job_status === 'completed' && notification.call_record_id !== null
+                    ? appRoutes.private.call(String(notification.call_record_id))
+                    : undefined
+                }
+              />
             ))
-          ) : (
-            <li className="py-8 text-center text-gray-500">Không có thông báo mới</li>
+          ) : isLoading ? (
+            <li className="py-8 text-center text-gray-500 dark:text-gray-300">
+              Đang tải thông báo...
+            </li>
+          ) : isError ? null : (
+            <li className="py-8 text-center text-gray-500 dark:text-gray-300">
+              Không có thông báo mới
+            </li>
           )}
         </ul>
       </Dropdown>

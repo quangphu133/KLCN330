@@ -23,8 +23,16 @@ class UserService:
         return db.query(User).filter(User.email == email).first()
 
     @staticmethod
-    def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[User]:
-        return db.query(User).offset(skip).limit(limit).all()
+    def get_all(
+        db: Session,
+        skip: int = 0,
+        limit: int = 100,
+        role: Optional[str] = None,
+    ) -> List[User]:
+        query = db.query(User)
+        if role is not None:
+            query = query.filter(User.role == role)
+        return query.order_by(User.id).offset(max(skip, 0)).limit(min(max(limit, 1), 100)).all()
 
     @staticmethod
     def create(db: Session, user_in: UserCreate) -> User:

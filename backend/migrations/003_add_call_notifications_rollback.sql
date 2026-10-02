@@ -1,0 +1,2 @@
+-- Preserve notification history during application rollback.
+-- Roll back by deploying the previous application code; do not drop this table.

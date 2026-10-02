@@ -135,14 +135,14 @@ export const CallsTable = (): JSX.Element => {
 
             <div className="flex items-center gap-3">
               <Button
-                className="w-[112px] h-[44px] border border-gray-200 rounded-full hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
+                className="w-[112px] h-[44px] border border-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 cursor-pointer"
                 onClick={openFilterModal}
               >
                 <span>Lọc</span>
                 <FilterIcon width={20} height={20} />
               </Button>
               <Button
-                className={`h-[44px] border border-gray-200 rounded-full ${filtersActive ? 'hover:bg-gray-100 cursor-pointer' : 'opacity-50 cursor-not-allowed'} flex items-center gap-2`}
+                className={`h-[44px] border border-gray-200 rounded-full ${filtersActive ? 'hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer' : 'opacity-50 cursor-not-allowed'} flex items-center gap-2`}
                 onClick={handleResetFilters}
                 disabled={!filtersActive}
               >
@@ -154,13 +154,13 @@ export const CallsTable = (): JSX.Element => {
                 )}
               </Button>
               <Button
-                className="h-[44px] border border-gray-200 rounded-full hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
+                className="h-[44px] border border-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 cursor-pointer"
                 onClick={handleRefresh}
               >
                 <span>Làm mới</span>
               </Button>
               <Button
-                className="w-[155px] h-[44px] border border-gray-200 rounded-full hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
+                className="w-[155px] h-[44px] border border-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 cursor-pointer"
                 onClick={handleDownload}
               >
                 <span>Tải xuống Excel</span>
@@ -258,7 +258,7 @@ export const CallsTable = (): JSX.Element => {
 
                     return (
                       <TableRow
-                        className="cursor-pointer hover:bg-gray-100"
+                        className="cursor-pointer transition-colors hover:bg-gray-100 dark:hover:bg-gray-800/80"
                         key={item.id}
                         onClick={() =>
                           item?.id &&
@@ -271,7 +271,7 @@ export const CallsTable = (): JSX.Element => {
                             : 'Chưa có'}
                         </TableCell>
                         <TableCell className="px-4 py-4 border-b border-gray-100 font-semibold text-gray-800 dark:border-white/[0.05] text-theme-sm dark:text-gray-400 whitespace-nowrap">
-                          {item?.operatorName || 'Chưa có'}
+                          {item?.telesaleName || 'Chưa gán nhân viên'}
                         </TableCell>
                         <TableCell className="px-4 py-4 border-b border-gray-100 font-normal text-gray-800 dark:border-white/[0.05] text-theme-sm dark:text-white/90 whitespace-nowrap">
                           {clientNumber}
@@ -294,6 +294,9 @@ export const CallsTable = (): JSX.Element => {
                           >
                             {negativeValue === null ? 'Chưa chấm điểm' : `${negativeValue}%`}
                           </span>
+                        </TableCell>
+                        <TableCell className="px-4 py-4 border-b border-gray-100 font-normal dark:border-white/[0.05] text-theme-sm whitespace-nowrap">
+                          {item.complianceScore == null ? 'Chưa chấm điểm' : `${item.complianceScore}%`}
                         </TableCell>
                         <TableCell className="px-4 py-4 border-b border-gray-100 font-normal dark:border-white/[0.05] text-theme-sm whitespace-nowrap">
                           <span className={`${getValueColorClass(lexis)}`}>

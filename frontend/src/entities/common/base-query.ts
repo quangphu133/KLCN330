@@ -16,12 +16,10 @@ import {
   demoChecklists,
   demoDictionaries,
   demoMediaFiles,
-  demoOperators,
   demoProjects,
   demoMediaFileResult,
 } from '@/shared/constants/demo-data';
 
-const demoOperatorsState = demoOperators.map((operator) => ({ ...operator }));
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_BASE_API_URL,
@@ -78,7 +76,6 @@ function getDemoData(endpoint: string, args: unknown): unknown {
   const url = getUrl(args);
 
   if (endpoint === 'getAnalyticsDashboard') return demoAnalytics;
-  if (endpoint === 'getOperators') return demoOperatorsState.map((operator) => ({ ...operator }));
   if (endpoint === 'getProjects') return demoProjects;
   if (endpoint === 'getChecklists') return demoChecklists;
   if (endpoint === 'getDictionaries') return demoDictionaries;
@@ -105,13 +102,6 @@ function getDemoData(endpoint: string, args: unknown): unknown {
     };
   }
 
-  if (endpoint === 'getOperator') {
-    const match = url.match(/\/(\d+)$/);
-    const id = match ? Number(match[1]) : null;
-    return id != null
-      ? (demoOperatorsState.find((o) => o.id === id) ?? demoOperatorsState[0])
-      : demoOperatorsState[0];
-  }
   if (endpoint === 'getProject') {
     const match = url.match(/\/(\d+)$/);
     const id = match ? Number(match[1]) : null;
@@ -151,35 +141,6 @@ function getDemoData(endpoint: string, args: unknown): unknown {
   }
 
   // Handle mutations in demo mode
-  if (endpoint === 'deleteOperator') {
-    const match = url.match(/\/(\d+)$/);
-    const id = match ? Number(match[1]) : null;
-    if (id != null) {
-      const idx = demoOperatorsState.findIndex((o) => o.id === id);
-      if (idx !== -1) demoOperatorsState.splice(idx, 1);
-    }
-    return null;
-  }
-  if (endpoint === 'createOperator') {
-    const body = (args as any)?.body ?? {};
-    const newId = demoOperatorsState.length > 0 ? Math.max(...demoOperatorsState.map((o) => o.id)) + 1 : 1;
-    demoOperatorsState.push({ id: newId, name: body.name || 'Nhân viên mới', isActive: body.isActive ?? true, createdAt: new Date().toISOString() });
-    return null;
-  }
-  if (endpoint === 'updateOperator') {
-    const match = url.match(/\/(\d+)$/);
-    const id = match ? Number(match[1]) : null;
-    const body = (args as any)?.body ?? {};
-    if (id != null) {
-      const op = demoOperatorsState.find((o) => o.id === id);
-      if (op) {
-        if (body.name !== undefined) op.name = body.name;
-        if (body.isActive !== undefined) op.isActive = body.isActive;
-      }
-    }
-    return null;
-  }
-
   return undefined;
 }
 
@@ -201,11 +162,12 @@ export const commonApi = createApi({
   reducerPath: 'commonApi',
   tagTypes: [
     'ANALYTICS_DASHBOARD',
-    'OPERATORS',
+    'EMPLOYEES',
     'PROJECTS',
     'VOCAB',
     'MEDIAFILE',
     'CHAT',
+    'NOTIFICATIONS',
     'AUTH',
     'CHECKLISTS',
     'DICTIONARIES',

@@ -5,8 +5,8 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, UploadFile, status
 from app.models.call_record import CallRecord
-from app.models.operator import Operator
 from app.models.project import Project
+from app.models.asr_job import AsrJob
 from app.services.file_service import FileService
 from app.services.rule_service import analyze_transcript
 
@@ -15,10 +15,9 @@ class MediaFileService:
     """Map CallRecord ↔ MediaFile shape cho frontend."""
 
     @staticmethod
-    def _to_media_file(record: CallRecord, total_count: int = 0) -> dict:
+    def _to_media_file(record: CallRecord, total_count: int = 0, transcription_status: Optional[str] = None) -> dict:
         created_iso = (record.call_date or record.created_at).isoformat() if (record.call_date or record.created_at) else ""
-        op_name = record.operator.name if record.operator else None
-        op_id = record.operator_id
+        telesale_name = (record.telesale.full_name or record.telesale.email) if record.telesale else None
         proj_name = record.project.name if record.project else None
         neg_level = (
             round((100 - record.compliance_score) / 100, 4)
@@ -38,12 +37,12 @@ class MediaFileService:
             "numChannels": 1,
             "sampleRate": 8000,
             "duration": record.audio_duration or 0,
-            "operatorId": op_id,
-            "operatorName": op_name,
+            "telesaleId": record.telesale_id,
+            "telesaleName": telesale_name,
             "operatorChannel": role_mapping.get("agent_speaker_id"),
             "lastAccessUtc": created_iso,
             "createDate": created_iso,
-            "isFailed": False,
+            "isFailed": transcription_status == "failed",
             "additionalMetadata": {
                 "outerId": None,
                 "clientId": None,
@@ -71,8 +70,12 @@ class MediaFileService:
                 "negativeLevelClient": None,
             },
             "filteredKeywordsCount": len(record.violations),
+            "complianceScore": record.compliance_score,
+            "transcriptionStatus": transcription_status,
+            "transcriptionError": None,
             "diarizationStatus": diarization.get("status"),
             "speakerRoleStatus": role_mapping.get("status"),
+            "speakerCount": len(diarization.get("speakers") or []),
         }
 
     @staticmethod
@@ -82,20 +85,49 @@ class MediaFileService:
         end: Optional[str] = None,
         offset: int = 0,
         limit: int = 20,
-        operator_id: Optional[int] = None,
         search_phrase: Optional[str] = None,
+        telesale_id: Optional[int] = None,
     ) -> dict:
         query = db.query(CallRecord)
-        if operator_id:
-            query = query.filter(CallRecord.operator_id == operator_id)
+        if telesale_id is not None:
+            query = query.filter(CallRecord.telesale_id == telesale_id)
+        if start:
+            start_date = datetime.fromisoformat(start.replace("Z", "+00:00"))
+            if start_date.tzinfo is not None:
+                start_date = start_date.astimezone(timezone.utc).replace(tzinfo=None)
+            query = query.filter(CallRecord.call_date >= start_date)
+        if end:
+            end_date = datetime.fromisoformat(end.replace("Z", "+00:00"))
+            if end_date.tzinfo is not None:
+                end_date = end_date.astimezone(timezone.utc).replace(tzinfo=None)
+            query = query.filter(CallRecord.call_date <= end_date)
         if search_phrase:
             query = query.filter(CallRecord.transcript.ilike(f"%{search_phrase}%"))
         total = query.count()
         records = query.order_by(CallRecord.created_at.desc()).offset(offset).limit(limit).all()
+        jobs = {}
+        if records:
+            jobs = {
+                job.call_record_id: {"status": job.status, "error": job.error_message}
+                for job in db.query(AsrJob)
+                .filter(AsrJob.call_record_id.in_([record.id for record in records]))
+                .all()
+            }
         return {
             "totalCount": total,
-            "mediaFile": [MediaFileService._to_media_file(r, total) for r in records],
+            "mediaFile": [
+                MediaFileService._with_transcription_error(
+                    MediaFileService._to_media_file(r, total, (jobs.get(r.id) or {}).get("status")),
+                    (jobs.get(r.id) or {}).get("error"),
+                )
+                for r in records
+            ],
         }
+
+    @staticmethod
+    def _with_transcription_error(media_file: dict, error: Optional[str]) -> dict:
+        media_file["transcriptionError"] = error
+        return media_file
 
     @staticmethod
     def get_by_id(db: Session, record_id: int) -> dict:
@@ -183,6 +215,13 @@ class MediaFileService:
             })
 
         return {
+            "id": record.id,
+            "telesaleId": record.telesale_id,
+            "complianceScore": record.compliance_score,
+            "callDate": record.call_date.isoformat() if record.call_date else None,
+            "duration": record.audio_duration or 0,
+            "clientNumber": record.client_number,
+            "fileName": Path(record.file_path).name if record.file_path else None,
             "gptSummary": None,
             "gptChecklist": None,
             "stt": {
@@ -202,10 +241,10 @@ class MediaFileService:
     async def create_from_upload(
         db: Session,
         file: UploadFile,
-        operator_id: Optional[int] = None,
         project_id: Optional[int] = None,
         client_number: Optional[str] = None,
         call_date: Optional[datetime] = None,
+        telesale_id: Optional[int] = None,
     ) -> dict:
         # Lưu file
         saved = await FileService.save_audio_file(file)
@@ -214,7 +253,7 @@ class MediaFileService:
         # Tạo CallRecord
         record = CallRecord(
             file_path=file_path,
-            operator_id=operator_id,
+            telesale_id=telesale_id,
             project_id=project_id,
             client_number=client_number,
             call_date=call_date or datetime.now(timezone.utc).replace(tzinfo=None),

@@ -1,119 +1,56 @@
-// Ghi chú nhóm: Việt hóa và cải thiện hiển thị cho màn hình quản lý dữ liệu.
-import { Modal } from '@/shared/ui/modal/modal';
-import Button from '@/shared/ui/button/button';
-import { type Operator } from '@/entities/operators/operators.types';
-import { z } from 'zod';
-import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Input from '@/shared/ui/input/input';
-import { useGetOperatorQuery } from '@/entities/operators/operators.api';
-import Label from '@/shared/ui/label/label';
-import { Switcher } from '@/shared/ui/switcher';
-import { useEffect } from 'react';
+import { useEffect } from 'react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { EmployeeAccount, UpdateEmployeeRequest } from '@/entities/users/users.types'
+import { Modal } from '@/shared/ui/modal/modal'
+import Button from '@/shared/ui/button/button'
+import Input from '@/shared/ui/input/input'
+import Label from '@/shared/ui/label/label'
+import { Switcher } from '@/shared/ui/switcher'
 
 interface Props {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (data: Partial<Operator>) => void;
-  operatorId: number;
+  employee: EmployeeAccount
+  isOpen: boolean
+  onClose: () => void
+  onSave: (data: UpdateEmployeeRequest) => Promise<boolean>
 }
 
-const editOperatorSchema = z.object({
-  name: z.string().min(2, {
-    message: 'Tên nhân viên phải có ít nhất 2 ký tự.',
-  }),
-  isActive: z.boolean(),
-});
+const schema = z.object({
+  full_name: z.string().trim().min(2, 'Họ tên phải có ít nhất 2 ký tự.'),
+  is_active: z.boolean(),
+})
+type FormValues = z.infer<typeof schema>
 
-export const EditOperatorModal = ({
-  isOpen,
-  onClose,
-  onSave,
-  operatorId,
-}: Props) => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    formState: { isValid, errors },
-  } = useForm<z.infer<typeof editOperatorSchema>>({
-    resolver: zodResolver(editOperatorSchema),
-    defaultValues: {
-      name: '',
-      isActive: true,
-    },
-  });
-
-  const handleSubmitForm: SubmitHandler<z.infer<typeof editOperatorSchema>> = (
-    data
-  ) => {
-    onSave(data);
-    onClose();
-  };
-
-  const { data: operator, isSuccess } = useGetOperatorQuery(operatorId);
+export const EditOperatorModal = ({ employee, isOpen, onClose, onSave }: Props) => {
+  const { register, handleSubmit, control, reset, formState: { errors, isSubmitting } } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: { full_name: employee.full_name ?? '', is_active: employee.is_active },
+  })
 
   useEffect(() => {
-    if (isSuccess && operator) {
-      reset({
-        name: operator.name ?? '',
-        isActive: operator.isActive ?? true,
-      });
-    }
-  }, [operator, isSuccess, reset]);
+    reset({ full_name: employee.full_name ?? '', is_active: employee.is_active })
+  }, [employee, reset])
+
+  const submit: SubmitHandler<FormValues> = async data => {
+    const saved = await onSave(data)
+    if (!saved) return
+    onClose()
+  }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      title={'Chỉnh sửa nhân viên'}
-      onClose={onClose}
-      className="max-w-[700px] mx-auto"
-    >
-      <form
-        className="px-10 flex flex-col gap-6 pb-10 pt-4"
-        onSubmit={handleSubmit(handleSubmitForm)}
-      >
-        <Input
-          {...register('name')}
-          id="operator-name"
-          label="Tên nhân viên"
-          placeholder="Nhập tên nhân viên"
-          error={errors.name?.message}
-        />
-        <Controller
-          control={control}
-          name="isActive"
-          render={({ field: { onChange, value } }) => (
-            <div className="flex items-center gap-3">
-              <Switcher
-                enabled={value}
-                setEnabled={() => {
-                  onChange(!value);
-                }}
-              />
-              <Label>Trạng thái hoạt động</Label>
-            </div>
-          )}
-        />
-
+    <Modal isOpen={isOpen} title="Chỉnh sửa nhân viên" onClose={onClose} className="mx-auto max-w-[700px]">
+      <form className="flex flex-col gap-5 px-10 pb-10 pt-4" onSubmit={handleSubmit(submit)}>
+        <p className="text-sm text-gray-600">Email đăng nhập: <span className="font-medium">{employee.email}</span></p>
+        <Input {...register('full_name')} id="employee-edit-name" label="Họ và tên" placeholder="Nhập họ tên" error={errors.full_name?.message} />
+        <Controller control={control} name="is_active" render={({ field }) => (
+          <div className="flex items-center gap-3"><Switcher enabled={Boolean(field.value)} setEnabled={() => field.onChange(!field.value)} /><Label>Đang hoạt động</Label></div>
+        )} />
         <div className="flex justify-between">
-          <Button
-            type="button"
-            className="px-4 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
-            onClick={onClose}
-          >
-            Hủy
-          </Button>
-          <Button
-            type="submit"
-            className={`px-4 py-2 bg-purple-900 cursor-pointer hover:bg-purple-800 text-white rounded-full`}
-            disabled={!isValid}
-          >
-            Lưu changes
-          </Button>
+          <Button type="button" onClick={onClose}>Hủy</Button>
+          <Button type="submit" disabled={isSubmitting} className="rounded-full bg-purple-900 px-4 py-2 text-white">{isSubmitting ? 'Đang lưu...' : 'Lưu thay đổi'}</Button>
         </div>
       </form>
     </Modal>
-  );
-};
+  )
+}

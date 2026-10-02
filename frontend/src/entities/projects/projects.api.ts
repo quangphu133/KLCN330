@@ -29,11 +29,18 @@ const ProjectApi = commonApi.injectEndpoints({
       null,
       { body: Partial<Project>; id: number }
     >({
-      query: ({ body, id }) => ({
-        url: `api/projects/${id}`,
-        method: 'PUT',
-        body: body,
-      }),
+      query: ({ body, id }) => {
+        const { isActive, ...projectFields } = body;
+
+        return {
+          url: `api/projects/${id}`,
+          method: 'PUT',
+          body: {
+            ...projectFields,
+            ...(isActive === undefined ? {} : { is_active: isActive }),
+          },
+        };
+      },
       invalidatesTags: ['PROJECTS'],
     }),
     deleteProject: builder.mutation<void, number>({

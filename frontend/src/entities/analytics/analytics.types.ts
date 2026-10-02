@@ -24,8 +24,9 @@ export interface SummaryData {
   averageSimultaneousSpeechCount: number
 }
 
-export interface OperatorRatingDataItem {
-  operatorName: string | null
+export interface EmployeeRatingDataItem {
+  telesaleId: number | null
+  telesaleName: string
   recordsCount: number
   averageDuration: number
   averageNegativeLevelOverall: number | null
@@ -39,7 +40,7 @@ export interface AnalyticsDashboardQueryParams {
   end?: string
   offset?: number
   limit?: number
-  operatorId?: string
+  telesaleId?: number
   topNKeywords?: number
   negativeLevelThreshold?: number
   filterByPhrasesCategoriesCommaSeparated?: string
@@ -51,5 +52,5 @@ export interface AnalyticsDashboardResponse {
   plotData: PlotDataItem[]
   negativeHistogramData: NegativeHistogramData
   summaryData: SummaryData
-  operatorRatingData: OperatorRatingDataItem[]
+  employeeRatingData: EmployeeRatingDataItem[]
 }

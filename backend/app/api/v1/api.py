@@ -6,7 +6,7 @@ from app.api.v1.endpoints import (
     checklists,
     files,
     mediafile,
-    operators,
+    notifications,
     projects,
     transcribe,
     users,
@@ -22,7 +22,6 @@ api_router.include_router(auth.router, prefix="/auth", tags=["auth"])
 # Core Entities
 # These endpoint modules already declare their own prefixes.
 api_router.include_router(users.router)
-api_router.include_router(operators.router, prefix="/operators", tags=["operators"])
 api_router.include_router(projects.router, prefix="/projects", tags=["projects"])
 api_router.include_router(checklists.router, prefix="/checklists", tags=["checklists"])
 
@@ -34,6 +33,7 @@ api_router.include_router(vocabularies.router, prefix="/dictionaries", tags=["di
 api_router.include_router(mediafile.router, prefix="/mediafile", tags=["mediafile"])
 api_router.include_router(analytics.router, prefix="/analytics", tags=["analytics"])
 api_router.include_router(transcribe.router)
+api_router.include_router(notifications.router)
 
 # Legacy / Direct Audio Endpoints
 api_router.include_router(calls.router)

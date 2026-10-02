@@ -10,14 +10,16 @@ BuzzASR model or CUDA.
 Keep the source bundle and model as separate directories:
 
 ```text
-KLTN330/
+your-ai-folder/
 ├── buzzasr_bundle/                 # this code and the API client
 │   ├── package/api_server.py       # run on the GPU computer
 │   └── client/api_client.py        # copy to the backend computer
 └── models/buzzasr/ctranslate2/     # run-time model, GPU computer only
 ```
 
-The API server resolves the model from `models/buzzasr/ctranslate2` relative
+Choose the name and location of `your-ai-folder` yourself; it is not a required
+folder name. Run the commands below from that folder after placing the source
+bundle there. The API server resolves the model from `models/buzzasr/ctranslate2` relative
 to the project root. Set `BUZZASR_MODEL_DIR` to an absolute CTranslate2 model
 directory when deploying the source bundle elsewhere. The model is never
 downloaded automatically.
@@ -32,9 +34,10 @@ PowerShell process before starting the server:
 $env:ASR_API_KEY = "replace-with-a-long-random-secret"
 $env:ASR_HOST = "127.0.0.1"       # use the Tailscale IP for remote access
 $env:ASR_PORT = "8000"
-$env:ASR_DATA_DIR = "E:\Python\KLTN330\asr_service_data"
+$env:BUZZASR_MODEL_DIR = Read-Host 'Enter the absolute path to your CTranslate2 model folder'
+$env:ASR_DATA_DIR = Join-Path (Get-Location) 'asr_service_data'
 $env:ASR_RETENTION_DAYS = "7"
-\.venv\Scripts\python.exe -m buzzasr_bundle.package.api_server
+.\.venv\Scripts\python.exe -m buzzasr_bundle.package.api_server
 ```
 
 For a remote backend, bind `ASR_HOST` to the GPU computer's Tailscale IP, or

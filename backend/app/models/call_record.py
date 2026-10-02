@@ -9,7 +9,6 @@ class CallRecord(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     telesale_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
-    operator_id = Column(Integer, ForeignKey("operators.id", ondelete="SET NULL"), nullable=True)
     project_id = Column(Integer, ForeignKey("projects.id", ondelete="SET NULL"), nullable=True)
     file_path = Column(String(255), nullable=False)
     audio_duration = Column(Integer, nullable=True)   # Thời lượng tính bằng giây
@@ -23,6 +22,5 @@ class CallRecord(Base):
 
     # Relationships
     telesale = relationship("User", back_populates="call_records")
-    operator = relationship("Operator", back_populates="call_records")
     project = relationship("Project", back_populates="call_records")
     violations = relationship("Violation", back_populates="call_record", cascade="all, delete-orphan")

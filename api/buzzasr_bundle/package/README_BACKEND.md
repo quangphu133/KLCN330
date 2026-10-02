@@ -55,8 +55,8 @@ python -m buzzasr_bundle.package.transcribe_sample `
 
 CPU inference uses system RAM and is normally slower than CUDA FP16. Keep one
 ASR process, allow enough RAM for the large-v3 model, and benchmark the real
-call duration before setting an API timeout. The bundle currently contains the
-FP16 runtime model used by the RTX deployment. If the installed CTranslate2
+call duration before setting an API timeout. Download and prepare the runtime
+model separately; this source bundle does not include model weights. If the installed CTranslate2
 build rejects `compute_type="int8"` for that model, create a separate CPU
 runtime conversion with `--quantization int8` and point `model` to that local
 directory; do not silently switch back to CUDA or another model.

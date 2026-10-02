@@ -95,6 +95,15 @@ export const DictionariesTable = <T extends Dictionary>({
   }, [updateDictionaryResult]);
 
   useEffect(() => {
+    if (updateDictionaryResult.isError) {
+      const apiError = updateDictionaryResult.error as {
+        data?: { detail?: string };
+      };
+      toast.error(apiError.data?.detail ?? 'Không thể cập nhật từ điển');
+    }
+  }, [updateDictionaryResult.isError, updateDictionaryResult.error]);
+
+  useEffect(() => {
     if (createDictionaryResult.isSuccess) {
       toast.success('Đã tạo từ điển');
     }
@@ -105,12 +114,7 @@ export const DictionariesTable = <T extends Dictionary>({
       if (!item) return;
       updateDictionary({
         id: item.id,
-        body: {
-          ...item,
-          name: item.name ?? '',
-          isActive: !item.isActive,
-          phrases: item.data?.phrases ?? [],
-        },
+        body: { isActive: !item.isActive },
       });
     },
     [updateDictionary]

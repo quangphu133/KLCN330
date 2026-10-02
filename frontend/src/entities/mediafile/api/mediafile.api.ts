@@ -1,4 +1,3 @@
-import { ChecklistScale } from '@/entities/checklists/checklists.types';
 import { commonApi } from '@/entities/common/base-query';
 import {
   CreateMediaFileRequest,
@@ -18,8 +17,8 @@ export const MediaFileApi = commonApi.injectEndpoints({
         formData.append('file', file);
         formData.append('createDate', queryParams.createDate);
         formData.append('clientNumber', queryParams.clientNumber);
-        if (queryParams.operatorId !== undefined) {
-          formData.append('operatorId', String(queryParams.operatorId));
+        if (queryParams.telesaleId !== undefined) {
+          formData.append('telesale_id', String(queryParams.telesaleId));
         }
         if (queryParams.projectId !== undefined) {
           formData.append('projectId', String(queryParams.projectId));
@@ -31,7 +30,7 @@ export const MediaFileApi = commonApi.injectEndpoints({
           body: formData,
         };
       },
-      invalidatesTags: ['MEDIAFILE'],
+      invalidatesTags: ['MEDIAFILE', 'NOTIFICATIONS'],
     }),
 
     getMediaFilesQuery: builder.query<MediaFileResponse, MediaFileRequest>({
@@ -92,6 +91,17 @@ export const MediaFileApi = commonApi.injectEndpoints({
       }),
       invalidatesTags: ['MEDIAFILE'],
     }),
+    deleteCallRecord: builder.mutation<
+      { status: string; message: string },
+      { id: number; reason: string }
+    >({
+      query: ({ id, reason }) => ({
+        url: `api/calls/${id}`,
+        method: 'DELETE',
+        body: { reason },
+      }),
+      invalidatesTags: ['MEDIAFILE'],
+    }),
     getDownloadFileExcel: builder.query<string, void>({
       query: () => ({
         url: 'api/mediafile/export/excel',
@@ -116,47 +126,15 @@ export const MediaFileApi = commonApi.injectEndpoints({
         return URL.createObjectURL(blob);
       },
     }),
-    updateMediaFileChecklist: builder.mutation<
-      undefined,
-      {
-        id: number;
-        body: {
-          blocks?: {
-            name: string;
-            criterias?: {
-              name: string;
-              minScore?: number;
-              maxScore?: number;
-              help?: string | null;
-              scale?: ChecklistScale;
-            }[];
-          }[];
-        };
-        checklistId: number;
-      }
-    >({
-      query: (args) => {
-        const { id, body, checklistId } = args;
-        return {
-          url: `api/mediafile/${id}`,
-          method: 'PUT',
-          body: body,
-          params: {
-            checklistId,
-          },
-        };
-      },
-      invalidatesTags: ['MEDIAFILE'],
-    }),
   }),
 });
 
 export const {
-  useUpdateMediaFileChecklistMutation,
   useCreateMediaFileMutation,
   useGetMediaFilesQueryQuery,
   useGetMediaFileByIdQuery,
   useLazyGetDownloadFileExcelQuery,
   useGetMediaFileResultQuery,
   useConfirmSpeakerRolesMutation,
+  useDeleteCallRecordMutation,
 } = MediaFileApi;

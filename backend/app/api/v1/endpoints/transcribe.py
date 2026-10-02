@@ -20,6 +20,7 @@ from fastapi import (
     File,
     Form,
     HTTPException,
+    Request,
     UploadFile,
     status,
 )
@@ -32,6 +33,9 @@ from app.models.asr_job import AsrJob
 from app.models.call_record import CallRecord
 from app.schemas.asr_schema import AsrJobResponse
 from app.services import asr_service
+from app.api.v1.endpoints.auth import get_current_user, require_admin
+from app.models.user import User
+from app.services.notification_service import create_once, create_upload_notification
 
 logger = logging.getLogger(__name__)
 
@@ -91,13 +95,14 @@ def _save_upload(file: UploadFile) -> str:
 )
 async def upload_and_transcribe(
     background_tasks: BackgroundTasks,
+    request: Request,
     db: Session = Depends(get_db),
     file: UploadFile = File(..., description="Tệp âm thanh (.wav, .mp3, .m4a, .ogg, .flac)"),
     telesale_id: Optional[int] = Form(None, description="Mã nhân viên thực hiện cuộc gọi"),
-    operatorId: Optional[int] = Form(None),
     projectId: Optional[int] = Form(None),
     clientNumber: Optional[str] = Form(None),
     createDate: Optional[datetime] = Form(None),
+    current_user: User = Depends(get_current_user),
 ):
     """
     **Luồng xử lý:**
@@ -109,7 +114,19 @@ async def upload_and_transcribe(
 
     **Client check kết quả** bằng `GET /transcribe/{job_id}/status`
     """
-    # Bước 1: Lưu file
+    if "operatorId" in await request.form():
+        raise HTTPException(status_code=422, detail="operatorId đã ngừng hỗ trợ; hãy gửi telesale_id")
+    if current_user.role == "admin" and telesale_id is not None:
+        owner = db.query(User).filter(
+            User.id == telesale_id,
+            User.is_active.is_(True),
+            User.role == "telesales",
+        ).first()
+        if owner is None:
+            raise HTTPException(status_code=404, detail="Không tìm thấy nhân viên đang hoạt động")
+    owner_id = current_user.id if current_user.role != "admin" else (owner.id if telesale_id is not None else None)
+
+    # Save the file only after the selected account has been validated.
     file_path = _save_upload(file)
 
     # Bước 2 + 3: Submit sang BuzzASR & lưu DB
@@ -117,8 +134,7 @@ async def upload_and_transcribe(
         asr_job = asr_service.submit_to_asr(
             db=db,
             file_path=file_path,
-            telesale_id=telesale_id,
-            operator_id=operatorId,
+            telesale_id=owner_id,
             project_id=projectId,
             client_number=clientNumber,
             requested_call_date=createDate,
@@ -128,7 +144,7 @@ async def upload_and_transcribe(
         # Người dùng có thể nghe/xem tệp đã tải lên và xử lý AI lại sau.
         call_record = CallRecord(
             file_path=file_path,
-            operator_id=operatorId,
+            telesale_id=owner_id,
             project_id=projectId,
             client_number=clientNumber,
             call_date=createDate or datetime.now(timezone.utc).replace(tzinfo=None),
@@ -141,8 +157,7 @@ async def upload_and_transcribe(
             job_id=f"local-{uuid.uuid4().hex}",
             file_path=file_path,
             status="failed",
-            telesale_id=telesale_id,
-            operator_id=operatorId,
+            telesale_id=owner_id,
             project_id=projectId,
             client_number=clientNumber,
             requested_call_date=createDate,
@@ -150,6 +165,29 @@ async def upload_and_transcribe(
             error_message=f"Tệp đã được lưu cục bộ; BuzzASR chưa kết nối: {exc.message}",
         )
         db.add(asr_job)
+        db.flush()
+        create_upload_notification(
+            db,
+            user_id=current_user.id,
+            job_id=asr_job.job_id,
+            asr_job_id=asr_job.id,
+            filename=file.filename or "Bản ghi âm",
+            event_type="failed",
+            title="Không thể kết nối AI",
+            message="Bản ghi âm đã lưu nhưng chưa phân tích được. Vui lòng liên hệ quản trị viên.",
+            call_record_id=call_record.id,
+        )
+        if owner_id is not None and owner_id != current_user.id:
+            create_once(
+                db,
+                user_id=owner_id,
+                event_key=f"asr:{asr_job.job_id}:failed",
+                event_type="failed",
+                title="Phân tích cuộc gọi thất bại",
+                message="Không thể xử lý audio. Vui lòng liên hệ quản trị viên.",
+                call_record_id=call_record.id,
+                asr_job_id=asr_job.id,
+            )
         db.commit()
         db.refresh(asr_job)
         logger.warning("[ASR] Server unavailable; upload saved locally as call_record_id=%s", call_record.id)
@@ -160,6 +198,15 @@ async def upload_and_transcribe(
         if os.path.exists(file_path):
             os.unlink(file_path)
         raise HTTPException(status_code=500, detail=f"Lỗi submit ASR: {exc}")
+
+    create_upload_notification(
+        db,
+        user_id=current_user.id,
+        job_id=asr_job.job_id,
+        asr_job_id=asr_job.id,
+        filename=file.filename or "Bản ghi âm",
+    )
+    db.commit()
 
     # Bước 4 (Bước 5): Chạy nền – poll & tạo CallRecord
     background_tasks.add_task(_background_process, asr_job.id)
@@ -177,14 +224,33 @@ async def upload_and_transcribe(
     summary="Xem trạng thái job phiên âm",
     description="Trả về trạng thái hiện tại của tác vụ: đang chờ | đang xử lý | hoàn tất | thất bại",
 )
-def get_transcription_status(job_id: str, db: Session = Depends(get_db)):
+def get_transcription_status(
+    job_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     asr_job = asr_service.get_job_status(db=db, job_id=job_id)
     if not asr_job:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Không tìm thấy tác vụ có mã: {job_id}",
         )
+    if current_user.role != "admin" and asr_job.telesale_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tác vụ phiên âm")
     return asr_job
+
+
+@router.get("/", response_model=list[AsrJobResponse])
+def list_transcription_jobs(
+    offset: int = 0,
+    limit: int = 100,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    query = db.query(AsrJob).filter(AsrJob.status.in_(["queued", "running", "failed"]))
+    if current_user.role != "admin":
+        query = query.filter(AsrJob.telesale_id == current_user.id)
+    return query.order_by(AsrJob.created_at.desc()).offset(max(offset, 0)).limit(min(max(limit, 1), 100)).all()
 
 
 # ---------------------------------------------------------------------------
@@ -200,7 +266,13 @@ def get_transcription_status(job_id: str, db: Session = Depends(get_db)):
         "Chỉ cho phép với job ở trạng thái `queued` hoặc `running`."
     ),
 )
-def retry_poll(job_id: str, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+def retry_poll(
+    job_id: str,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin),
+):
+    del current_user
     asr_job = asr_service.get_job_status(db=db, job_id=job_id)
     if not asr_job:
         raise HTTPException(status_code=404, detail=f"Không tìm thấy tác vụ có mã: {job_id}")
@@ -228,5 +300,13 @@ def _background_process(asr_job_db_id: int):
         asr_service.process_asr_result(db=db, asr_job_db_id=asr_job_db_id)
     except Exception as exc:
         logger.error(f"[ASR Background] Unhandled error for job id={asr_job_db_id}: {exc}", exc_info=True)
+        db.rollback()
+        try:
+            asr_job = db.query(AsrJob).filter(AsrJob.id == asr_job_db_id).first()
+            if asr_job is not None and asr_job.status not in {"completed", "failed"}:
+                asr_service._set_status(db, asr_job, "failed", error_message=str(exc))
+        except Exception:
+            db.rollback()
+            logger.exception("[ASR Background] Failed to save terminal state for job id=%s", asr_job_db_id)
     finally:
         db.close()

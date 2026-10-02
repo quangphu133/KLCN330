@@ -3,7 +3,7 @@ import { Block } from '@/entities/checklists/checklists.types';
 export interface MediaFileQueryParams {
   createDate: string;
   clientNumber: string;
-  operatorId?: number;
+  telesaleId?: number;
   projectId?: number;
 }
 
@@ -30,8 +30,8 @@ export interface MediaFile {
   numChannels: number;
   sampleRate: number;
   duration: number;
-  operatorId: number;
-  operatorName: string | null;
+  telesaleId: number | null;
+  telesaleName: string | null;
   operatorChannel: string | null;
   lastAccessUtc: string;
   createDate: string;
@@ -65,6 +65,12 @@ export interface MediaFile {
     negativeLevelClient: number | null;
   };
   filteredKeywordsCount: number;
+  complianceScore?: number | null;
+  transcriptionStatus?: 'queued' | 'running' | 'completed' | 'failed' | null;
+  transcriptionError?: string | null;
+  diarizationStatus?: string | null;
+  speakerRoleStatus?: string | null;
+  speakerCount?: number;
 }
 
 export interface MediaFileResponse {
@@ -77,9 +83,8 @@ export interface MediaFileRequest {
   end?: string;
   offset?: number;
   limit?: number;
-  operatorId?: number;
+  telesaleId?: number;
   searchPhrase?: string;
-  orderByDescOperatorName?: boolean;
   orderByDescCreateDate?: boolean;
   orderByDescClientNumber?: boolean;
   orderByDescDuration?: boolean;
@@ -149,6 +154,13 @@ export interface MediaFileRequest {
 // }
 
 export interface MediaFileResultResponse {
+  id?: number;
+  telesaleId?: number | null;
+  complianceScore?: number | null;
+  callDate?: string | null;
+  duration?: number;
+  clientNumber?: string | null;
+  fileName?: string | null;
   gptSummary: string | null;
   gptChecklist: GptChecklist | null;
   stt: Stt | null;

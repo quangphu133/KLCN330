@@ -22,7 +22,7 @@ export const CallLayout: React.FC<MainLayoutProps> = ({ children }) => {
                     <Backdrop />
                 </div>
                 <div
-                    className={`flex-1 transition-all duration-300 ease-in-out min-h-screen max-h-screen bg-gray-50/50 ${isExpanded || isHovered ? 'lg:ml-[290px]' : 'lg:ml-[90px]'
+                    className={`flex-1 transition-all duration-300 ease-in-out min-h-screen max-h-screen bg-gray-50/50 dark:bg-[#111827] ${isExpanded || isHovered ? 'lg:ml-[290px]' : 'lg:ml-[90px]'
                         } ${isMobileOpen ? 'ml-0' : ''} max-w-full flex flex-col h-screen`}
                 >
                     <Suspense

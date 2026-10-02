@@ -6,7 +6,9 @@ from app.db.database import get_db
 from app.schemas.checklist_schema import ChecklistCreate, ChecklistFullResponse, ChecklistResponse, ChecklistUpdate
 from app.services.checklist_service import ChecklistService
 
-router = APIRouter()
+from app.api.v1.endpoints.auth import require_admin
+
+router = APIRouter(dependencies=[Depends(require_admin)])
 
 
 @router.get("/", response_model=List[ChecklistResponse])

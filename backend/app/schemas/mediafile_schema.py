@@ -45,8 +45,6 @@ class MediaFile(BaseModel):
     numChannels: int = 1
     sampleRate: int = 8000
     duration: int = 0
-    operatorId: Optional[int] = None
-    operatorName: Optional[str] = None
     operatorChannel: Optional[str] = "1"
     lastAccessUtc: str
     createDate: str
@@ -54,6 +52,14 @@ class MediaFile(BaseModel):
     additionalMetadata: AdditionalMetadata
     summaryAnalyserResult: SummaryAnalyserResult
     filteredKeywordsCount: int = 0
+    telesaleId: Optional[int] = None
+    telesaleName: Optional[str] = None
+    complianceScore: Optional[float] = None
+    transcriptionStatus: Optional[str] = None
+    transcriptionError: Optional[str] = None
+    diarizationStatus: Optional[str] = None
+    speakerRoleStatus: Optional[str] = None
+    speakerCount: int = 0
 
     model_config = ConfigDict(from_attributes=True)
 

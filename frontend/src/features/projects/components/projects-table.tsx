@@ -92,6 +92,13 @@ export const ProjectsTable = ({
   }, [updateProjectResult]);
 
   useEffect(() => {
+    if (updateProjectResult.isError) {
+      const apiError = updateProjectResult.error as { data?: { detail?: string } };
+      toast.error(apiError.data?.detail ?? 'Không thể cập nhật dự án');
+    }
+  }, [updateProjectResult.isError, updateProjectResult.error]);
+
+  useEffect(() => {
     if (createProjectResult.isSuccess) {
       toast.success('Đã tạo dự án');
     }
@@ -102,10 +109,7 @@ export const ProjectsTable = ({
       if (!item) return;
       updateProject({
         id: item.id,
-        body: {
-          ...item,
-          isActive: !item.isActive,
-        },
+        body: { isActive: !item.isActive },
       });
     },
     [updateProject]

@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import { ErrorComponent } from '@/shared/ui/error/error';
 import { toast } from 'react-toastify';
 import { useGetProjectsQuery } from '@/entities/projects/projects.api';
-import { useGetOperatorsQuery } from '@/entities/operators/operators.api';
+import { useGetEmployeesQuery } from '@/entities/users/users.api';
 import { setToLocalStorage } from '@/shared/utils/common-utils';
 import { formatDateWithLocalTimeZone } from '@/shared/utils/date-utils';
 import 'react-multi-date-picker/styles/backgrounds/bg-gray.css';
@@ -37,7 +37,8 @@ export const UploadForm = ({
 }: UploadFormProps) => {
   const [createMediaFile, { isLoading }] = useCreateMediaFileMutation();
   const { data: projectsData } = useGetProjectsQuery();
-  const { data: operatorsData } = useGetOperatorsQuery();
+  const { data: employeesData } = useGetEmployeesQuery();
+  const activeEmployees = employeesData?.filter((employee) => employee.is_active) ?? [];
 
   const today = new Date();
 
@@ -53,7 +54,7 @@ export const UploadForm = ({
     resolver: zodResolver(MediaFileSchema),
     defaultValues: {
       clientNumber: '',
-      operatorId: '',
+      telesaleId: '',
       projectId: '',
       file: null,
     },
@@ -86,7 +87,7 @@ export const UploadForm = ({
         queryParams: {
           createDate,
           clientNumber: data.clientNumber,
-          operatorId: data.operatorId ? parseInt(data.operatorId) : undefined,
+          telesaleId: data.telesaleId ? parseInt(data.telesaleId) : undefined,
           projectId: data.projectId ? parseInt(data.projectId) : undefined,
         },
       }).unwrap();
@@ -110,10 +111,10 @@ export const UploadForm = ({
       value: project.id.toString(),
     })) ?? [];
 
-  const operatorsOptions =
-    operatorsData?.map((operator) => ({
-      label: operator.name,
-      value: operator.id.toString(),
+  const employeeOptions =
+    activeEmployees.map((employee) => ({
+      label: employee.full_name || employee.email,
+      value: employee.id.toString(),
     })) ?? [];
 
   return (
@@ -126,8 +127,8 @@ export const UploadForm = ({
                 control={control}
                 render={({ field: { onChange, value } }) => {
                   const selectedValue = value ?? '';
-                  const selectedOperator = operatorsData?.find(
-                    (operator) => operator.id === parseInt(selectedValue)
+                  const selectedEmployee = activeEmployees.find(
+                    (employee) => employee.id === parseInt(selectedValue)
                   );
 
                   return (
@@ -136,19 +137,19 @@ export const UploadForm = ({
                       label="Nhân viên tổng đài"
                       placeholder="Chọn nhân viên tổng đài"
                       selected={{
-                        label: selectedOperator?.name ?? selectedValue,
+                      label: selectedEmployee?.full_name || selectedEmployee?.email || selectedValue,
                         value: selectedValue,
                       }}
-                      options={operatorsOptions}
+                      options={employeeOptions}
                     />
                   );
                 }}
-                name={'operatorId'}
+                name={'telesaleId'}
               />
-              {errors.operatorId && <ErrorComponent text={errors.operatorId.message ?? ''} />}
-              {!operatorsData?.length && (
+              {errors.telesaleId && <ErrorComponent text={errors.telesaleId.message ?? ''} />}
+              {!activeEmployees.length && (
                 <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
-                  Chưa có điều hành viên. Bạn vẫn có thể tải tệp lên.
+                  Chưa có nhân viên đang hoạt động. Bạn vẫn có thể tải tệp lên.
                 </p>
               )}
             </div>

@@ -21,8 +21,10 @@ import {
   useGetMediaFileByIdQuery,
   useGetMediaFileResultQuery,
   useConfirmSpeakerRolesMutation,
+  useDeleteCallRecordMutation,
 } from '@/entities/mediafile/api/mediafile.api';
-import { useParams } from 'next/navigation';
+import { useGetProfileQuery } from '@/entities/auth/auth.api';
+import { useParams, useRouter } from 'next/navigation';
 import WaveSurfer from 'wavesurfer.js';
 import RegionsPlugin from 'wavesurfer.js/dist/plugins/regions';
 import { getFromLocalStorage } from '@/shared/utils/common-utils';
@@ -58,9 +60,11 @@ type AudioIndicator = {
 
 export const Call = () => {
   const params = useParams();
+  const router = useRouter();
   const id = Number(params.id);
   const token = getFromLocalStorage('accessToken', null);
   const isDemoMode = token === 'local-demo-token';
+  const { data: profile } = useGetProfileQuery(undefined, { skip: isDemoMode });
   const [isAudioLoading, setIsAudioLoading] = useState(!isDemoMode);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
   const regionsPluginRef = useRef<any>(null);
@@ -70,16 +74,23 @@ export const Call = () => {
   const [duration, setDuration] = useState(0);
   const [wavesurferReady, setWavesurferReady] = useState(isDemoMode);
   const regionsAddedRef = useRef(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [deletionReason, setDeletionReason] = useState('');
 
-  const { data: mediaFileById, isLoading } = useGetMediaFileByIdQuery({ id });
+  const { data: mediaFileById, isLoading } = useGetMediaFileByIdQuery(
+    { id },
+    { pollingInterval: isDemoMode ? 0 : 10_000 },
+  );
 
   const { data: mediaFileResult } = useGetMediaFileResultQuery({
     id,
     negativeProbThreshold: 0.15,
     simultaneousSilenceDurationThreshold: 10,
-  });
+  }, { pollingInterval: isDemoMode ? 0 : 10_000 });
   const [confirmSpeakerRoles, { isLoading: isConfirmingSpeakerRoles }] =
     useConfirmSpeakerRolesMutation();
+  const [deleteCallRecord, { isLoading: isDeletingCall }] =
+    useDeleteCallRecordMutation();
   const diarization = mediaFileResult?.diarization?.status
     ? mediaFileResult.diarization
     : null;
@@ -104,6 +115,26 @@ export const Call = () => {
     } catch (error) {
       const apiError = error as { data?: { detail?: string } };
       toast.error(apiError.data?.detail ?? 'Không thể xác nhận vai trò người nói');
+    }
+  };
+
+  const handleDeleteCall = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const reason = deletionReason.trim();
+    if (reason.length < 5) {
+      toast.error('Vui lòng nhập lý do xóa từ 5 ký tự trở lên');
+      return;
+    }
+
+    try {
+      await deleteCallRecord({ id, reason }).unwrap();
+      toast.success('Đã xóa cuộc gọi');
+      setIsDeleteDialogOpen(false);
+      setDeletionReason('');
+      router.push(appRoutes.private.calls);
+    } catch (error) {
+      const apiError = error as { data?: { detail?: string } };
+      toast.error(apiError.data?.detail ?? 'Không thể xóa cuộc gọi');
     }
   };
 
@@ -504,7 +535,7 @@ export const Call = () => {
   };
 
   const callInfo = {
-    name: mediaFileById?.operatorName || 'Nguyễn Văn An',
+    name: mediaFileById?.telesaleName || 'Chưa gán nhân viên',
     phone:
       mediaFileById?.additionalMetadata?.clientNumber || '0900 000 000',
     date: formatDatesTime(
@@ -581,7 +612,25 @@ export const Call = () => {
         backHref={appRoutes.private.calls}
       />
 
-      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 flex flex-col overflow-y-auto">
+      <div className="bg-white dark:bg-[#242424] rounded-2xl border border-gray-200 dark:border-[#383838] p-6 flex flex-col overflow-y-auto">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4 dark:border-[#383838]">
+          <div>
+            <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Chi tiết cuộc gọi</h1>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              {callInfo.name} · {callInfo.date}
+            </p>
+          </div>
+          {!isDemoMode && profile?.role === 'admin' && (
+            <button
+              type="button"
+              onClick={() => setIsDeleteDialogOpen(true)}
+              disabled={isDeletingCall}
+              className="rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-red-900/70 dark:text-red-300 dark:hover:bg-red-950/50"
+            >
+              {isDeletingCall ? 'Đang xóa...' : 'Xóa cuộc gọi'}
+            </button>
+          )}
+        </div>
         {/* <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <div className="w-10 h-10 bg-purple-700 rounded-full flex items-center justify-center text-white font-medium">
@@ -598,7 +647,7 @@ export const Call = () => {
         </div> */}
 
         <div
-          className={`bg-purple-50 rounded-xl p-4 mb-4 relative dark:bg-purple-950/30 ${hasMultipleChannels ? 'h-32' : 'h-20'}`}
+          className={`bg-purple-50 rounded-xl p-4 mb-4 relative dark:bg-[#30263b] ${hasMultipleChannels ? 'h-32' : 'h-20'}`}
         >
           {!isAudioLoading && (
             <button
@@ -758,6 +807,59 @@ export const Call = () => {
           />
         )}
       </div>
+      {isDeleteDialogOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4">
+          <form
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-call-title"
+            onSubmit={handleDeleteCall}
+            className="w-full max-w-lg rounded-2xl border border-gray-200 bg-white p-6 shadow-2xl dark:border-gray-700 dark:bg-gray-900"
+          >
+            <h2 id="delete-call-title" className="text-lg font-semibold text-gray-900 dark:text-white">
+              Lý do xóa cuộc gọi
+            </h2>
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+              Nhân viên được gán cuộc gọi sẽ nhận thông báo kèm lý do này.
+            </p>
+            <label htmlFor="delete-call-reason" className="mt-5 block text-sm font-medium text-gray-800 dark:text-gray-200">
+              Lý do <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="delete-call-reason"
+              autoFocus
+              required
+              minLength={5}
+              maxLength={400}
+              rows={4}
+              value={deletionReason}
+              onChange={event => setDeletionReason(event.target.value)}
+              placeholder="Nhập lý do để nhân viên biết vì sao cuộc gọi bị xóa"
+              className="mt-2 w-full resize-y rounded-xl border border-gray-300 bg-white p-3 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:placeholder:text-gray-500"
+            />
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                type="button"
+                disabled={isDeletingCall}
+                onClick={() => {
+                  setIsDeleteDialogOpen(false);
+                  setDeletionReason('');
+                }}
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-60 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
+              >
+                Hủy
+              </button>
+              <button
+                type="submit"
+                disabled={isDeletingCall || deletionReason.trim().length < 5}
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isDeletingCall ? 'Đang xóa...' : 'Xác nhận xóa'}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </Fragment>
   );
 };

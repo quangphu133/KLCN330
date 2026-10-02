@@ -19,8 +19,9 @@ class PlotDataItem(BaseModel):
     simultaneousSpeechExceedCount: int
 
 
-class OperatorRatingDataItem(BaseModel):
-    operatorName: Optional[str]
+class EmployeeRatingDataItem(BaseModel):
+    telesaleId: Optional[int]
+    telesaleName: str
     recordsCount: int
     averageDuration: float
     averageNegativeLevelOverall: Optional[float]
@@ -35,4 +36,4 @@ class AnalyticsDashboardResponse(BaseModel):
     plotData: List[PlotDataItem]
     negativeHistogramData: Dict[str, int]
     summaryData: SummaryData
-    operatorRatingData: List[OperatorRatingDataItem]
+    employeeRatingData: List[EmployeeRatingDataItem]

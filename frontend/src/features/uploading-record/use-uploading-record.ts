@@ -26,7 +26,7 @@ const FileSchema =
 
 export const MediaFileSchema = z.object({
   clientNumber: z.string().trim().min(1, { message: 'Vui lòng nhập số điện thoại' }),
-  operatorId: z.string().optional(),
+  telesaleId: z.string().optional(),
   projectId: z.string().optional(),
   file: FileSchema,
 })

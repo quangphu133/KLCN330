@@ -73,7 +73,7 @@ export const Analytics = () => {
               <AnalyticsBarChart data={data?.negativeHistogramData} />
             </div>
             <div className="col-span-12 md:col-span-6">
-              <TopChannel data={data?.operatorRatingData} />
+              <TopChannel data={data?.employeeRatingData} />
             </div>
             <div className="col-span-12 md:col-span-6">
               <TopPages

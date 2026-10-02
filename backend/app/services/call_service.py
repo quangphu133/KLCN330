@@ -7,7 +7,6 @@ from fastapi import HTTPException, status
 from app.models.call_record import CallRecord
 from app.models.violation import Violation
 from app.models.user import User
-from app.models.operator import Operator
 from app.models.project import Project
 from app.schemas.call_schema import CallRecordCreate, CallRecordUpdate
 from app.schemas.ai_schema import AISpeechSegment
@@ -17,17 +16,19 @@ from app.core.config import settings
 class CallService:
     @staticmethod
     def create_call(db: Session, call_in: CallRecordCreate) -> CallRecord:
-        # 1. Xác thực Telesale ID nếu có truyền vào
+        # Validate the selected owner as an active employee account.
         if call_in.telesale_id:
-            user = db.query(User).filter(User.id == call_in.telesale_id).first()
+            user = db.query(User).filter(
+                User.id == call_in.telesale_id,
+                User.role == "telesales",
+                User.is_active.is_(True),
+            ).first()
             if not user:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
-                    detail=f"Không tìm thấy nhân viên với mã: {call_in.telesale_id}"
+                    detail=f"Không tìm thấy nhân viên đang hoạt động với mã: {call_in.telesale_id}"
                 )
 
-        if call_in.operator_id and not db.query(Operator).filter(Operator.id == call_in.operator_id).first():
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy nhân viên có mã: {call_in.operator_id}")
         if call_in.project_id and not db.query(Project).filter(Project.id == call_in.project_id).first():
             raise HTTPException(status_code=404, detail=f"Không tìm thấy dự án có mã: {call_in.project_id}")
 
@@ -84,7 +85,6 @@ class CallService:
         # 4. Khởi tạo bản ghi cuộc gọi
         db_call = CallRecord(
             telesale_id=call_in.telesale_id,
-            operator_id=call_in.operator_id,
             project_id=call_in.project_id,
             client_number=call_in.client_number,
             call_date=call_in.call_date or datetime.now(timezone.utc).replace(tzinfo=None),
@@ -123,7 +123,7 @@ class CallService:
         diarization = dict(data.get("diarization") or {})
         speakers = diarization.get("speakers") or []
         speaker_ids = [str(item.get("speaker_id")) for item in speakers]
-        if diarization.get("status") != "completed" or len(speaker_ids) != 2:
+        if diarization.get("status") != "completed" or len(speaker_ids) != 2 or len(set(speaker_ids)) != 2:
             raise HTTPException(status_code=400, detail="Cuộc gọi chưa có đúng hai người nói để xác nhận")
         if agent_speaker_id not in speaker_ids:
             raise HTTPException(status_code=400, detail="Mã người nói không tồn tại trong cuộc gọi")

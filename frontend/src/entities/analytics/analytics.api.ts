@@ -18,7 +18,7 @@ const AnalyticsApi = commonApi.injectEndpoints({
           end: args?.end,
           offset: args?.offset ?? 0,
           limit: args?.limit ?? 10,
-          operatorId: args?.operatorId,
+          telesaleId: args?.telesaleId,
           topNKeywords: args?.topNKeywords ?? 5,
           negativeLevelThreshold: args?.negativeLevelThreshold ?? 0.3,
           filterByPhrasesCategoriesCommaSeparated: args?.filterByPhrasesCategoriesCommaSeparated,

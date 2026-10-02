@@ -22,7 +22,6 @@ class AsrJob(Base):
 
     # Nhân viên thực hiện cuộc gọi (gắn từ lúc upload)
     telesale_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
-    operator_id = Column(Integer, ForeignKey("operators.id", ondelete="SET NULL"), nullable=True)
     project_id = Column(Integer, ForeignKey("projects.id", ondelete="SET NULL"), nullable=True)
     client_number = Column(String(50), nullable=True)
     requested_call_date = Column(DateTime, nullable=True)
@@ -38,6 +37,5 @@ class AsrJob(Base):
 
     # Relationships
     telesale = relationship("User", foreign_keys=[telesale_id])
-    operator = relationship("Operator", foreign_keys=[operator_id])
     project = relationship("Project", foreign_keys=[project_id])
     call_record = relationship("CallRecord", foreign_keys=[call_record_id])

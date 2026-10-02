@@ -63,7 +63,7 @@ export const DropdownCustom = ({
           <div
             ref={trigger}
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className={`grow min-h-11 transition duration-200 hover:bg-gray-100 inline-flex items-center 
+            className={`grow min-h-11 transition duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 inline-flex items-center
             gap-2.5 py-3.5 px-5 text-sm bg-transparent border border-gray-200 
             rounded-full appearance-none h-9 shadow-theme-xs cursor-pointer placeholder:text-gray-400 
             focus:border-brand-300 focus:outline-hidden focus:ring-1 focus:ring-brand-500/10 
@@ -113,7 +113,7 @@ export const DropdownCustom = ({
                     if (onChange) onChange(option.value);
                     setDropdownOpen(false);
                   }}
-                  className="transition duration-200 flex font-medium hover:bg-gray-100 hover:text-primary dark:hover:bg-meta-4 px-5 py-1"
+                  className="transition duration-200 flex font-medium hover:bg-gray-100 hover:text-primary dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-white px-5 py-1"
                 >
                   {option.label}
                 </li>

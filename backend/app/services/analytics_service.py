@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.models.call_record import CallRecord
-from app.models.operator import Operator
 from app.models.violation import Violation
 
 
@@ -13,7 +12,7 @@ class AnalyticsService:
         db: Session,
         start: Optional[str] = None,
         end: Optional[str] = None,
-        operator_id: Optional[int] = None,
+        telesale_id: Optional[int] = None,
         top_n_keywords: int = 5,
         negative_level_threshold: float = 0.3,
         offset: int = 0,
@@ -31,8 +30,8 @@ class AnalyticsService:
                 query = query.filter(CallRecord.call_date <= datetime.fromisoformat(end))
             except ValueError:
                 pass
-        if operator_id:
-            query = query.filter(CallRecord.operator_id == operator_id)
+        if telesale_id is not None:
+            query = query.filter(CallRecord.telesale_id == telesale_id)
 
         records = query.all()
         total = len(records)
@@ -82,35 +81,37 @@ class AnalyticsService:
 
         plot_data = sorted(date_map.values(), key=lambda x: x["dateTime"])
 
-        # ── Operator Rating Data ──────────────────────────────────
-        op_map: dict = {}
+        # ── Employee Rating Data ─────────────────────────────────
+        employee_map: dict = {}
         for r in records:
-            op_id = r.operator_id
-            if op_id not in op_map:
-                op_map[op_id] = {
-                    "op": r.operator,
+            employee_id = r.telesale_id
+            if employee_id not in employee_map:
+                employee_map[employee_id] = {
+                    "employee": r.telesale,
                     "records": [],
                 }
-            op_map[op_id]["records"].append(r)
+            employee_map[employee_id]["records"].append(r)
 
-        operator_rating = []
-        for op_id, data in op_map.items():
+        employee_rating = []
+        for employee_id, data in employee_map.items():
             op_records = data["records"]
             op_count = len(op_records)
-            op_avg_dur = sum(r.audio_duration or 0 for r in op_records) / op_count
-            scored_op_records = [r for r in op_records if r.compliance_score is not None]
-            op_avg_score = (
-                sum(r.compliance_score for r in scored_op_records) / len(scored_op_records)
-                if scored_op_records
+            employee_avg_duration = sum(r.audio_duration or 0 for r in op_records) / op_count
+            scored_employee_records = [r for r in op_records if r.compliance_score is not None]
+            employee_avg_score = (
+                sum(r.compliance_score for r in scored_employee_records) / len(scored_employee_records)
+                if scored_employee_records
                 else None
             )
-            op_neg = round((100 - op_avg_score) / 100, 4) if op_avg_score is not None else None
-            op_name = data["op"].name if data["op"] else f"Operator #{op_id}"
-            operator_rating.append({
-                "operatorName": op_name,
+            employee_negative_level = round((100 - employee_avg_score) / 100, 4) if employee_avg_score is not None else None
+            employee = data["employee"]
+            employee_name = employee.full_name if employee else None
+            employee_rating.append({
+                "telesaleId": employee_id,
+                "telesaleName": employee_name or (f"Nhân viên #{employee_id}" if employee_id is not None else "Chưa gán nhân viên"),
                 "recordsCount": op_count,
-                "averageDuration": round(op_avg_dur, 2),
-                "averageNegativeLevelOverall": op_neg,
+                "averageDuration": round(employee_avg_duration, 2),
+                "averageNegativeLevelOverall": employee_negative_level,
                 "averageKeywordsCount": 0.0,
                 "averageMaxSimultaneousSilenceDuration": 0.0,
                 "averageSimultaneousSpeechCount": 0.0,
@@ -147,5 +148,5 @@ class AnalyticsService:
             "plotData": plot_data,
             "negativeHistogramData": neg_histogram,
             "summaryData": summary_data,
-            "operatorRatingData": operator_rating,
+            "employeeRatingData": employee_rating,
         }

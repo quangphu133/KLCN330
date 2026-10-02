@@ -6,11 +6,14 @@ Database PostgreSQL nghiệp vụ được cấu hình và truy cập qua `backe
 
 Dịch vụ này chạy độc lập trên máy có GPU và mặc định lắng nghe ở cổng `8000`.
 
+Bạn tự đặt tên và vị trí thư mục AI/model trên máy của mình. `api/` là tên thư mục mã nguồn trong repo này; model có thể nằm ở một thư mục riêng với tên bất kỳ, được khai báo bằng `BUZZASR_MODEL_DIR`.
+
 ```powershell
 cd api
 python -m pip install -r requirements.txt
 $env:ASR_API_KEY = "your-shared-secret"
 $env:ASR_HOST = "0.0.0.0"
+$env:BUZZASR_MODEL_DIR = Read-Host 'Enter the absolute path to your CTranslate2 model folder'
 python run.py
 ```
 

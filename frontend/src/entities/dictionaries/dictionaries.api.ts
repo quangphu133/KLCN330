@@ -26,14 +26,21 @@ const DictionaryApi = commonApi.injectEndpoints({
       invalidatesTags: ['DICTIONARIES'],
     }),
     updateDictionary: builder.mutation<
-      null,
-      { body: DictionaryReqBody; id: number }
+      Dictionary,
+      { body: Partial<DictionaryReqBody>; id: number }
     >({
-      query: ({ body, id }) => ({
-        url: `api/vocabularies/${id}`,
-        method: 'PUT',
-        body: body,
-      }),
+      query: ({ body, id }) => {
+        const { isActive, ...dictionaryFields } = body;
+
+        return {
+          url: `api/vocabularies/${id}`,
+          method: 'PUT',
+          body: {
+            ...dictionaryFields,
+            ...(isActive === undefined ? {} : { is_active: isActive }),
+          },
+        };
+      },
       invalidatesTags: ['DICTIONARIES'],
     }),
     deleteDictionary: builder.mutation<void, number>({
