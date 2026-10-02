@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Cập nhật mô tả API và thông báo phản hồi bằng tiếng Việt.
 """
 Endpoint xử lý luồng phiên âm đầu-cuối:
   POST /transcribe/upload    – Upload audio, gửi sang BuzzASR, trả job_id ngay
@@ -44,7 +45,7 @@ router = APIRouter(prefix="/transcribe", tags=["ASR Transcription"])
 def _save_upload(file: UploadFile) -> str:
     """Lưu UploadFile vào thư mục uploads/audio/, trả về đường dẫn tuyệt đối."""
     if not file.filename:
-        raise HTTPException(status_code=400, detail="Tên file không hợp lệ")
+        raise HTTPException(status_code=400, detail="Tên tệp không hợp lệ")
 
     ext = os.path.splitext(file.filename)[1].lower()
     if ext not in settings.ALLOWED_AUDIO_EXTENSIONS:
@@ -60,7 +61,7 @@ def _save_upload(file: UploadFile) -> str:
         with open(dest, "wb") as buf:
             shutil.copyfileobj(file.file, buf)
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Không thể lưu file: {exc}")
+        raise HTTPException(status_code=500, detail=f"Không thể lưu tệp: {exc}")
 
     file_size = os.path.getsize(dest)
     max_bytes = settings.MAX_FILE_SIZE_MB * 1024 * 1024
@@ -68,7 +69,7 @@ def _save_upload(file: UploadFile) -> str:
         dest.unlink(missing_ok=True)
         raise HTTPException(
             status_code=400,
-            detail=f"File vượt quá giới hạn {settings.MAX_FILE_SIZE_MB} MB",
+            detail=f"Tệp vượt quá giới hạn {settings.MAX_FILE_SIZE_MB} MB",
         )
 
     return str(dest)
@@ -82,17 +83,17 @@ def _save_upload(file: UploadFile) -> str:
     "/upload",
     response_model=AsrJobResponse,
     status_code=status.HTTP_202_ACCEPTED,
-    summary="Upload audio và phiên âm tự động qua BuzzASR",
+    summary="Tải lên tệp âm thanh và tự động phiên âm qua BuzzASR",
     description=(
-        "Nhận file audio từ client, lưu tạm, gửi sang GPU server BuzzASR để phiên âm. "
+        "Nhận tệp âm thanh từ ứng dụng, lưu tạm, gửi đến máy chủ GPU BuzzASR để phiên âm. "
         "Trả về `job_id` ngay lập tức. Hệ thống tự động poll kết quả nền và tạo CallRecord khi xong."
     ),
 )
 async def upload_and_transcribe(
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
-    file: UploadFile = File(..., description="File âm thanh (.wav, .mp3, .m4a, .ogg, .flac)"),
-    telesale_id: Optional[int] = Form(None, description="ID nhân viên telesale thực hiện cuộc gọi"),
+    file: UploadFile = File(..., description="Tệp âm thanh (.wav, .mp3, .m4a, .ogg, .flac)"),
+    telesale_id: Optional[int] = Form(None, description="Mã nhân viên thực hiện cuộc gọi"),
     operatorId: Optional[int] = Form(None),
     projectId: Optional[int] = Form(None),
     clientNumber: Optional[str] = Form(None),
@@ -154,7 +155,7 @@ async def upload_and_transcribe(
         logger.warning("[ASR] Server unavailable; upload saved locally as call_record_id=%s", call_record.id)
         return asr_job
     except FileNotFoundError as exc:
-        raise HTTPException(status_code=500, detail=f"File không tồn tại sau khi lưu: {exc}")
+        raise HTTPException(status_code=500, detail=f"Không tìm thấy tệp sau khi lưu: {exc}")
     except Exception as exc:
         if os.path.exists(file_path):
             os.unlink(file_path)
@@ -174,14 +175,14 @@ async def upload_and_transcribe(
     "/{job_id}/status",
     response_model=AsrJobResponse,
     summary="Xem trạng thái job phiên âm",
-    description="Trả về trạng thái hiện tại của job từ DB: queued | running | completed | failed",
+    description="Trả về trạng thái hiện tại của tác vụ: đang chờ | đang xử lý | hoàn tất | thất bại",
 )
 def get_transcription_status(job_id: str, db: Session = Depends(get_db)):
     asr_job = asr_service.get_job_status(db=db, job_id=job_id)
     if not asr_job:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Không tìm thấy job với job_id: {job_id}",
+            detail=f"Không tìm thấy tác vụ có mã: {job_id}",
         )
     return asr_job
 
@@ -202,13 +203,13 @@ def get_transcription_status(job_id: str, db: Session = Depends(get_db)):
 def retry_poll(job_id: str, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     asr_job = asr_service.get_job_status(db=db, job_id=job_id)
     if not asr_job:
-        raise HTTPException(status_code=404, detail=f"Không tìm thấy job: {job_id}")
+        raise HTTPException(status_code=404, detail=f"Không tìm thấy tác vụ có mã: {job_id}")
 
     if asr_job.status == "completed":
-        raise HTTPException(status_code=400, detail="Job đã hoàn thành, không cần poll lại.")
+        raise HTTPException(status_code=400, detail="Tác vụ đã hoàn tất, không cần kiểm tra lại.")
 
     if asr_job.status == "failed":
-        raise HTTPException(status_code=400, detail="Job đã thất bại. Hãy upload lại file.")
+        raise HTTPException(status_code=400, detail="Tác vụ đã thất bại. Vui lòng tải lại tệp.")
 
     background_tasks.add_task(_background_process, asr_job.id)
     return asr_job

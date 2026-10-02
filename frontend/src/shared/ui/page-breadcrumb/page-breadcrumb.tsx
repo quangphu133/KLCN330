@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
 import Link from 'next/link'
 
 interface BreadcrumbProps {
@@ -8,7 +9,7 @@ interface BreadcrumbProps {
 
 const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
   pageTitle,
-  backTitle = 'Back',
+  backTitle = 'Quay lại',
   backHref = '/',
 }) => {
   return (

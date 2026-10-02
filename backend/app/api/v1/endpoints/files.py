@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Cập nhật mô tả API và thông báo phản hồi bằng tiếng Việt.
 from fastapi import APIRouter, UploadFile, File, status
 from fastapi.responses import FileResponse
 from app.schemas.file_schema import FileUploadResponse
@@ -11,7 +12,7 @@ router = APIRouter(prefix="/files", tags=["Files"])
     status_code=status.HTTP_201_CREATED,
     summary="Tải lên file âm thanh ghi âm cuộc gọi"
 )
-async def upload_audio_file(file: UploadFile = File(..., description="File âm thanh cuộc gọi (.wav, .mp3, .m4a, .ogg)")):
+async def upload_audio_file(file: UploadFile = File(..., description="Tệp âm thanh cuộc gọi (.wav, .mp3, .m4a, .ogg)")):
     """
     Tải lên file ghi âm từ hệ thống tổng đài / telesale.
     Hệ thống sẽ lưu trữ và trả về thông tin đường dẫn `file_path` để sử dụng khi tạo cuộc gọi.

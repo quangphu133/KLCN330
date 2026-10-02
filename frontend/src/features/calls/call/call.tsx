@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cải thiện độ tương phản chế độ tối cho nội dung cuộc gọi và transcript.
 'use client';
 
 import React, {
@@ -503,9 +504,9 @@ export const Call = () => {
   };
 
   const callInfo = {
-    name: mediaFileById?.operatorName || 'Lindsay Curtis',
+    name: mediaFileById?.operatorName || 'Nguyễn Văn An',
     phone:
-      mediaFileById?.additionalMetadata?.clientNumber || '+123 (45) 678-91-01',
+      mediaFileById?.additionalMetadata?.clientNumber || '0900 000 000',
     date: formatDatesTime(
       mediaFileById?.createDate ? new Date(mediaFileById.createDate) : null
     ),
@@ -530,7 +531,7 @@ export const Call = () => {
           score: 10,
           maxScore: 10,
           explanation:
-            'The operator\'s voice lacked negative intonations. The operator\'s lexicon emphasized a respectful attitude towards the client.',
+            'Nhân viên có giọng nói nhẹ nhàng, dùng từ ngữ lịch sự và thể hiện thái độ tôn trọng khách hàng.',
         },
         {
           criteriaGroup: 'CÁCH THỨC HỘI THOẠI',
@@ -580,7 +581,7 @@ export const Call = () => {
         backHref={appRoutes.private.calls}
       />
 
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col overflow-y-auto">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 flex flex-col overflow-y-auto">
         {/* <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <div className="w-10 h-10 bg-purple-700 rounded-full flex items-center justify-center text-white font-medium">
@@ -589,19 +590,19 @@ export const Call = () => {
             <div className="ml-4">
               <>
                 <p className="font-medium">{callInfo.name}</p>
-                <p className="text-gray-500 text-sm">{callInfo.phone}</p>
+                <p className="text-gray-500 text-sm dark:text-gray-400">{callInfo.phone}</p>
               </>
             </div>
           </div>
-          <div className="text-gray-500 text-sm">{callInfo.date}</div>
+          <div className="text-gray-500 text-sm dark:text-gray-400">{callInfo.date}</div>
         </div> */}
 
         <div
-          className={`bg-purple-50 rounded-xl p-4 mb-4 relative ${hasMultipleChannels ? 'h-32' : 'h-20'}`}
+          className={`bg-purple-50 rounded-xl p-4 mb-4 relative dark:bg-purple-950/30 ${hasMultipleChannels ? 'h-32' : 'h-20'}`}
         >
           {!isAudioLoading && (
             <button
-              className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-gray-100 hover:bg-purple-200 rounded-full cursor-pointer flex items-center justify-center ${isPlaying ? 'text-purple-700' : ''}`}
+              className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-gray-100 hover:bg-purple-200 rounded-full cursor-pointer flex items-center justify-center dark:bg-gray-800 dark:hover:bg-purple-900 dark:text-gray-200 ${isPlaying ? 'text-purple-700 dark:text-purple-300' : ''}`}
               onClick={togglePlayPause}
             >
               {isPlaying ? (
@@ -657,7 +658,7 @@ export const Call = () => {
         </div>
 
         <div className="flex justify-between items-center mb-6">
-          <div className="text-gray-600 text-sm">{callInfo.duration}</div>
+          <div className="text-gray-600 text-sm dark:text-gray-400">{callInfo.duration}</div>
 
           <div className="flex gap-5 text-sm">
             {audioIndicators.map((indicator, index) => (
@@ -665,7 +666,7 @@ export const Call = () => {
                 <div
                   className={`w-2 h-2 rounded-full ${indicator.color} mr-2`}
                 ></div>
-                <span className="text-gray-600">{indicator.type}</span>
+                <span className="text-gray-600 dark:text-gray-400">{indicator.type}</span>
               </div>
             ))}
           </div>
@@ -676,8 +677,8 @@ export const Call = () => {
                 key={rate}
                 className={`text-sm px-2 py-1 rounded cursor-pointer ${
                   playbackRate === rate
-                    ? 'text-purple-700 font-medium'
-                    : 'text-gray-500'
+                    ? 'text-purple-700 font-medium dark:text-purple-300'
+                    : 'text-gray-500 dark:text-gray-400'
                 }`}
                 onClick={() => setPlaybackRate(rate)}
               >
@@ -688,11 +689,11 @@ export const Call = () => {
         </div>
 
         {diarization?.status === 'completed' && (
-          <div className="mb-6 rounded-xl border border-purple-100 bg-purple-50 p-4">
+          <div className="mb-6 rounded-xl border border-purple-100 bg-purple-50 p-4 dark:border-purple-900/60 dark:bg-purple-950/40">
             <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
-                <h3 className="font-semibold text-purple-900">Xác nhận người nói</h3>
-                <p className="mt-1 text-sm text-purple-700">
+                <h3 className="font-semibold text-purple-900 dark:text-purple-200">Xác nhận người nói</h3>
+                <p className="mt-1 text-sm text-purple-700 dark:text-purple-300">
                   {roleMapping?.suggestion_reason
                     ? `Gợi ý nhân viên dựa trên câu: “${roleMapping.suggestion_reason}”`
                     : 'Chọn người nói là nhân viên để hệ thống chấm regex đúng người.'}
@@ -702,7 +703,7 @@ export const Call = () => {
                 <select
                   value={selectedAgentSpeakerId}
                   onChange={(event) => setSelectedAgentSpeakerId(event.target.value)}
-                  className="rounded-lg border border-purple-200 bg-white px-3 py-2 text-sm"
+                  className="rounded-lg border border-purple-200 bg-white px-3 py-2 text-sm text-gray-800 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
                 >
                   <option value="">Chọn người nói</option>
                   {diarization.speakers.map((speaker, index) => (
@@ -729,7 +730,7 @@ export const Call = () => {
         )}
 
         {diarization && diarization.status !== 'completed' && diarization.status !== 'disabled' && (
-          <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+          <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">
             Chưa thể xác nhận vai trò người nói: {diarization.error?.message ?? diarization.status}.
           </div>
         )}
@@ -739,7 +740,7 @@ export const Call = () => {
         </div>
 
         <div className="-mx-6">
-          <hr className="my-5 border-gray-200" />
+          <hr className="my-5 border-gray-200 dark:border-gray-700" />
         </div>
         {activeTab === CallTab.Summary && <Summary content={summaryContent} />}
         {activeTab === CallTab.Transcript && (

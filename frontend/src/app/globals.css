@@ -1,3 +1,4 @@
+/* Ghi chú nhóm: Cải thiện màu sắc và độ tương phản của giao diện ở chế độ tối. */
 @import '../shared/styles/_colors.css';
 @import '../shared/styles/react-toastify.css';
 @import 'tailwindcss';
@@ -33,6 +34,11 @@
     color: var(--color-neutral-900);
   }
 
+  html.dark body {
+    background-color: #111827;
+    color: #f3f4f6;
+  }
+
   table {
     border-spacing: 0;
     border-collapse: collapse;
@@ -60,6 +66,15 @@
   background-size: 32px 32px, 32px 32px, auto, auto;
 }
 
+.dark .huit-app-background {
+  background-color: #111827;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.045) 1px, transparent 1px),
+    radial-gradient(circle at 85% 8%, rgba(0, 104, 173, 0.16), transparent 28%),
+    linear-gradient(145deg, #111827 0%, #0b1220 100%);
+}
+
 .huit-sidebar {
   border-right-color: rgba(0, 104, 173, 0.18);
   box-shadow: 8px 0 28px rgba(0, 79, 135, 0.05);
@@ -74,6 +89,12 @@
   background:
     radial-gradient(circle at 12% 12%, rgba(0, 104, 173, 0.1), transparent 30%),
     linear-gradient(145deg, #ffffff 0%, #eef7fc 100%);
+}
+
+.dark .huit-auth-page {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(0, 104, 173, 0.2), transparent 30%),
+    linear-gradient(145deg, #111827 0%, #0b1220 100%);
 }
 
 .huit-auth-hero {

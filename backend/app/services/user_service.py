@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Chuẩn hóa thông báo nghiệp vụ và thuật ngữ tiếng Việt.
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
@@ -13,7 +14,7 @@ class UserService:
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Không tìm thấy người dùng với ID: {user_id}"
+                detail=f"Không tìm thấy người dùng có mã: {user_id}"
             )
         return user
 

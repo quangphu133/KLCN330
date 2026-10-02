@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
 import React, { ReactNode } from 'react';
 
 interface ButtonProps {
@@ -34,7 +35,7 @@ const Button: React.FC<ButtonProps> = ({
     purple:
       'bg-purple-900 hover:bg-purple-800 text-white py-2 px-4 rounded-full cursor-pointer',
     outline:
-      'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03] dark:hover:text-gray-300',
+      'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:ring-gray-700 dark:hover:bg-white/[0.06] dark:hover:text-white',
   };
 
   return (

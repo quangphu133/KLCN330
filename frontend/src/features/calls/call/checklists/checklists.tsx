@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cải thiện độ tương phản chế độ tối cho nội dung cuộc gọi và transcript.
 'use client'
 
 import React, { Fragment } from 'react'
@@ -25,7 +26,7 @@ interface ChecklistProps {
 }
 
 export const Checklist: React.FC<ChecklistProps> = ({ checklistData, gptChecklist }) => {
-  return gptChecklist ? <div className="text-gray-700 space-y-8">
+  return gptChecklist ? <div className="text-gray-700 space-y-8 dark:text-gray-300">
     <ChecklistTable checklist={gptChecklist} />
     {/* <ChecklistTóm tắt checklist={gptChecklist} /> */}
   </div> : null;

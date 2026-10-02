@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
@@ -112,7 +113,7 @@ export const Header = () => {
           <button
             className="items-center justify-center w-10 h-10 text-gray-500 border-gray-200 rounded-lg z-99999 dark:border-gray-800 lg:flex dark:text-gray-400 lg:h-11 lg:w-11 lg:border"
             onClick={handleToggle}
-            aria-label="Toggle Sidebar"
+            aria-label="Đóng hoặc mở thanh điều hướng"
           >
             {isMobileOpen ? (
               <svg

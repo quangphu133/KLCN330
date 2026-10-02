@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
 interface UploadAlertProps {
   onClose: () => void
   title: string
@@ -5,7 +6,7 @@ interface UploadAlertProps {
 
 export const UploadAlert = ({ onClose, title }: UploadAlertProps) => {
   return (
-    <div className="mb-4 rounded-lg bg-blue-50 p-4 text-sm text-blue-800 flex justify-between items-center">
+    <div className="mb-4 rounded-lg bg-blue-50 p-4 text-sm text-blue-800 flex justify-between items-center dark:bg-blue-950/40 dark:text-blue-200">
       <div className="flex items-center">
         <svg
           className="mr-2 h-5 w-5 text-blue-600"

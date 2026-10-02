@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa và cải thiện hiển thị cho màn hình quản lý dữ liệu.
 'use client';
 
 import { Fragment, useEffect, useState, useMemo } from 'react';
@@ -70,19 +71,19 @@ export const OperatorsTable = ({
 
   useEffect(() => {
     if (updateOperatorResult.isSuccess) {
-      toast.success('Điều hành viên updated successfully');
+      toast.success('Đã cập nhật nhân viên');
     }
   }, [updateOperatorResult]);
 
   useEffect(() => {
     if (createOperatorResult.isSuccess) {
-      toast.success('Điều hành viên created successfully');
+      toast.success('Đã tạo nhân viên');
     }
   }, [createOperatorResult]);
 
   useEffect(() => {
     if (deleteOperatorResult.isSuccess) {
-      toast.success('Điều hành viên deleted successfully');
+      toast.success('Đã xóa nhân viên');
       setIsConfirmingDelete(false);
       setDeletingItem(undefined);
     }
@@ -171,12 +172,12 @@ export const OperatorsTable = ({
         isLoading={deleteOperatorResult.isLoading}
       />
 
-      <div className="rounded-2xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+      <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
         {/* Search & Filter Header Bar */}
         <div className="p-4 border-b border-gray-100 dark:border-white/[0.05] flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex flex-1 items-center gap-3 max-w-md">
             <Input
-              placeholder="Search by operator name..."
+              placeholder="Tìm theo tên nhân viên..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -197,9 +198,9 @@ export const OperatorsTable = ({
                 }}
                 className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 outline-none focus:border-purple-500 dark:border-white/10 dark:bg-gray-800 dark:text-gray-300"
               >
-                <option value="all">All Status</option>
+                <option value="all">Tất cả trạng thái</option>
                 <option value="active">Đang hoạt động</option>
-                <option value="inactive">Inactive</option>
+                <option value="inactive">Ngừng hoạt động</option>
               </select>
             </div>
 
@@ -210,7 +211,7 @@ export const OperatorsTable = ({
                 setIsCreatingOperator(true);
               }}
             >
-              Tạo điều hành viên
+              Tạo nhân viên
             </Button>
           </div>
         </div>
@@ -224,7 +225,7 @@ export const OperatorsTable = ({
                     isHeader
                     className="p-6 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400 w-[90px]"
                   >
-                    Id
+                    Mã
                   </TableCell>
                   <TableCell
                     isHeader
@@ -236,21 +237,21 @@ export const OperatorsTable = ({
                     isHeader
                     className="p-6 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400"
                   >
-                    Status
+                    Trạng thái
                   </TableCell>
                   <TableCell
                     isHeader
                     className="w-44 py-6 px-6 font-normal text-gray-500 text-end text-theme-sm dark:text-gray-400"
                   >
-                    Actions
+                    Thao tác
                   </TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                 {currentItems.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="h-32 text-center text-gray-500">
-                      No operators found.
+                    <TableCell colSpan={4} className="h-32 text-center text-gray-500 dark:text-gray-400">
+                      Không tìm thấy nhân viên nào.
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -280,23 +281,23 @@ export const OperatorsTable = ({
                         </TableCell>
                         <TableCell className="h-16 px-3">
                           <Badge color={isActive ? 'success' : 'error'} variant="light">
-                            {isActive ? 'Đang hoạt động' : 'Inactive'}
+                            {isActive ? 'Đang hoạt động' : 'Ngừng hoạt động'}
                           </Badge>
                         </TableCell>
                         <TableCell className="h-16 w-44 pr-6 pl-3">
                           <div className="flex items-center gap-2 w-full justify-end">
                             <button
                               type="button"
-                              title="Chỉnh sửa operator"
-                              className="cursor-pointer font-medium text-gray-700 dark:text-gray-300 rounded-full p-2 border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/10 transition duration-300"
+                              title="Chỉnh sửa nhân viên"
+                              className="cursor-pointer font-medium text-gray-700 dark:text-gray-200 rounded-full p-2 border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-950/70 dark:hover:text-blue-300 transition duration-300"
                               onClick={(e) => handleEditClick(e, item)}
                             >
                               <PencilIcon width={14} height={14} />
                             </button>
                             <button
                               type="button"
-                              title="Delete operator"
-                              className="cursor-pointer font-medium text-red-600 rounded-full p-2 border border-red-200 dark:border-red-900/40 hover:bg-red-50 dark:hover:bg-red-950/30 transition duration-300"
+                              title="Xóa nhân viên"
+                              className="cursor-pointer font-medium text-red-600 dark:text-red-400 rounded-full p-2 border border-red-200 dark:border-red-800 bg-red-50/70 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-900/70 transition duration-300"
                               onClick={(e) => handleDeleteClick(e, item)}
                             >
                               <TrashRedIcon width={14} height={14} />

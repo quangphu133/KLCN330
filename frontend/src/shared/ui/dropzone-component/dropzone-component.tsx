@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
 'use client'
 
 import React, { useEffect, useRef } from 'react'
@@ -25,7 +26,7 @@ const DropzoneComponent: React.FC<DropzoneComponentProps> = ({
     'audio/ogg': [],
     'audio/aac': [],
   },
-  title = 'Drop your file here',
+  title = 'Kéo thả tệp vào đây',
   description = 'Drag a WAV or MP3 recording here, or choose a file from your device',
   cardWrapper = true,
   uploadedFile,
@@ -114,7 +115,7 @@ const DropzoneComponent: React.FC<DropzoneComponentProps> = ({
               open()
             }}
           >
-            {uploadedFile && uploadedFile.length > 0 ? 'Choose another file' : 'Choose file'}
+            {uploadedFile && uploadedFile.length > 0 ? 'Chọn tệp khác' : 'Chọn tệp'}
           </span>
         </div>
       </div>

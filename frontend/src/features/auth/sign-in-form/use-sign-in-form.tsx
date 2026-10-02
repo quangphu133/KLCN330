@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật nội dung và luồng giao diện đăng nhập theo yêu cầu demo.
 'use client'
 
 import { z } from 'zod'
@@ -9,8 +10,8 @@ export const useSignInForm = () => {
     email: z
       .string()
       .trim()
-      .min(1, 'Enter your email address')
-      .email('Invalid email address'),
+      .min(1, 'Vui lòng nhập địa chỉ email')
+      .email('Địa chỉ email không hợp lệ'),
     password: z.string().min(1, 'Nhập mật khẩu'),
     rememberMe: z.boolean().optional(),
   })

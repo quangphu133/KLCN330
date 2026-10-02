@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Chuẩn hóa thông báo nghiệp vụ và thuật ngữ tiếng Việt.
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Optional
@@ -100,14 +101,14 @@ class MediaFileService:
     def get_by_id(db: Session, record_id: int) -> dict:
         record = db.query(CallRecord).filter(CallRecord.id == record_id).first()
         if not record:
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy bản ghi ID: {record_id}")
+            raise HTTPException(status_code=404, detail=f"Không tìm thấy bản ghi có mã: {record_id}")
         return MediaFileService._to_media_file(record)
 
     @staticmethod
     def get_result(db: Session, record_id: int) -> dict:
         record = db.query(CallRecord).filter(CallRecord.id == record_id).first()
         if not record:
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy bản ghi ID: {record_id}")
+            raise HTTPException(status_code=404, detail=f"Không tìm thấy bản ghi có mã: {record_id}")
 
         analysis_data = record.analysis_data or {}
         diarization = analysis_data.get("diarization") or {}

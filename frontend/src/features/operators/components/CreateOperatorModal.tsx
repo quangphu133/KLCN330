@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa và cải thiện hiển thị cho màn hình quản lý dữ liệu.
 import { Modal } from '@/shared/ui/modal/modal';
 import Button from '@/shared/ui/button/button';
 import { type Operator } from '@/entities/operators/operators.types';
@@ -16,7 +17,7 @@ interface Props {
 
 const createOperatorSchema = z.object({
   name: z.string().min(2, {
-    message: 'Name must be at least 2 characters.',
+    message: 'Tên nhân viên phải có ít nhất 2 ký tự.',
   }),
   isActive: z.boolean(),
 });
@@ -45,7 +46,7 @@ export const CreateOperatorModal = ({ isOpen, onClose, onCreate }: Props) => {
   return (
     <Modal
       isOpen={isOpen}
-      title={'Tạo điều hành viên'}
+      title={'Tạo nhân viên tổng đài'}
       onClose={onClose}
       className="max-w-[700px] mx-auto"
     >
@@ -56,8 +57,8 @@ export const CreateOperatorModal = ({ isOpen, onClose, onCreate }: Props) => {
         <Input
           {...register('name')}
           id="operator-name"
-          label="Điều hành viên name"
-          placeholder="Nhập tên điều hành viên"
+          label="Tên nhân viên"
+          placeholder="Nhập tên nhân viên"
           error={errors.name?.message}
         />
         <Controller
@@ -71,14 +72,14 @@ export const CreateOperatorModal = ({ isOpen, onClose, onCreate }: Props) => {
                   onChange(!value);
                 }}
               />
-              <Label>Đang hoạt động Status</Label>
+              <Label>Trạng thái hoạt động</Label>
             </div>
           )}
         />
         <div className="flex justify-between">
           <Button
             type="button"
-            className="px-4 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full"
+            className="px-4 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
             onClick={onClose}
           >
             Hủy

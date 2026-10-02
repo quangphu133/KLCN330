@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Chuẩn hóa thông báo nghiệp vụ và thuật ngữ tiếng Việt.
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
@@ -19,7 +20,7 @@ class ProjectService:
         if not project:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Không tìm thấy dự án với ID: {project_id}"
+                detail=f"Không tìm thấy dự án với mã: {project_id}"
             )
         return ProjectService._to_response(project)
 
@@ -35,7 +36,7 @@ class ProjectService:
     def update(db: Session, project_id: int, project_in: ProjectUpdate) -> dict:
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy dự án ID: {project_id}")
+            raise HTTPException(status_code=404, detail=f"Không tìm thấy dự án có mã: {project_id}")
         if project_in.name is not None:
             project.name = project_in.name
         if project_in.is_active is not None:
@@ -48,7 +49,7 @@ class ProjectService:
     def delete(db: Session, project_id: int) -> bool:
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy dự án ID: {project_id}")
+            raise HTTPException(status_code=404, detail=f"Không tìm thấy dự án có mã: {project_id}")
         db.delete(project)
         db.commit()
         return True

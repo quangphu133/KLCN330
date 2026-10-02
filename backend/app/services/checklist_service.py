@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Chuẩn hóa thông báo nghiệp vụ và thuật ngữ tiếng Việt.
 import copy
 from typing import List, Optional
 from sqlalchemy.orm import Session
@@ -17,7 +18,7 @@ class ChecklistService:
     def get_by_id(db: Session, checklist_id: int) -> dict:
         item = db.query(Checklist).filter(Checklist.id == checklist_id).first()
         if not item:
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy checklist ID: {checklist_id}")
+            raise HTTPException(status_code=404, detail=f"Không tìm thấy bộ tiêu chí có mã: {checklist_id}")
         return ChecklistService._to_full_response(item)
 
     @staticmethod
@@ -36,7 +37,7 @@ class ChecklistService:
     def update(db: Session, checklist_id: int, checklist_in: ChecklistUpdate) -> dict:
         item = db.query(Checklist).filter(Checklist.id == checklist_id).first()
         if not item:
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy checklist ID: {checklist_id}")
+            raise HTTPException(status_code=404, detail=f"Không tìm thấy bộ tiêu chí có mã: {checklist_id}")
         if checklist_in.isActive is not None:
             item.is_active = checklist_in.isActive
         if checklist_in.name is not None:
@@ -54,7 +55,7 @@ class ChecklistService:
     def clone(db: Session, checklist_id: int) -> dict:
         original = db.query(Checklist).filter(Checklist.id == checklist_id).first()
         if not original:
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy checklist ID: {checklist_id}")
+            raise HTTPException(status_code=404, detail=f"Không tìm thấy bộ tiêu chí có mã: {checklist_id}")
         cloned = Checklist(
             name=f"{original.name} (copy)",
             is_active=original.is_active,
@@ -70,7 +71,7 @@ class ChecklistService:
     def delete(db: Session, checklist_id: int) -> None:
         item = db.query(Checklist).filter(Checklist.id == checklist_id).first()
         if not item:
-            raise HTTPException(status_code=404, detail=f"Không tìm thấy bộ tiêu chí ID: {checklist_id}")
+            raise HTTPException(status_code=404, detail=f"Không tìm thấy bộ tiêu chí có mã: {checklist_id}")
         item.projects = []
         db.delete(item)
         db.commit()

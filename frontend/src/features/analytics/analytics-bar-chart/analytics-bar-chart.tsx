@@ -1,8 +1,10 @@
+// Ghi chú nhóm: Việt hóa và cải thiện hiển thị chế độ tối cho trang thống kê.
 'use client'
 
 import { ApexOptions } from 'apexcharts'
 import dynamic from 'next/dynamic'
 import { useMemo } from 'react'
+import { useTheme } from '@/shared/context/theme-context/theme-context'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
@@ -11,6 +13,7 @@ interface NegativeHistogramChartProps {
 }
 
 export default function AnalyticsBarChart({ data }: NegativeHistogramChartProps) {
+  const { theme } = useTheme()
   const { categories, values, colors } = useMemo(() => {
     if (!data) {
       return { categories: [], values: [], colors: [] }
@@ -35,13 +38,14 @@ export default function AnalyticsBarChart({ data }: NegativeHistogramChartProps)
       if (index === lastIndex) {
         return '#5a2d76'
       }
-      return '#F2F2F7'
+        return theme === 'dark' ? '#374151' : '#F2F2F7'
     })
 
     return { categories, values, colors }
-  }, [data])
+  }, [data, theme])
 
   const options: ApexOptions = {
+    theme: { mode: theme },
     chart: {
       fontFamily: 'Outfit, sans-serif',
       type: 'bar',
@@ -80,7 +84,7 @@ export default function AnalyticsBarChart({ data }: NegativeHistogramChartProps)
     },
     grid: {
       show: true,
-      borderColor: '#F2F2F7',
+      borderColor: theme === 'dark' ? '#374151' : '#F2F2F7',
       strokeDashArray: 4,
       position: 'back',
       xaxis: {
@@ -104,7 +108,7 @@ export default function AnalyticsBarChart({ data }: NegativeHistogramChartProps)
       },
       labels: {
         style: {
-          colors: '#8E8E93',
+          colors: theme === 'dark' ? '#9CA3AF' : '#8E8E93',
           fontSize: '12px',
           fontFamily: 'Outfit, sans-serif',
         },
@@ -116,7 +120,7 @@ export default function AnalyticsBarChart({ data }: NegativeHistogramChartProps)
       tickAmount: 4,
       labels: {
         style: {
-          colors: '#8E8E93',
+          colors: theme === 'dark' ? '#9CA3AF' : '#8E8E93',
           fontSize: '12px',
           fontFamily: 'Outfit, sans-serif',
         },
@@ -131,7 +135,7 @@ export default function AnalyticsBarChart({ data }: NegativeHistogramChartProps)
     },
     tooltip: {
       enabled: true,
-      theme: 'light',
+      theme,
       y: {
         formatter: val => val.toString(),
       },
@@ -147,12 +151,11 @@ export default function AnalyticsBarChart({ data }: NegativeHistogramChartProps)
 
   return (
     <div
-      className="rounded-2xl h-full border border-gray-100 bg-white px-5 pt-5 
-    dark:border-gray-200 dark:bg-white/[0.03] sm:px-6 sm:pt-6"
+      className="rounded-2xl h-full border border-gray-100 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-gray-900 sm:px-6 sm:pt-6"
     >
       <div className="flex flex-wrap items-start justify-between gap-5">
         <div>
-          <h3 className="mb-1 text-lg font-semibold text-neutral-900">Frequency</h3>
+          <h3 className="mb-1 text-lg font-semibold text-neutral-900 dark:text-gray-100">Tần suất</h3>
         </div>
       </div>
       <div className="overflow-x-auto custom-scrollbar">

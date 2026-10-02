@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
 import React from 'react';
 import Label from '@/shared/ui/label/label';
 import { ErrorComponent } from '@/shared/ui/error/error';
@@ -19,7 +20,7 @@ export interface SelectProps {
 
 const Select: React.FC<SelectProps> = ({
   options,
-  placeholder = 'Select an option',
+  placeholder = 'Chọn một mục',
   onChange,
   className = '',
   label,

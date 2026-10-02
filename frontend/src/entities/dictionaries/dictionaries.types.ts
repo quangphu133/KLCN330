@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật kiểu dữ liệu hoặc cách hiển thị dữ liệu của tính năng.
 import { dictionaryColors } from '@/shared/constants/dictionaryColors';
 
 export interface Dictionary {
@@ -28,8 +29,8 @@ export const DictionaryTypeValues = [
 export type DictionaryType = (typeof DictionaryTypeValues)[number];
 
 export const DictionariesTranslations = {
-  'All': "General",
-  'OnlyOperator': "For operator",
-  'OnlyClient': "For client",
-  'Hotwords': "Thuật ngữ",
+  'All': 'Tất cả đối tượng',
+  'OnlyOperator': 'Chỉ nhân viên',
+  'OnlyClient': 'Chỉ khách hàng',
+  'Hotwords': 'Thuật ngữ',
 }

@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Cập nhật mô tả API và thông báo phản hồi bằng tiếng Việt.
 from io import BytesIO
 from pathlib import Path
 from datetime import datetime
@@ -153,11 +154,11 @@ def confirm_speaker_roles(
 def stream_media_file(file_id: int, db: Session = Depends(get_db)):
     record = db.query(CallRecord).filter(CallRecord.id == file_id).first()
     if not record:
-        raise HTTPException(status_code=404, detail=f"Không tìm thấy bản ghi ID: {file_id}")
+        raise HTTPException(status_code=404, detail=f"Không tìm thấy bản ghi có mã: {file_id}")
     file_path = Path(record.file_path)
     if not file_path.is_absolute():
         file_path = settings.UPLOAD_DIR / file_path
     file_path = file_path.resolve()
     if not file_path.is_file():
-        raise HTTPException(status_code=404, detail=f"File âm thanh không tồn tại: {file_path}")
+        raise HTTPException(status_code=404, detail=f"Tệp âm thanh không tồn tại: {file_path}")
     return FileResponse(str(file_path), filename=file_path.name)

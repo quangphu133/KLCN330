@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa và cải thiện hiển thị cho màn hình quản lý dữ liệu.
 import { Modal } from '@/shared/ui/modal/modal';
 import Button from '@/shared/ui/button/button';
 import { type Checklist } from '@/entities/checklists/checklists.types';
@@ -16,7 +17,7 @@ interface Props {
 
 const createChecklistSchema = z.object({
   name: z.string().min(2, {
-    message: 'Name must be at least 2 characters.',
+    message: 'Tên bộ tiêu chí phải có ít nhất 2 ký tự.',
   }),
   projectIds: z.array(z.number()),
 });
@@ -93,7 +94,7 @@ export const CreateChecklistModal = ({ isOpen, onClose, onCreate }: Props) => {
         )}
         <div className="flex justify-between">
           <Button
-            className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full"
+            className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
             onClick={onClose}
           >
             Hủy

@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa và cải thiện hiển thị chế độ tối cho trang thống kê.
 'use client';
 
 import { useState } from 'react';
@@ -22,10 +23,10 @@ export default function TopPages({ data = [] }: TopPagesProps) {
   }
 
   return (
-    <div className="h-full rounded-2xl border border-gray-100 bg-white p-5 dark:border-gray-100 dark:bg-white/[0.03] md:p-6 flex flex-col gap-6">
+    <div className="h-full rounded-2xl border border-gray-100 bg-white p-5 dark:border-gray-800 dark:bg-gray-900 md:p-6 flex flex-col gap-6">
       <div className="flex items-start justify-between">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-          Mention frequency
+          Tần suất xuất hiện từ khóa
         </h3>
         <div className="relative hidden ">
           <button className="dropdown-toggle" onClick={toggleDropdown}>
@@ -40,29 +41,29 @@ export default function TopPages({ data = [] }: TopPagesProps) {
               onItemClick={closeDropdown}
               className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
-              View More
+              Xem thêm
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
               className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
-              Delete
+              Xóa
             </DropdownItem>
           </Dropdown>
         </div>
       </div>
 
       <div>
-        <div className="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-200">
-          <span className="text-gray-400 text-theme-xs">Word</span>
-          <span className="text-right text-gray-400 text-theme-xs">Count</span>
+        <div className="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-700">
+          <span className="text-gray-400 text-theme-xs">Từ khóa</span>
+          <span className="text-right text-gray-400 text-theme-xs">Số lần</span>
         </div>
 
         {data && data.length > 0 ? (
           data.slice(0, 5).map((frequency, index) => (
             <div
               key={index}
-              className="py-3 border-b border-gray-100 dark:border-gray-200"
+              className="py-3 border-b border-gray-100 dark:border-gray-700"
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="font-medium text-gray-800 text-theme-sm dark:text-gray-300">
@@ -76,7 +77,7 @@ export default function TopPages({ data = [] }: TopPagesProps) {
           ))
         ) : (
           <div className="flex items-center justify-center py-8">
-            <span className="text-gray-400">No data đến display</span>
+            <span className="text-gray-400">Chưa có dữ liệu để hiển thị</span>
           </div>
         )}
       </div>

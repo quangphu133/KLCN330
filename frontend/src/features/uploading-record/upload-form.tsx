@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật giao diện và nội dung tiếng Việt cho khu vực này.
 'use client';
 import ComponentCard from '@/shared/ui/component-card/component-card';
 import Form from '@/shared/ui/form/form';
@@ -117,7 +118,7 @@ export const UploadForm = ({
 
   return (
     <>
-      <ComponentCard title="Data">
+      <ComponentCard title="Thông tin bản ghi">
         <Form onSubmit={onSubmit}>
           <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2">
             <div>
@@ -132,8 +133,8 @@ export const UploadForm = ({
                   return (
                     <DropdownCustom
                       onChange={onChange}
-                      label="Operator"
-                      placeholder="Select operator"
+                      label="Nhân viên tổng đài"
+                      placeholder="Chọn nhân viên tổng đài"
                       selected={{
                         label: selectedOperator?.name ?? selectedValue,
                         value: selectedValue,
@@ -146,7 +147,7 @@ export const UploadForm = ({
               />
               {errors.operatorId && <ErrorComponent text={errors.operatorId.message ?? ''} />}
               {!operatorsData?.length && (
-                <p className="mt-1 text-xs text-amber-600">
+                <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
                   Chưa có điều hành viên. Bạn vẫn có thể tải tệp lên.
                 </p>
               )}
@@ -159,7 +160,7 @@ export const UploadForm = ({
                     setSelectedDate(Array.isArray(date) ? date[0] : date);
                   }
                 }}
-                label="Date and time"
+                label="Ngày và giờ ghi âm"
                 withTime={true}
               />
             </div>
@@ -175,8 +176,8 @@ export const UploadForm = ({
                     return (
                       <DropdownCustom
                         onChange={onChange}
-                        label={'Project'}
-                        placeholder="Select project"
+                        label={'Dự án'}
+                        placeholder="Chọn dự án"
                         selected={{
                           label: selectedProject?.name ?? selectedValue,
                           value: selectedValue,
@@ -189,7 +190,7 @@ export const UploadForm = ({
                 />
                 {errors.projectId && <ErrorComponent text={errors.projectId.message ?? ''} />}
                 {!projectsData?.length && (
-                  <p className="mt-1 text-xs text-amber-600">
+                  <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
                     Chưa có dự án. Bạn vẫn có thể tải tệp lên.
                   </p>
                 )}

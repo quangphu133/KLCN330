@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa và cải thiện hiển thị cho màn hình quản lý dữ liệu.
 import { Modal } from '@/shared/ui/modal/modal';
 import Button from '@/shared/ui/button/button';
 import {
@@ -26,7 +27,7 @@ interface Props {
 
 const createDictionarySchema = z.object({
   name: z.string().min(2, {
-    message: 'Name must be at least 2 characters.',
+    message: 'Tên từ điển phải có ít nhất 2 ký tự.',
   }),
   isActive: z.boolean(),
   type: z.enum(DictionaryTypeValues),
@@ -80,7 +81,7 @@ export const CreateDictionaryModal = ({ isOpen, onClose, onCreate }: Props) => {
             <DropdownCustom
               onChange={onChange}
               label="Loại từ điển"
-              placeholder="Select dictionary type"
+              placeholder="Chọn loại từ điển"
               selected={{
                 label: DictionariesTranslations[value],
                 value: value,
@@ -164,7 +165,7 @@ export const CreateDictionaryModal = ({ isOpen, onClose, onCreate }: Props) => {
                   onChange(!value);
                 }}
               />
-              <Label>Xuất bảned</Label>
+              <Label>Trạng thái hoạt động</Label>
             </div>
           )}
           name={'isActive'}
@@ -172,7 +173,7 @@ export const CreateDictionaryModal = ({ isOpen, onClose, onCreate }: Props) => {
 
         <div className="flex justify-between">
           <Button
-            className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full"
+            className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
             onClick={onClose}
           >
             Hủy

@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
 'use client';
 
 import { useSidebar } from '@/shared/ui/sidebar/context/sidebar-context';
@@ -81,7 +82,7 @@ export const Sidebar: React.FC = () => {
             <div>
               <LogoIcon width={123} height={31} fill={'#0068AD'} />
               <p className="mt-2 text-[9px] font-bold tracking-[0.12em] text-blue-700">
-                HUIT · CALL REVIEW
+                HUIT · HẬU KIỂM CUỘC GỌI
               </p>
             </div>
           ) : (
@@ -111,8 +112,8 @@ export const Sidebar: React.FC = () => {
                         isExpanded || isMobileOpen ? 'px-4' : 'px-2'
                       } py-3 w-full h-[40px] rounded-full transition-all duration-200 ${
                         active
-                          ? 'bg-purple-100 text-purple-900 font-semibold'
-                          : 'hover:bg-gray-100 text-gray-700'
+                          ? 'bg-purple-100 text-purple-900 font-semibold dark:bg-blue-950/70 dark:text-blue-200'
+                          : 'hover:bg-gray-100 text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white'
                       }`}
                     >
                       <span className="flex items-center justify-center w-6">

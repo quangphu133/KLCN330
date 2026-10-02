@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa và cải thiện hiển thị cho màn hình quản lý dữ liệu.
 'use client';
 
 import { ChecklistsTable } from '@/features/checklists/components/checklists-table';
@@ -163,7 +164,7 @@ export const EditChecklist = () => {
             <div className="flex gap-2 w-full">
               <div className="flex flex-col gap-6 grow">
                 <div className="flex flex-col gap-2">
-                  <h3 className="text-lg font-semibold text-neutral-900">
+                  <h3 className="text-lg font-semibold text-neutral-900 dark:text-gray-100">
                     {checklistData?.name}
                   </h3>
                   <p className="text-gray-500 text-sm dark:text-gray-400">
@@ -192,7 +193,7 @@ export const EditChecklist = () => {
               </div>
               <div className="flex flex-col justify-between gap-6">
                 <Button
-                  className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full"
+                  className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
                   type="button"
                   onClick={() => {
                     cloneChecklist(checklistid);
@@ -204,7 +205,7 @@ export const EditChecklist = () => {
                   <div className="whitespace-nowrap">Tạo bản sao</div>
                 </Button>
                 <Button
-                  className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full"
+                  className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
                   type="button"
                   onClick={() => {
                       setIsEditingChecklist(true);
@@ -239,7 +240,7 @@ export const EditChecklist = () => {
                             <div className="flex gap-2 items-center">
                               <Label>Tiêu chí {ind + 1}</Label>
                               <div
-                                className="w-4 cursor-pointer"
+                                className="w-7 h-7 flex items-center justify-center rounded-lg cursor-pointer text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/60"
                                 onClick={() => {
                                   const newCriterias = block.criterias.filter(
                                     (_, i) => i !== ind
@@ -367,7 +368,7 @@ export const EditChecklist = () => {
 
                 <div className="flex justify-center">
                   <Button
-                    className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full"
+                    className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
                     type="button"
                     onClick={() => {
                                   setValue(`data.blocks.${index}.criterias`, [
@@ -394,7 +395,7 @@ export const EditChecklist = () => {
           <ComponentCard>
             <div className="flex justify-center">
               <Button
-                className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full"
+                className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
                 type="button"
                 onClick={() => {
                         setValue('data.blocks', [
@@ -415,7 +416,7 @@ export const EditChecklist = () => {
           </ComponentCard>
           <div className="flex justify-between w-full">
             <Link href="/checklists">
-              <Button className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full">
+              <Button className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700">
                 Hủy thay đổi
               </Button>
             </Link>

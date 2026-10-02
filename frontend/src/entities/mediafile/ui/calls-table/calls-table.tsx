@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật kiểu dữ liệu hoặc cách hiển thị dữ liệu của tính năng.
 'use client';
 
 import { JSX } from 'react';
@@ -31,8 +32,8 @@ import { DropdownCustom } from '@/shared/ui/dropdown-custom';
 import { SortKey } from '../../hooks/getSortParamsName';
 
 const getChanelColor = (chanel: number) => {
-  if (chanel > 1) return 'bg-green-100 text-green-800';
-  return 'bg-yellow-100 text-yellow-800';
+  if (chanel > 1) return 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300';
+  return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300';
 };
 
 export const CallsTable = (): JSX.Element => {
@@ -66,7 +67,7 @@ export const CallsTable = (): JSX.Element => {
       {isLoading ? (
         <LoaderContent width={200} height={200} isLoading={isLoading} />
       ) : (
-        <div className="overflow-x-auto rounded-xl bg-white dark:bg-white/[0.03] border border-gray-100">
+        <div className="overflow-x-auto rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800">
           <div className="flex flex-col gap-2 px-4 py-4 rounded-t-xl sm:flex-row sm:items-center sm:justify-between sm:gap-6 flex-wrap">
             <div className="flex items-center gap-3">
               <span className="text-gray-500 dark:text-gray-400">
@@ -129,7 +130,7 @@ export const CallsTable = (): JSX.Element => {
                   </svg>
                 </span>
               </div> */}
-              <span className="text-gray-500 dark:text-gray-400">rows</span>
+              <span className="text-gray-500 dark:text-gray-400">dòng</span>
             </div>
 
             <div className="flex items-center gap-3">
@@ -137,7 +138,7 @@ export const CallsTable = (): JSX.Element => {
                 className="w-[112px] h-[44px] border border-gray-200 rounded-full hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
                 onClick={openFilterModal}
               >
-                <span>Filter</span>
+                <span>Lọc</span>
                 <FilterIcon width={20} height={20} />
               </Button>
               <Button
@@ -145,7 +146,7 @@ export const CallsTable = (): JSX.Element => {
                 onClick={handleResetFilters}
                 disabled={!filtersActive}
               >
-                <span>Reset</span>
+                <span>Đặt lại</span>
                 {filtersActive ? (
                   <ResetFiltersActive width={20} height={20} />
                 ) : (
@@ -156,13 +157,13 @@ export const CallsTable = (): JSX.Element => {
                 className="h-[44px] border border-gray-200 rounded-full hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
                 onClick={handleRefresh}
               >
-                <span>Refresh</span>
+                <span>Làm mới</span>
               </Button>
               <Button
                 className="w-[155px] h-[44px] border border-gray-200 rounded-full hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
                 onClick={handleDownload}
               >
-                <span>Download XLS</span>
+                <span>Tải xuống Excel</span>
                 <DownloadIcon width={18} height={18} />
               </Button>
             </div>
@@ -245,7 +246,7 @@ export const CallsTable = (): JSX.Element => {
                     const interruptions =
                       summaryAnalyserResult?.simultaneousSpeechCount || 0;
                     const clientNumber =
-                      item?.additionalMetadata?.clientNumber || 'N/A';
+                      item?.additionalMetadata?.clientNumber || 'Chưa có';
 
                     const scorePercentage =
                       item.gptChecklist &&
@@ -267,10 +268,10 @@ export const CallsTable = (): JSX.Element => {
                         <TableCell className="px-4 py-4 border-b border-gray-100 text-gray-800 dark:border-white/[0.05] dark:text-white/90 whitespace-nowrap">
                           {item?.createDate
                             ? formatDatesTime(new Date(item.createDate))
-                            : 'N/A'}
+                            : 'Chưa có'}
                         </TableCell>
                         <TableCell className="px-4 py-4 border-b border-gray-100 font-semibold text-gray-800 dark:border-white/[0.05] text-theme-sm dark:text-gray-400 whitespace-nowrap">
-                          {item?.operatorName || 'N/A'}
+                          {item?.operatorName || 'Chưa có'}
                         </TableCell>
                         <TableCell className="px-4 py-4 border-b border-gray-100 font-normal text-gray-800 dark:border-white/[0.05] text-theme-sm dark:text-white/90 whitespace-nowrap">
                           {clientNumber}
@@ -285,7 +286,7 @@ export const CallsTable = (): JSX.Element => {
                         <TableCell className="px-4 py-4 border-b border-gray-100 font-normal text-gray-800 dark:border-white/[0.05] text-theme-sm dark:text-white/90 whitespace-nowrap">
                           {typeof item?.duration === 'number'
                             ? formatDuration(item.duration)
-                            : 'N/A'}
+                            : 'Chưa có'}
                         </TableCell>
                         <TableCell className="px-4 py-4 border-b border-gray-100 font-normal dark:border-white/[0.05] text-theme-sm whitespace-nowrap">
                           <span

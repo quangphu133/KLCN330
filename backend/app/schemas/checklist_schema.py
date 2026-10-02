@@ -1,3 +1,4 @@
+# Ghi chú nhóm: Cập nhật mô tả và thông báo xác thực dữ liệu bằng tiếng Việt.
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional, List, Any
 from datetime import datetime
@@ -11,7 +12,7 @@ class ChecklistProjectInfo(BaseModel):
 
 
 class ChecklistBase(BaseModel):
-    name: str = Field(..., description="Tên checklist")
+    name: str = Field(..., description="Tên bộ tiêu chí")
     is_active: bool = Field(True)
     data: Optional[Any] = Field(None, description="Cấu trúc blocks/criterias JSON")
     projectIds: Optional[List[int]] = Field(default_factory=list)

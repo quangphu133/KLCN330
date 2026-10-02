@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa và cải thiện hiển thị chế độ tối cho trang thống kê.
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -107,9 +108,9 @@ export const AnalyticsFilterModal = ({
   }
 
   return (
-    <Modal isOpen={isOpen} title={'Filter'} onClose={onClose} className="max-w-[410px] mx-auto">
+    <Modal isOpen={isOpen} title={'Bộ lọc'} onClose={onClose} className="max-w-[410px] mx-auto">
       <div className="p-4">
-        <h3 className="text-sm font-semibold mb-2">Select period</h3>
+        <h3 className="text-sm font-semibold mb-2">Chọn khoảng thời gian</h3>
         <DateTimePicker
           value={dateRange ? [new Date(dateRange.start), new Date(dateRange.end)] : null}
           onChange={value => {
@@ -137,7 +138,7 @@ export const AnalyticsFilterModal = ({
                   onChange={() => handleDictionaryChange(Number(id))}
                   className="w-5 h-5 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
                 />
-                <label htmlFor={`dictionary-${id}`} className="ml-2 text-sm text-gray-700">
+                <label htmlFor={`dictionary-${id}`} className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                   {name.name}
                 </label>
               </div>
@@ -146,7 +147,7 @@ export const AnalyticsFilterModal = ({
 
         <div className="flex justify-between pt-4">
           <Button
-            className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full"
+            className="px-2 py-2 text-gray-700 hover:bg-gray-100 bg-white border border-gray-200 cursor-pointer rounded-full dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
             onClick={onClose}
           >
             Hủy

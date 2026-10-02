@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cải thiện màu sắc và độ tương phản của giao diện ở chế độ tối.
 'use client';
 
 import { Calendar, DateObject } from 'react-multi-date-picker';
@@ -21,27 +22,27 @@ interface DateTimePickerProps {
 }
 
 const months = [
-  ['Thg 1uary'],
-  ['Thg 2ruary'],
-  ['Thg 3ch'],
-  ['Thg 4il'],
-  ['Thg 5'],
-  ['Thg 6e'],
-  ['Thg 7y'],
-  ['Thg 8ust'],
-  ['Thg 9tember'],
-  ['Thg 10ober'],
-  ['Thg 11ember'],
-  ['Thg 12ember'],
+  ['Tháng 1'],
+  ['Tháng 2'],
+  ['Tháng 3'],
+  ['Tháng 4'],
+  ['Tháng 5'],
+  ['Tháng 6'],
+  ['Tháng 7'],
+  ['Tháng 8'],
+  ['Tháng 9'],
+  ['Tháng 10'],
+  ['Tháng 11'],
+  ['Tháng 12'],
 ];
 const weekDays = [
-  ['Sun', 'Su'],
-  ['Mon', 'Mo'],
-  ['Tue', 'Tu'],
-  ['Wed', 'We'],
-  ['Thu', 'Th'],
-  ['Fri', 'Fr'],
-  ['Sat', 'Sa'],
+  ['Chủ nhật', 'CN'],
+  ['Thứ Hai', 'T2'],
+  ['Thứ Ba', 'T3'],
+  ['Thứ Tư', 'T4'],
+  ['Thứ Năm', 'T5'],
+  ['Thứ Sáu', 'T6'],
+  ['Thứ Bảy', 'T7'],
 ];
 
 export const DateTimePicker = ({
@@ -52,7 +53,7 @@ export const DateTimePicker = ({
   format,
   disabled = false,
   className,
-  placeholder = 'Select date',
+  placeholder = 'Chọn ngày',
   range = false,
 }: DateTimePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);

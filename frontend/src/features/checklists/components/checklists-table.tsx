@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa và cải thiện hiển thị cho màn hình quản lý dữ liệu.
 'use client';
 
 import { Fragment, useCallback, useEffect, useState } from 'react';
@@ -94,7 +95,7 @@ export const ChecklistsTable = <T extends Checklist>({
 
   useEffect(() => {
     if (createChecklistResult.isSuccess) {
-      toast.success('Checklist created successfully');
+      toast.success('Đã tạo bộ tiêu chí');
     }
   }, [createChecklistResult]);
 
@@ -138,7 +139,7 @@ export const ChecklistsTable = <T extends Checklist>({
         onClose={() => setDeletingItem(undefined)}
         onConfirm={handleConfirmDelete}
       />
-      <div className="rounded-2xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+      <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
         <div className="overflow-hidden">
           <div className="max-w-full overflow-x-auto">
             <Table className="w-full">
@@ -203,14 +204,14 @@ export const ChecklistsTable = <T extends Checklist>({
                         <Link
                           href={`/checklists/${item.id}`}
                           onClick={(event) => event.stopPropagation()}
-                          className="cursor-pointer block font-medium text-gray-700 text-theme-sm dark:text-gray-400 rounded-full p-2 border border-gray-200 hover:bg-gray-50 transition duration-300"
+                          className="cursor-pointer block font-medium text-gray-700 text-theme-sm dark:text-gray-200 rounded-full p-2 border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-950/70 dark:hover:text-blue-300 transition duration-300"
                         >
                           <PencilIcon width={14} height={14} />
                         </Link>
                         <button
                           type="button"
                           title="Xóa bộ tiêu chí"
-                          className="cursor-pointer rounded-full border border-red-200 p-2 text-red-600 transition hover:bg-red-50 dark:border-red-900/40 dark:hover:bg-red-950/30"
+                          className="cursor-pointer rounded-full border border-red-200 p-2 bg-red-50/70 text-red-600 transition hover:bg-red-100 dark:border-red-800 dark:bg-red-950/40 dark:text-red-400 dark:hover:bg-red-900/70"
                           onClick={(event) => {
                             event.stopPropagation();
                             setDeletingItem(item);

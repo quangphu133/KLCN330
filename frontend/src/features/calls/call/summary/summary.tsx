@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cải thiện độ tương phản chế độ tối cho nội dung cuộc gọi và transcript.
 'use client'
 
 import React from 'react'
@@ -21,7 +22,7 @@ export const Summary: React.FC<SummaryProps> = ({ content }) => {
         {/*  <EditIcon width={20} height={20} />*/}
         {/*</Button>*/}
       </div>
-      <p className="text-gray-700 text-sm leading-relaxed">{content}</p>
+      <p className="text-gray-700 text-sm leading-relaxed dark:text-gray-300">{content}</p>
     </>
   )
 }

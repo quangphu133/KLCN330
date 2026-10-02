@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa và cải thiện hiển thị cho màn hình quản lý dữ liệu.
 'use client';
 
 import { DictionariesTable } from '@/features/dictionaries/components/dictionaries-table';
@@ -18,7 +19,7 @@ export const Dictionaries = () => {
     render?: (item: Dictionary) => React.ReactNode;
   }[] = [
     { key: 'name', title: 'Tên từ điển' },
-    { key: 'isActive', title: 'Xuất bảned' },
+    { key: 'isActive', title: 'Trạng thái hoạt động' },
     {
       key: 'phrases',
       title: 'Regex / từ khóa',

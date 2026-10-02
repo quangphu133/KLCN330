@@ -1,10 +1,11 @@
+# Ghi chú nhóm: Cập nhật mô tả và thông báo xác thực dữ liệu bằng tiếng Việt.
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
 from datetime import datetime
 
 
 class OperatorBase(BaseModel):
-    name: str = Field(..., max_length=100, description="Tên nhân viên operator")
+    name: str = Field(..., max_length=100, description="Tên nhân viên tổng đài")
 
 
 class OperatorCreate(OperatorBase):

@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Việt hóa hoặc tinh chỉnh hiển thị của thành phần giao diện dùng chung.
 import React, { useState, useRef, useEffect } from 'react';
 import Label from '../label/label';
 
@@ -59,7 +60,7 @@ export const MultiSelect = ({
           type="button"
           ref={trigger}
           onClick={() => setDropdownOpen(!dropdownOpen)}
-          className="min-h-11 w-full inline-flex items-center gap-2.5 bg-primary 
+          className="min-h-11 w-full inline-flex items-center gap-2.5 bg-primary dark:bg-gray-900
             px-3 py-1.5 font-medium hover:bg-opacity-95 border text-gray-800 border-gray-300
     focus:border-gray-400 focus:ring-gray-300 rounded-[22px]
     dark:border-gray-700 dark:text-white/90 dark:focus:border-gray-500"
@@ -68,8 +69,7 @@ export const MultiSelect = ({
             {selectedOptions.map((option, index) => (
               <div
                 key={option.value}
-                className="bg-[#F2F4F7] rounded-full border border-[#E4E7EC] px-3 py-1 flex gap-1 
-                items-center grow-0"
+                className="bg-[#F2F4F7] rounded-full border border-[#E4E7EC] px-3 py-1 flex gap-1 items-center grow-0 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
               >
                 {option.label}
                 <div

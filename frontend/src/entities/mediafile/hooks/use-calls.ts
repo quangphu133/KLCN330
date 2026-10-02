@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật kiểu dữ liệu hoặc cách hiển thị dữ liệu của tính năng.
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getLast30DaysRange } from '@/shared/utils/date-utils';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
@@ -225,7 +226,7 @@ export const useCalls = () => {
         URL.revokeObjectURL(result);
       }
     } catch (error) {
-      toast.error('Không thể tải file Excel.');
+      toast.error('Không thể tải tệp Excel.');
     }
   };
 
@@ -265,7 +266,7 @@ export const useCalls = () => {
 
   const handleRefresh = () => {
     refetch();
-    toast.success('Data updated successfully');
+    toast.success('Đã cập nhật dữ liệu');
   };
 
   return {

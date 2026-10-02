@@ -1,3 +1,4 @@
+// Ghi chú nhóm: Cập nhật bố cục và khả năng hiển thị giao diện theo chủ đề.
 import '@/app/globals.css'
 import Providers from '@/app/providers'
 import { AuthGate } from '../widgets/AuthGate'
@@ -14,7 +15,7 @@ const arimo = localFont({
 })
 
 export const metadata = {
-  title: 'HUIT Call Review',
+  title: 'HUIT | Hậu kiểm cuộc gọi',
   description: 'Hệ thống hậu kiểm và phân tích cuộc gọi',
   icons: {
     icon: '/favicon.png',
